@@ -11,12 +11,10 @@ public:
     RasterOperationsTest();
     RasterOperationsTest(QString* testDataLocation);
 
-protected:
-    void initTestCase();
-    void cleanupTestCase();
-
 private Q_SLOTS:
+    void initTestCase();
     void testLinearStretchOperation();
+    void cleanupTestCase();
 };
 
 

@@ -3,7 +3,10 @@
 
 #include "kernel.h"
 #include "raster.h"
+#include "catalog.h"
 #include "symboltable.h"
+#include "ilwiscontext.h"
+#include "mastercatalog.h"
 
 #include "ilwisoperation.h"
 
@@ -30,9 +33,14 @@ RasterOperationsTest::RasterOperationsTest()
 
 void RasterOperationsTest::initTestCase()
 {
+    QUrl s = QString("file:///%1").arg(ROOT_TESTDATA);
+    mastercatalog()->addContainer(s);
+    Catalog cat;
+    cat.prepare(s);
+    context()->setWorkingCatalog(cat);
+
     QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
-    qDebug() << QString("prepare '%1' for testing...").arg(res);
-    _mpl.prepare(res);
+    QVERIFY2(_mpl.prepare(res), QString("could not prepare '%1'").arg(res).toLatin1().constData());
 }
 
 void RasterOperationsTest::testLinearStretchOperation()
@@ -64,6 +72,10 @@ void RasterOperationsTest::testLinearStretchOperation()
     }
 }
 
+
+void RasterOperationsTest::cleanupTestCase()
+{
+}
 
 //#include "tst_rasteroperationstest.moc"
 
