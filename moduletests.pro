@@ -20,11 +20,13 @@ TEMPLATE = app
 
 
 HEADERS += \
-    rasteroperationstest/tst_rasteroperationstest.h
+    rasteroperationstest/tst_rasteroperationstest.h \
+    systemtest/systemtest.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
-    testmodules.cpp
+    testmodules.cpp \
+    systemtest/systemtest.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
