@@ -14,45 +14,54 @@
 #include "numericdomain.h"
 #include "numericitemrange.h"
 
+#include "testcontants.h"
 #include "rasterstrechoperation.h"
 #include "tst_rasteroperationstest.h"
 
 using namespace Ilwis;
 
-#define ROOT_TESTDATA "D:/data/coding/ilwis/testdata"
+SymbolTable _symtbl;
+ExecutionContext _ctx;
+IRasterCoverage _mpl;
 
 RasterOperationsTest::RasterOperationsTest()
 {
 }
 
+void RasterOperationsTest::initTestCase()
+{
+    QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
+    qDebug() << QString("prepare '%1' for testing...").arg(res);
+    _mpl.prepare(res);
+}
+
 void RasterOperationsTest::testLinearStretchOperation()
 {
+    try {
+        INumericItemDomain bitsValueDomain;
+        bitsValueDomain.prepare();
 
-    SymbolTable symtbl;
-    ExecutionContext ctx;
+        NumericItemRange bitsValueRange;
+        bitsValueRange.interpolation("");
+        bitsValueRange << "0 255 1";
+        bitsValueDomain->setRange(bitsValueRange);
 
-    IRasterCoverage mpl;
-    QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
-    mpl.prepare(res);
+        qDebug() << "stretch raster with 8Bit value domain";
+        _mpl->datadefIndex().domain(bitsValueDomain);
+        _mpl->setLayerIndexes(bitsValueRange);
+        //IndexSlicer slicer(mpl);
 
-    INumericItemDomain bitsValueDomain;
-    bitsValueDomain.prepare();
+        QVERIFY2(true, "Failure");
 
-    NumericItemRange bitValueRange;
-    bitValueRange << "0 255 1";
-    bitsValueDomain->setRange(bitValueRange);
+        //INumericItemDomain percentDomain;
+        //percentDomain.prepare();
 
-    qDebug() << "stretch raster with 8Bit value domain";
-    mpl->datadefIndex().domain(bitsValueDomain);
-    mpl->setLayerIndexes(bitValueRange);
-    //IndexSlicer slicer(mpl);
-
-    QVERIFY2(true, "Failure");
-
-    INumericItemDomain percentDomain;
-    percentDomain.prepare();
-
-    // TODO verify stretch with percent domain
+        // TODO verify stretch with percent domain
+    }
+    catch(ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
 }
 
 

@@ -21,7 +21,8 @@ TEMPLATE = app
 
 HEADERS += \
     rasteroperationstest/tst_rasteroperationstest.h \
-    systemtest/systemtest.h
+    systemtest/systemtest.h \
+    testcontants.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
