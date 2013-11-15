@@ -29,7 +29,6 @@ private slots:
     void thematicDomains();
     void masterCatalogAdmin();
     void tabcalc();
-    void rasterStretch();
 
 };
 

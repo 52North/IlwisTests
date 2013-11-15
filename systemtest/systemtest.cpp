@@ -53,15 +53,14 @@ bool equals(double v1, double v2, double dig) {
 
 }
 
-bool loaders1 = false;
-bool loaders2 = false;
-bool loaders3 = false;
-bool loaders4 = false;
-bool loaders5 = false;
-bool loaders6 = false;
-bool loaders7 = false;
+bool loaders1 = true;
+bool loaders2 = true;
+bool loaders3 = true;
+bool loaders4 = true;
+bool loaders5 = true;
+bool loaders6 = true;
+bool loaders7 = true;
 bool loaders8 = true;
-bool loaders9 = true;
 
 LoaderTests::LoaderTests(QObject *parent) :
     QObject(parent)
@@ -760,28 +759,6 @@ void LoaderTests::scriptExecution() {
 //            ctx.clear();
 //            QVERIFY(commandhandler()->execute(txt,&ctx));
 
-        }
-    }
-    catch (ErrorObject& err) {
-        qDebug() << err.message();
-        QVERIFY(false);
-    }
-
-}
-
-void LoaderTests::rasterStretch() {
-    try{
-        if (loaders9) {
-            SymbolTable symtbl;
-            ExecutionContext ctx;
-
-            IRasterCoverage mpl;
-            QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
-            mpl.prepare(res);
-
-            qDebug() << "stretch";
-            ctx.clear();
-            QVERIFY(commandhandler()->execute("stretch(aa1)", &ctx,symtbl));
         }
     }
     catch (ErrorObject& err) {
