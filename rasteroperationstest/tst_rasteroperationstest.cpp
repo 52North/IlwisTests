@@ -46,6 +46,7 @@ void RasterOperationsTest::initTestCase()
 void RasterOperationsTest::testLinearStretchOperation()
 {
     try {
+        /*
         INumericItemDomain bitsValueDomain;
         bitsValueDomain.prepare();
 
@@ -54,17 +55,17 @@ void RasterOperationsTest::testLinearStretchOperation()
         bitsValueRange << "0 255 1";
         bitsValueDomain->setRange(bitsValueRange);
 
-        qDebug() << "stretch raster with 8Bit value domain";
         _mpl->datadefIndex().domain(bitsValueDomain);
         _mpl->setLayerIndexes(bitsValueRange);
-        //IndexSlicer slicer(mpl);
+         */
 
-        QVERIFY2(true, "Failure");
 
-        //INumericItemDomain percentDomain;
-        //percentDomain.prepare();
+        ExecutionContext ctx;
+        Operation op({"strech_out=stretch(small.mpl)"});
+        qDebug() << "stretch raster";
+        QVERIFY2(op->execute(&ctx,_symtbl), "operation done.");
 
-        // TODO verify stretch with percent domain
+
     }
     catch(ErrorObject& err) {
         qDebug() << err.message();
