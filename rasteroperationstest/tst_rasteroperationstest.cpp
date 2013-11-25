@@ -25,7 +25,6 @@ using namespace Ilwis;
 
 SymbolTable _symtbl;
 ExecutionContext _ctx;
-IRasterCoverage _mpl;
 
 RasterOperationsTest::RasterOperationsTest()
 {
@@ -39,8 +38,11 @@ void RasterOperationsTest::initTestCase()
     cat.prepare(s);
     context()->setWorkingCatalog(cat);
 
-    QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
-    QVERIFY2(_mpl.prepare(res), QString("could not prepare '%1'").arg(res).toLatin1().constData());
+}
+
+void RasterOperationsTest::cleanupTestCase()
+{
+    // TODO clean up mastercatalog etc.
 }
 
 void RasterOperationsTest::testLinearStretchOperation()
@@ -60,12 +62,19 @@ void RasterOperationsTest::testLinearStretchOperation()
          */
 
 
+        IRasterCoverage mpl;
+        QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
+        QVERIFY2(mpl.prepare(res), QString("could not prepare '%1'").arg(res).toLatin1().constData());
+
         ExecutionContext ctx;
-        Operation op({"strech_out=stretch(small.mpl)"});
+        Operation op({"stretch_out=linearstretch(small.mpl)"});
         qDebug() << "stretch raster";
         QVERIFY2(op->execute(&ctx,_symtbl), "operation done.");
 
 
+    }
+    catch (const std::length_error& le) {
+        qDebug() << "Length error: " << le.what() << '\n';
     }
     catch(ErrorObject& err) {
         qDebug() << err.message();
@@ -73,10 +82,6 @@ void RasterOperationsTest::testLinearStretchOperation()
     }
 }
 
-
-void RasterOperationsTest::cleanupTestCase()
-{
-}
 
 //#include "tst_rasteroperationstest.moc"
 
