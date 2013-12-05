@@ -3,6 +3,7 @@
 #include "kernel.h"
 #include "systemtest/systemtest.h"
 #include "rasteroperationstest/tst_rasteroperationstest.h"
+#include "wfsconnectortest/tst_wfsconnectortest.h"
 
 using namespace Ilwis;
 
@@ -18,6 +19,12 @@ int testRasterOperations()
     return QTest::qExec( &test); \
 }
 
+int testWfsOperations()
+{
+    WfsConnectorTest test; \
+    return QTest::qExec( &test); \
+}
+
 int main(int argc, char *argv[]) \
 { \
     QGuiApplication app(argc, argv); \
@@ -25,7 +32,8 @@ int main(int argc, char *argv[]) \
 
     return 0
             //+ testSystem()
-            + testRasterOperations()
+            //+ testRasterOperations()
+            + testWfsOperations()
             //+ testMyNotYetImplementedModule()
             ;
 }

@@ -22,7 +22,6 @@ private Q_SLOTS:
     void testLinearStretchWithPercentLimits();
     void cleanupTestCase();
 
-
 private:
     SymbolTable _symtbl;
     ExecutionContext _ctx;

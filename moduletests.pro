@@ -11,7 +11,7 @@ include(global.pri)
 DLLDESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
 DESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
 
-QT       += sql testlib
+QT       += sql testlib network
 
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -22,12 +22,14 @@ TEMPLATE = app
 HEADERS += \
     rasteroperationstest/tst_rasteroperationstest.h \
     systemtest/systemtest.h \
-    testcontants.h
+    testcontants.h \
+    wfsconnectortest/tst_wfsconnectortest.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
     testmodules.cpp \
-    systemtest/systemtest.cpp
+    systemtest/systemtest.cpp \
+    wfsconnectortest/tst_wfsconnectortest.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
