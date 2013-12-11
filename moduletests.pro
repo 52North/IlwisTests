@@ -21,23 +21,26 @@ TEMPLATE = app
 
 HEADERS += \
     rasteroperationstest/tst_rasteroperationstest.h \
-    systemtest/systemtest.h \
     testcontants.h \
     wfsconnectortest/tst_wfsconnectortest.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
     testmodules.cpp \
-    systemtest/systemtest.cpp \
     wfsconnectortest/tst_wfsconnectortest.cpp
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
+                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
+                                                 -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
 
-INCLUDEPATH += $$PWD/../ilwiscore/core \
-    $$PWD/../ilwiscore/rasteroperations
+INCLUDEPATH += $$PWD/../IlwisCore/core \
+    $$PWD/../IlwisCore/rasteroperations \
+    $$PWD/../IlwisConnectors/wfsconnector
+
 DEPENDPATH += $$PWD/../ilwiscore/core \
-    $$PWD/../ilwiscore/rasteroperations
+    $$PWD/../IlwisCore/rasteroperations \
+    $$PWD/../IlwisConnectors/wfsconnector
 
 OTHER_FILES += \
     global.pri

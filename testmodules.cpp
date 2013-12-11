@@ -1,17 +1,19 @@
 #include <QtWidgets/QApplication>
 #include <QTest>
-#include "kernel.h"
-#include "systemtest/systemtest.h"
+
+//#include "systemtest/systemtest.h"
 #include "rasteroperationstest/tst_rasteroperationstest.h"
 #include "wfsconnectortest/tst_wfsconnectortest.h"
 
 using namespace Ilwis;
 
+/*
 int testSystem()
 {
     LoaderTests test; \
     return QTest::qExec( &test); \
 }
+*/
 
 int testRasterOperations()
 {
