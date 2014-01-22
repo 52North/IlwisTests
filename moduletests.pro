@@ -30,13 +30,16 @@ SOURCES += \
     wfsconnectortest/tst_wfsconnectortest.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
-                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
+                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector \
+                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/pugixml/ -lpugixml
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
-                                                 -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
+                                                 -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector \
+                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/pugixml/ -lpugixml
 
 INCLUDEPATH += $$PWD/../IlwisCore/core \
     $$PWD/../IlwisCore/rasteroperations \
-    $$PWD/../IlwisConnectors/wfsconnector
+    $$PWD/../IlwisConnectors/wfsconnector \
+    $$PWD/../external/
 
 DEPENDPATH += $$PWD/../ilwiscore/core \
     $$PWD/../IlwisCore/rasteroperations \
@@ -45,3 +48,9 @@ DEPENDPATH += $$PWD/../ilwiscore/core \
 OTHER_FILES += \
     global.pri
 
+
+testtarget.files = testfiles/wfs_capabilities.xml
+
+testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
+
+INSTALLS += testtarget
