@@ -2,6 +2,7 @@
 #include <QtTest>
 #include <QString>
 #include <QObject>
+#include <QTextStream>
 
 #include "pugixml/pugixml_global.h"
 #include "pugixml/pugixml.hpp"
@@ -52,29 +53,48 @@ void WfsConnectorTest::initTestCase() {
     context()->setWorkingCatalog(cat);
 }
 
+void WfsConnectorTest::shouldRecognizeExceptionReport()
+{
+    WfsResponse testResponse;
+    readTestResponseFromFile("extensions/testfiles/wfs_exceptionreport.xml", testResponse);
 
-void WfsConnectorTest::parseFeatureTypesFromCapabilities() {
+    try {
+        QVERIFY2(testResponse.isException(), "Response did not recognized an exception message!");
+    } catch(pugi::xpath_exception e) {
+        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+    }
+}
 
+
+void WfsConnectorTest::shouldNotRecognizeExceptionReport()
+{
+    WfsResponse testResponse;
+    readTestResponseFromFile("extensions/testfiles/wfs_capabilities.xml", testResponse);
+
+    try {
+        QVERIFY2(!testResponse.isException(), "Response recognized an exception message!");
+    } catch(pugi::xpath_exception e) {
+        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+    }
+}
+
+
+void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
+{
     pugi::xml_document doc;
-
-    // use the following three lines to get Capabilities from remote
-//    WfsResponse *response = _wfs->getCapabilities();
-//    QString capabilities = response->getContent();
-//    std::istringstream cs(capabilities.toStdString());
-//    doc.load(cs);
-
-    // the following line uses capabilities from file
     doc.load_file("extensions/testfiles/wfs_capabilities.xml");
 
-    pugi::xpath_node_set featureTypes = doc.select_nodes("/*/FeatureTypeList/FeatureType");
-    std::for_each (featureTypes.begin(), featureTypes.end(), [](pugi::xpath_node featureType) {
+    try {
+        pugi::xpath_node_set featureTypes = doc.select_nodes("/*/FeatureTypeList/FeatureType");
+        QVERIFY2(featureTypes.size() == 2, "Wrong amount of feature types found.");
+    } catch(pugi::xpath_exception e) {
+        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+    }
 
-        // TODO: compile to xpath_query objects
+//    std::for_each (featureTypes.begin(), featureTypes.end(), [](pugi::xpath_node featureType) {
+//        qDebug() << "featureType name: " << featureType.node().child("Name").text().as_string();
+//    });
 
-        qDebug() << "featureType name: " << featureType.node().child("Name").text().as_string();
-    });
-
-    QVERIFY2(featureTypes.size() == 2, "Wrong amount of feature types found.");
 
 }
 
@@ -101,7 +121,19 @@ void WfsConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
     QVERIFY2(connector.canUse(wfs1), QString("Connector indicates it can't use valid WFS: %1").arg(url).toLatin1().constData());
 }
 
+void WfsConnectorTest::readTestResponseFromFile(QString path, WfsResponse &response) {
+    QFile file(path);
+    QVERIFY2(file.open(QIODevice::ReadOnly), QString("Could not find test file '%1'!").arg(path).toLatin1().constData());
 
+    QString content;
+    QTextStream in(&file);
+    while(!in.atEnd()) {
+        QString line = in.readLine();
+        content.append(line);
+    }
+    file.close();
+    response.setContent(content);
+}
 
 void WfsConnectorTest::cleanupTestCase() {
     delete _wfs;

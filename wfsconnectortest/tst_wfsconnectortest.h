@@ -20,13 +20,16 @@ public:
 private Q_SLOTS:
 
     void initTestCase();
-    void parseFeatureTypesFromCapabilities();
+    void shouldRecognizeExceptionReport();
+    void shouldNotRecognizeExceptionReport();
+    void parseCorrectNumberOfFeatureTypesFromCapabilities();
     void cleanupTestCase();
 
 private:
     void sandbox();
     void canUseValidWfsUrlWithCapitalParameters();
     void canUseValidWfsUrlWithMixedCapitalParameters();
+    void readTestResponseFromFile(QString path, WfsResponse &content);
     WebFeatureService *_wfs;
 
 };

@@ -49,7 +49,8 @@ OTHER_FILES += \
     global.pri
 
 
-testtarget.files = testfiles/wfs_capabilities.xml
+testtarget.files = testfiles/wfs_capabilities.xml \
+    testfiles/wfs_exceptionreport.xml
 
 testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
 
