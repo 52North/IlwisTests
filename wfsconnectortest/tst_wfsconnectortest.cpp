@@ -2,7 +2,6 @@
 #include <QtTest>
 #include <QString>
 #include <QObject>
-#include <QTextStream>
 
 #include "pugixml/pugixml_global.h"
 #include "pugixml/pugixml.hpp"
@@ -59,23 +58,23 @@ void WfsConnectorTest::parseFeatureTypesFromCapabilities() {
     pugi::xml_document doc;
 
     // use the following three lines to get Capabilities from remote
-    WfsResponse *response = _wfs->getCapabilities();
-    QString capabilities = response->getContent();
-    std::istringstream cs(capabilities.toStdString());
-    doc.load(cs);
+//    WfsResponse *response = _wfs->getCapabilities();
+//    QString capabilities = response->getContent();
+//    std::istringstream cs(capabilities.toStdString());
+//    doc.load(cs);
 
     // the following line uses capabilities from file
-//    doc.load_file("/files/wfs_capabilities.xml");
+    doc.load_file("extensions/testfiles/wfs_capabilities.xml");
 
     pugi::xpath_node_set featureTypes = doc.select_nodes("/*/FeatureTypeList/FeatureType");
     std::for_each (featureTypes.begin(), featureTypes.end(), [](pugi::xpath_node featureType) {
 
         // TODO: compile to xpath_query objects
 
-        qDebug() << "featureType name: " << featureType.node().first_child().text().as_string();
+        qDebug() << "featureType name: " << featureType.node().child("Name").text().as_string();
     });
 
-    //QVERIFY2(featureTypes.size() == 2, "Wrong amount of feature types found.");
+    QVERIFY2(featureTypes.size() == 2, "Wrong amount of feature types found.");
 
 }
 
