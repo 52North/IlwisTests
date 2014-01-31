@@ -11,7 +11,7 @@ include(global.pri)
 DLLDESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
 DESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
 
-QT       += sql testlib network
+QT       += sql testlib network xmlpatterns
 
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -22,12 +22,16 @@ TEMPLATE = app
 HEADERS += \
     rasteroperationstest/tst_rasteroperationstest.h \
     testcontants.h \
-    wfsconnectortest/tst_wfsconnectortest.h
+    wfsconnectortest/tst_wfsconnectortest.h \
+    core/catalog/tst_resourcetest.h \
+    xmltests/qtxmlparsertest.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
     testmodules.cpp \
-    wfsconnectortest/tst_wfsconnectortest.cpp
+    wfsconnectortest/tst_wfsconnectortest.cpp \
+    core/catalog/tst_resourcetest.cpp \
+    xmltests/qtxmlparsertest.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
                                               -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector \
@@ -46,11 +50,14 @@ DEPENDPATH += $$PWD/../ilwiscore/core \
     $$PWD/../IlwisConnectors/wfsconnector
 
 OTHER_FILES += \
-    global.pri
+    global.pri \
+    testfiles/quad100.xsd \
+    testfiles/test.xml
 
 
 testtarget.files = testfiles/wfs_capabilities.xml \
-    testfiles/wfs_exceptionreport.xml
+    testfiles/wfs_exceptionreport.xml \
+    testfiles/featurecollection.xml
 
 testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
 

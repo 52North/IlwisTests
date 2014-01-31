@@ -16,7 +16,6 @@
 #include "ilwisdata.h"
 #include "domain.h"
 #include "coverage.h"
-#include "polygon.h"
 #include "columndefinition.h"
 #include "geometry.h"
 #include "attributerecord.h"
@@ -27,6 +26,9 @@
 #include "wfsconnector.h"
 #include "wfs.h"
 #include "wfsresponse.h"
+#include "wfsfeature.h"
+#include "wfscapabilitiesparser.h"
+#include "wfsfeatureconnector.h"
 #include "tst_wfsconnectortest.h"
 
 #define WFS_TEST_SERVER_1 "http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS"
@@ -78,24 +80,46 @@ void WfsConnectorTest::shouldNotRecognizeExceptionReport()
     }
 }
 
+void WfsConnectorTest::shouldLoadFeatureMetadata()
+{
+    QUrl url("http://localhost/blah/?query=true");
+    Resource featureResource(url, itFEATURE); // TODO: replace when resource.getQuery() is implemented
+    WfsFeatureConnector featureConnector(featureResource);
+
+    Ilwis::IlwisObject *feature = featureConnector.create();
+    QString failureMsg("Could not load metadata for feature '%1'");
+    QVERIFY2(featureConnector.loadMetaData(feature), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
+}
+
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
-    pugi::xml_document doc;
-    doc.load_file("extensions/testfiles/wfs_capabilities.xml");
+
+    QXmlStreamReader reader;
+    QFile file("extensions/testfiles/wfs_capabilities.xml");
+    file.open(QIODevice::ReadOnly);
+    reader.setDevice( &file);
+
+    WfsResponse testResponse;
+    testResponse.setXmlReader( &reader);
+
+    QUrl url("http://localhost/wfs");
+    WfsCapabilitiesParser parser( &testResponse, url);
 
     try {
-        pugi::xpath_node_set featureTypes = doc.select_nodes("/*/FeatureTypeList/FeatureType");
-        QVERIFY2(featureTypes.size() == 2, "Wrong amount of feature types found.");
+        QList<WfsFeature> features;
+        parser.parseFeatures(features);
+        QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
     } catch(pugi::xpath_exception e) {
         QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
     }
 
-//    std::for_each (featureTypes.begin(), featureTypes.end(), [](pugi::xpath_node featureType) {
-//        qDebug() << "featureType name: " << featureType.node().child("Name").text().as_string();
-//    });
+}
 
-
+void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {
+    QUrl featureUrl("http://localhost/wfs?service=WFS&request=GetFeature&featureName=FeatureType&version=1.1.0");
+    WfsFeature feature(featureUrl);
+    QVERIFY2(feature.bbox().isNull(), "BBox of initial Feature is not null!");
 }
 
 

@@ -2,8 +2,10 @@
 #include <QTest>
 
 //#include "systemtest/systemtest.h"
+#include "core/catalog/tst_resourcetest.h"
 #include "rasteroperationstest/tst_rasteroperationstest.h"
 #include "wfsconnectortest/tst_wfsconnectortest.h"
+#include "xmltests/qtxmlparsertest.h"
 
 using namespace Ilwis;
 
@@ -14,6 +16,12 @@ int testSystem()
     return QTest::qExec( &test); \
 }
 */
+
+int testResource()
+{
+    ResourceTest test; \
+    return QTest::qExec( &test); \
+}
 
 int testRasterOperations()
 {
@@ -27,6 +35,12 @@ int testWfsOperations()
     return QTest::qExec( &test); \
 }
 
+int testQtXmlParserOperations()
+{
+    QtXmlParserTest test; \
+    return QTest::qExec( &test);
+}
+
 int main(int argc, char *argv[]) \
 { \
     QGuiApplication app(argc, argv); \
@@ -34,8 +48,11 @@ int main(int argc, char *argv[]) \
 
     return 0
             //+ testSystem()
+            //+ testResource()
             //+ testRasterOperations()
-            + testWfsOperations()
+            //+ testWfsOperations()
+            + testQtXmlParserOperations()
             //+ testMyNotYetImplementedModule()
+
             ;
 }

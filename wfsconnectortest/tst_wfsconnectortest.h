@@ -23,6 +23,8 @@ private Q_SLOTS:
     void shouldRecognizeExceptionReport();
     void shouldNotRecognizeExceptionReport();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
+    void shouldLoadFeatureMetadata();
+    void testInitialFeatureHasEmptyBBox();
     void cleanupTestCase();
 
 private:
