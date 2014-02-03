@@ -16,6 +16,8 @@ QT       += sql testlib network xmlpatterns
 CONFIG   += console
 CONFIG   -= app_bundle
 
+
+
 TEMPLATE = app
 
 
@@ -34,11 +36,9 @@ SOURCES += \
     xmltests/qtxmlparsertest.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
-                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector \
-                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/pugixml/ -lpugixml
+                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
-                                                 -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector \
-                                              -L$$PWD/../libraries/$$PLATFORM$$CONF/pugixml/ -lpugixml
+                                                 -L$$PWD/../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
 
 INCLUDEPATH += $$PWD/../IlwisCore/core \
     $$PWD/../IlwisCore/rasteroperations \
@@ -51,13 +51,13 @@ DEPENDPATH += $$PWD/../ilwiscore/core \
 
 OTHER_FILES += \
     global.pri \
-    testfiles/quad100.xsd \
-    testfiles/test.xml
+    testfiles/quad100.xsd
 
 
 testtarget.files = testfiles/wfs_capabilities.xml \
     testfiles/wfs_exceptionreport.xml \
-    testfiles/featurecollection.xml
+    testfiles/featurecollection.xml \
+    testfiles/test.xml
 
 testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
 

@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) \
             //+ testSystem()
             //+ testResource()
             //+ testRasterOperations()
-            //+ testWfsOperations()
-            + testQtXmlParserOperations()
+            + testWfsOperations()
+            //+ testQtXmlParserOperations()
             //+ testMyNotYetImplementedModule()
 
             ;

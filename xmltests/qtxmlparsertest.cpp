@@ -2,6 +2,8 @@
 #include <QtTest>
 #include <QString>
 #include <QObject>
+#include <QXmlItem>
+#include <QXmlQuery>
 #include <QTextStream>
 #include <QXmlStreamReader>
 #include <QtXmlPatterns/QXmlResultItems>
@@ -10,7 +12,8 @@
 
 #include "qtxmlparsertest.h"
 #include "wfsfeature.h"
-#include "xmlparser.h"
+#include "xmlstreamparser.h"
+#include "xpathparser.h"
 
 QtXmlParserTest::QtXmlParserTest()
 {
@@ -23,61 +26,74 @@ void QtXmlParserTest::initTestCase()
 
 void QtXmlParserTest::testParsingFeatureTypesViaStreamReader()
 {
-
     QFile file("extensions/testfiles/test.xml");
     file.open(QIODevice::ReadOnly);
 
     QXmlStreamReader reader;
     reader.setDevice( &file);
 
-    XmlParser parser( &reader);
-    parser.addNamespaceMapping("wfs", "http://www.opengis.net/wfs");
-    parser.addNamespaceMapping("ows", "http://www.opengis.net/ows");
+    XmlStreamParser parser( &reader);
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
 
-
-    QVERIFY2(parser.startParsing("test"), "Starts not at 'test' node.");
+    bool atTestNode = parser.startParsing("test");
+    if (!atTestNode && parser.reader()->hasError()) {
+        qDebug() << parser.reader()->errorString();
+    }
+    QVERIFY2(atTestNode, "Starts not at 'test' node.");
 }
 
 void QtXmlParserTest::testParsingFeatureTypesViaQuery()
 {
-    QMap<QString,QString> namespaces;
-    namespaces["wfs"] = "http://www.opengis.net/wfs";
-    namespaces["ows"] = "http://www.opengis.net/ows";
-    QString xPath(createXPathNamespaceDeclarations(namespaces));
-    xPath.append("doc($xml)/wfs:WFS_Capabilities/wfs:FeatureTypeList/wfs:FeatureType");
 
-    QFile file("extensions/testfiles/wfs_capabilities.xml");
-    file.open(QIODevice::ReadOnly);
+//    QMap<QString,QString> namespaces;
+//    namespaces["wfs"] = "http://www.opengis.net/wfs";
+//    namespaces["ows"] = "http://www.opengis.net/ows";
+//    QString xPath(createXPathNamespaceDeclarations(namespaces));
+//    xPath.append("doc($xml)/wfs:WFS_Capabilities/wfs:FeatureTypeList/wfs:FeatureType");
 
-    QXmlQuery query;
-    query.bindVariable("xml", &file);
-    query.setQuery(xPath);
-    QXmlResultItems result;
+    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    file->open(QIODevice::ReadOnly);
 
-    if (query.isValid()) {
-        query.evaluateTo( &result);
-        QXmlItem item(result.next());
-        while (!item.isNull()) {
+    XPathParser parser(file);
+    parser.addNamespaceMapping("wfs", "http://www.opengis.net/wfs");
+    parser.addNamespaceMapping("ows", "http://www.opengis.net/ows"); // default ns
 
-            item = result.next();
-            //debugItem(item);
+    QXmlResultItems results;
+    QString xpath("/wfs:WFS_Capabilities/wfs:FeatureTypeList/wfs:FeatureType");
+    QXmlQuery *query = parser.parseAbsolute(xpath);
+
+    if (query->isValid()) {
+        query->evaluateTo( &results);
+        QXmlItem featureType(results.next());
+        while (!featureType.isNull()) {
+            debugFeatureType(featureType, query);
+            featureType = results.next();
         }
-        if (result.hasError()) {
+        if (results.hasError()) {
             QFAIL("Evaluating failed.");
         }
     } else {
-        QFAIL(QString("Invalid xpath query: %1").arg(xPath).toLatin1().constData());
+        QFAIL(QString("Invalid xpath query: %1").arg(xpath).toLatin1().constData());
     }
 }
 
-void debugItem(QXmlItem &item) {
-    if (item.isNode()) {
-        QXmlItem nodeItem(item.toNodeModelIndex());
+void QtXmlParserTest::debugFeatureType(QXmlItem &featureType, QXmlQuery *ctx) {
+    ctx->setFocus(featureType);
+    QMap<QString,QString> namespaces;
+    namespaces["wfs"] = "http://www.opengis.net/wfs";
+    namespaces["ows"] = "http://www.opengis.net/ows";
 
-    } else {
-        QVariant value = item.toAtomicValue();
-        value.toChar();
-    }
+    QString xPath(createXPathNamespaceDeclarations(namespaces));
+
+    xPath.append("./wfs:Name/string()");
+    ctx->setQuery(xPath);
+    QString output;
+    ctx->evaluateTo(&output);
+    qDebug() << output;
+//    qDebug() << ctx.setQuery("./wfs:Title/text()");
+//    qDebug() << ctx.setQuery("./wfs:Abstract/text()");
+//    qDebug() << ctx.setQuery("./wfs:DefaultSRS/text()");
 }
 
 void QtXmlParserTest::cleanupTestCase()

@@ -4,9 +4,6 @@
 #include <QObject>
 #include <QTextStream>
 
-#include "pugixml/pugixml_global.h"
-#include "pugixml/pugixml.hpp"
-
 #include "kernel.h"
 #include "catalog.h"
 #include "symboltable.h"
@@ -17,7 +14,6 @@
 #include "domain.h"
 #include "coverage.h"
 #include "columndefinition.h"
-#include "geometry.h"
 #include "attributerecord.h"
 #include "feature.h"
 #include "featurecoverage.h"
@@ -58,26 +54,32 @@ void WfsConnectorTest::initTestCase() {
 void WfsConnectorTest::shouldRecognizeExceptionReport()
 {
     WfsResponse testResponse;
-    readTestResponseFromFile("extensions/testfiles/wfs_exceptionreport.xml", testResponse);
+    _file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
+    _file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(_file);
 
-    try {
+//    try {
         QVERIFY2(testResponse.isException(), "Response did not recognized an exception message!");
-    } catch(pugi::xpath_exception e) {
-        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-    }
+//    } catch(pugi::xpath_exception e) {
+//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+//    }
+        _file->close();
 }
 
 
 void WfsConnectorTest::shouldNotRecognizeExceptionReport()
 {
     WfsResponse testResponse;
-    readTestResponseFromFile("extensions/testfiles/wfs_capabilities.xml", testResponse);
+    _file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    _file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(_file);
 
-    try {
+//    try {
         QVERIFY2(!testResponse.isException(), "Response recognized an exception message!");
-    } catch(pugi::xpath_exception e) {
-        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-    }
+//    } catch(pugi::xpath_exception e) {
+//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+//    }
+        _file->close();
 }
 
 void WfsConnectorTest::shouldLoadFeatureMetadata()
@@ -95,24 +97,23 @@ void WfsConnectorTest::shouldLoadFeatureMetadata()
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
 
-    QXmlStreamReader reader;
-    QFile file("extensions/testfiles/wfs_capabilities.xml");
-    file.open(QIODevice::ReadOnly);
-    reader.setDevice( &file);
+    _file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    _file->open(QIODevice::ReadOnly);
 
     WfsResponse testResponse;
-    testResponse.setXmlReader( &reader);
+    testResponse.setDevice(_file);
 
     QUrl url("http://localhost/wfs");
     WfsCapabilitiesParser parser( &testResponse, url);
 
-    try {
+//    try {
         QList<WfsFeature> features;
         parser.parseFeatures(features);
         QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
-    } catch(pugi::xpath_exception e) {
-        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-    }
+//    } catch(pugi::xpath_exception e) {
+//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
+//    }
+        _file->close();
 
 }
 
@@ -145,21 +146,12 @@ void WfsConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
     QVERIFY2(connector.canUse(wfs1), QString("Connector indicates it can't use valid WFS: %1").arg(url).toLatin1().constData());
 }
 
-void WfsConnectorTest::readTestResponseFromFile(QString path, WfsResponse &response) {
-    QFile file(path);
-    QVERIFY2(file.open(QIODevice::ReadOnly), QString("Could not find test file '%1'!").arg(path).toLatin1().constData());
-
-    QString content;
-    QTextStream in(&file);
-    while(!in.atEnd()) {
-        QString line = in.readLine();
-        content.append(line);
-    }
-    file.close();
-    response.setContent(content);
-}
 
 void WfsConnectorTest::cleanupTestCase() {
+
+    if (_file && _file->isOpen()) {
+        _file->close();
+    }
     delete _wfs;
 }
 

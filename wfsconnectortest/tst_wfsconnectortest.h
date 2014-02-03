@@ -28,11 +28,12 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
+    WebFeatureService *_wfs;
+    QFile *_file;
+
     void sandbox();
     void canUseValidWfsUrlWithCapitalParameters();
     void canUseValidWfsUrlWithMixedCapitalParameters();
-    void readTestResponseFromFile(QString path, WfsResponse &content);
-    WebFeatureService *_wfs;
 
 };
 

@@ -1,8 +1,10 @@
 #ifndef QTXMLPARSERTEST_H
 #define QTXMLPARSERTEST_H
 
-#include <QObject>
-#include <QString>
+class QObject;
+class QString;
+class QXmlItem;
+class QXmlQuery;
 
 class QtXmlParserTest: public QObject
 {
@@ -13,13 +15,16 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
-    void testParsingFeatureTypesViaStreamReader();
+    void testParsingFeatureTypesViaQuery();
     void cleanupTestCase();
 
 private:
-    void testParsingFeatureTypesViaQuery();
+    void testParsingFeatureTypesViaStreamReader();
     QString createXPathNamespaceDeclarations(QMap<QString,QString> &mappings);
     QString readTestFile(QString path);
+
+
+    void debugFeatureType(QXmlItem &featureType, QXmlQuery *ctx);
 
 };
 
