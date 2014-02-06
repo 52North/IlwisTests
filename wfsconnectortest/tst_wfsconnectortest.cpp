@@ -40,7 +40,6 @@ WfsConnectorTest::WfsConnectorTest()
     _wfs = new WebFeatureService(wfsUrl);
 }
 
-
 void WfsConnectorTest::initTestCase() {
     QString url(WFS_TEST_SERVER_1);
 
@@ -54,37 +53,42 @@ void WfsConnectorTest::initTestCase() {
 void WfsConnectorTest::shouldRecognizeExceptionReport()
 {
     WfsResponse testResponse;
-    _file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
-    _file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(_file);
+    QFile *file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
+    file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(file);
 
-//    try {
-        QVERIFY2(testResponse.isException(), "Response did not recognized an exception message!");
-//    } catch(pugi::xpath_exception e) {
-//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-//    }
-        _file->close();
+    QVERIFY2(testResponse.isException(), "Response did not recognized exception report!");
+    file->close(); // no delete as file is owned by response
 }
 
+void WfsConnectorTest::shouldParseExceptionReportWithDetails()
+{
+    WfsResponse testResponse;
+    QFile *file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
+    file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(file);
+
+    QString exceptionLog = testResponse.parseException();
+    QVERIFY2( !exceptionLog.isEmpty(), "No Exception report could be parsed!");
+    qDebug() << "parsed exception report (to verify): " << exceptionLog;
+    file->close(); // no delete as file is owned by response
+}
 
 void WfsConnectorTest::shouldNotRecognizeExceptionReport()
 {
     WfsResponse testResponse;
-    _file = new QFile("extensions/testfiles/wfs_capabilities.xml");
-    _file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(_file);
+    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(file);
 
-//    try {
-        QVERIFY2(!testResponse.isException(), "Response recognized an exception message!");
-//    } catch(pugi::xpath_exception e) {
-//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-//    }
-        _file->close();
+    QVERIFY2( !testResponse.isException(), "Response recognized an exception message!");
+    file->close(); // no delete as file is owned by response
 }
 
 void WfsConnectorTest::shouldLoadFeatureMetadata()
 {
-    QUrl url("http://localhost/blah/?query=true");
+    //QUrl url("http://localhost/blah/?query=true");
+    QUrl url("http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100");
     Resource featureResource(url, itFEATURE); // TODO: replace when resource.getQuery() is implemented
     WfsFeatureConnector featureConnector(featureResource);
 
@@ -96,25 +100,18 @@ void WfsConnectorTest::shouldLoadFeatureMetadata()
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
-
-    _file = new QFile("extensions/testfiles/wfs_capabilities.xml");
-    _file->open(QIODevice::ReadOnly);
-
     WfsResponse testResponse;
-    testResponse.setDevice(_file);
+    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    file->open(QIODevice::ReadOnly);
+    testResponse.setDevice(file);
 
     QUrl url("http://localhost/wfs");
     WfsCapabilitiesParser parser( &testResponse, url);
 
-//    try {
-        QList<WfsFeature> features;
-        parser.parseFeatures(features);
-        QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
-//    } catch(pugi::xpath_exception e) {
-//        QFAIL(QString("Could not evaluate xpath: %1").arg(e.what()).toLatin1().constData());
-//    }
-        _file->close();
-
+    QList<WfsFeature> features;
+    parser.parseFeatures(features);
+    QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
+    file->close(); // no delete as file is owned by response
 }
 
 void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {
@@ -122,7 +119,6 @@ void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {
     WfsFeature feature(featureUrl);
     QVERIFY2(feature.bbox().isNull(), "BBox of initial Feature is not null!");
 }
-
 
 void WfsConnectorTest::sandbox() {
     QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
@@ -148,10 +144,6 @@ void WfsConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
 
 
 void WfsConnectorTest::cleanupTestCase() {
-
-    if (_file && _file->isOpen()) {
-        _file->close();
-    }
     delete _wfs;
 }
 

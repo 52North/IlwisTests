@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<test>
+<test xmlns="http://test.ns/b">
   <a:test xmlns:a="http://test.ns/a">
 
-    <b xmlns="http://test.ns/b" />
+    <b />
 
     <a:b>
         <a:c>text</a:c>
@@ -11,5 +11,7 @@
     <a:c>text</a:c>
 
   </a:test>
+
+  <node foo="bar" />
 
 </test>

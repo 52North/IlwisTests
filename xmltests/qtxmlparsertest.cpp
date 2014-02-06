@@ -14,6 +14,10 @@
 #include "wfsfeature.h"
 #include "xmlstreamparser.h"
 #include "xpathparser.h"
+#include "xmlstreamparser.h"
+
+using namespace Ilwis;
+using namespace Wfs;
 
 QtXmlParserTest::QtXmlParserTest()
 {
@@ -24,110 +28,95 @@ void QtXmlParserTest::initTestCase()
 {
 }
 
-void QtXmlParserTest::testParsingFeatureTypesViaStreamReader()
+void QtXmlParserTest::shouldStartParsingAtRootNode()
 {
-    QFile file("extensions/testfiles/test.xml");
-    file.open(QIODevice::ReadOnly);
+    QFile *file = new QFile("extensions/testfiles/test.xml");
+    file->open(QIODevice::ReadOnly);
 
     QXmlStreamReader reader;
-    reader.setDevice( &file);
+    reader.setDevice(file);
 
     XmlStreamParser parser( &reader);
     parser.addNamespaceMapping("a", "http://test.ns/a");
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
 
     bool atTestNode = parser.startParsing("test");
-    if (!atTestNode && parser.reader()->hasError()) {
-        qDebug() << parser.reader()->errorString();
+    if (!atTestNode) {
+        qDebug() << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
     }
     QVERIFY2(atTestNode, "Starts not at 'test' node.");
+    file->close();
 }
 
-void QtXmlParserTest::testParsingFeatureTypesViaQuery()
+void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 {
-
-//    QMap<QString,QString> namespaces;
-//    namespaces["wfs"] = "http://www.opengis.net/wfs";
-//    namespaces["ows"] = "http://www.opengis.net/ows";
-//    QString xPath(createXPathNamespaceDeclarations(namespaces));
-//    xPath.append("doc($xml)/wfs:WFS_Capabilities/wfs:FeatureTypeList/wfs:FeatureType");
-
-    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
+    QFile *file = new QFile("extensions/testfiles/test.xml");
     file->open(QIODevice::ReadOnly);
 
-    XPathParser parser(file);
-    parser.addNamespaceMapping("wfs", "http://www.opengis.net/wfs");
-    parser.addNamespaceMapping("ows", "http://www.opengis.net/ows"); // default ns
+    QXmlStreamReader reader;
+    reader.setDevice(file);
 
-    QXmlResultItems results;
-    QString xpath("/wfs:WFS_Capabilities/wfs:FeatureTypeList/wfs:FeatureType");
-    QXmlQuery *query = parser.parseAbsolute(xpath);
+    XmlStreamParser parser( &reader);
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
 
-    if (query->isValid()) {
-        query->evaluateTo( &results);
-        QXmlItem featureType(results.next());
-        while (!featureType.isNull()) {
-            debugFeatureType(featureType, query);
-            featureType = results.next();
-        }
-        if (results.hasError()) {
-            QFAIL("Evaluating failed.");
+    if (parser.startParsing("test")) {
+        if (parser.nextLevelMoveTo("a:test")) {
+            QVERIFY2(parser.nextLevelMoveTo("a:c"), "Could not find element '//test/a:test/a:c'");
         }
     } else {
-        QFAIL(QString("Invalid xpath query: %1").arg(xpath).toLatin1().constData());
+        QFAIL("Starts not at 'test' node.");
     }
 }
 
-void QtXmlParserTest::debugFeatureType(QXmlItem &featureType, QXmlQuery *ctx) {
-    ctx->setFocus(featureType);
-    QMap<QString,QString> namespaces;
-    namespaces["wfs"] = "http://www.opengis.net/wfs";
-    namespaces["ows"] = "http://www.opengis.net/ows";
+void QtXmlParserTest::shouldMoveToElementOnSameLevel()
+{
+    QFile *file = new QFile("extensions/testfiles/test.xml");
+    file->open(QIODevice::ReadOnly);
 
-    QString xPath(createXPathNamespaceDeclarations(namespaces));
+    QXmlStreamReader reader;
+    reader.setDevice(file);
 
-    xPath.append("./wfs:Name/string()");
-    ctx->setQuery(xPath);
-    QString output;
-    ctx->evaluateTo(&output);
-    qDebug() << output;
-//    qDebug() << ctx.setQuery("./wfs:Title/text()");
-//    qDebug() << ctx.setQuery("./wfs:Abstract/text()");
-//    qDebug() << ctx.setQuery("./wfs:DefaultSRS/text()");
+    XmlStreamParser parser( &reader);
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+
+    if (parser.startParsing("test")) {
+        if (parser.nextLevelMoveTo("a:test")) {
+            QVERIFY2(parser.currentLevelMoveTo("node"), "Could not find element '//test/node'");
+        }
+    } else {
+        QFAIL("Starts not at 'test' node.");
+    }
+}
+
+void QtXmlParserTest::shouldParseCorrectAttributeValue()
+{
+    QFile *file = new QFile("extensions/testfiles/test.xml");
+    file->open(QIODevice::ReadOnly);
+
+    QXmlStreamReader reader;
+    reader.setDevice(file);
+
+    XmlStreamParser parser( &reader);
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+
+    if (parser.startParsing("test")) {
+        if (parser.nextLevelMoveTo("a:test")) {
+            if (parser.currentLevelMoveTo("node")) {
+                QXmlStreamAttributes attributes = parser.attributes();
+                QVERIFY2(attributes.value("foo") == "bar", "Incorrect attribute value.");
+            }
+        }
+    } else {
+        QFAIL("Starts not at 'test' node.");
+    }
 }
 
 void QtXmlParserTest::cleanupTestCase()
 {
 
 }
-
-QString QtXmlParserTest::createXPathNamespaceDeclarations(QMap<QString, QString> &mappings)
-{
-    QString declarationString;
-    QMapIterator<QString,QString> iterator(mappings);
-    while(iterator.hasNext()) {
-        iterator.next();
-        QString declaration = QString("declare namespace %1 = \"%2\"; \n ").arg(iterator.key(), iterator.value());
-        declarationString.push_back(declaration);
-    }
-    return declarationString;
-}
-
-QString QtXmlParserTest::readTestFile(QString path)
-{
-    QFile file(path);
-    file.open(QIODevice::ReadOnly);
-    //QVERIFY2(file.open(QIODevice::ReadOnly), QString("Could not find test file '%1'!").arg(path).toLatin1().constData());
-
-    QString content;
-    QTextStream in(&file);
-    while(!in.atEnd()) {
-        QString line = in.readLine();
-        content.append(line);
-    }
-    file.close();
-    return content;
-}
-
 
 #include "moc_qtxmlparsertest.cpp"

@@ -22,18 +22,18 @@ private Q_SLOTS:
     void initTestCase();
     void shouldRecognizeExceptionReport();
     void shouldNotRecognizeExceptionReport();
+    void shouldParseExceptionReportWithDetails();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
     void shouldLoadFeatureMetadata();
     void testInitialFeatureHasEmptyBBox();
+    void canUseValidWfsUrlWithCapitalParameters();
+    void canUseValidWfsUrlWithMixedCapitalParameters();
     void cleanupTestCase();
 
 private:
     WebFeatureService *_wfs;
-    QFile *_file;
 
     void sandbox();
-    void canUseValidWfsUrlWithCapitalParameters();
-    void canUseValidWfsUrlWithMixedCapitalParameters();
 
 };
 

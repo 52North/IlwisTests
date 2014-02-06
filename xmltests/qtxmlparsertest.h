@@ -15,16 +15,14 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
-    void testParsingFeatureTypesViaQuery();
+    void shouldStartParsingAtRootNode();
+    void shouldMoveToElementOnNextLevel();
+    void shouldMoveToElementOnSameLevel();
+    void shouldParseCorrectAttributeValue();
     void cleanupTestCase();
 
 private:
-    void testParsingFeatureTypesViaStreamReader();
-    QString createXPathNamespaceDeclarations(QMap<QString,QString> &mappings);
-    QString readTestFile(QString path);
 
-
-    void debugFeatureType(QXmlItem &featureType, QXmlQuery *ctx);
 
 };
 
