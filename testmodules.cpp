@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) \
             //+ testResource()
             //+ testRasterOperations()
             + testWfsOperations()
-            //+ testQtXmlParserOperations()
+            + testQtXmlParserOperations()
             //+ testMyNotYetImplementedModule()
 
             ;

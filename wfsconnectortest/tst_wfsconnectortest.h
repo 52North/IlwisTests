@@ -24,7 +24,7 @@ private Q_SLOTS:
     void shouldNotRecognizeExceptionReport();
     void shouldParseExceptionReportWithDetails();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
-    void shouldLoadFeatureMetadata();
+    void shouldParseFeatureDescription();
     void testInitialFeatureHasEmptyBBox();
     void canUseValidWfsUrlWithCapitalParameters();
     void canUseValidWfsUrlWithMixedCapitalParameters();

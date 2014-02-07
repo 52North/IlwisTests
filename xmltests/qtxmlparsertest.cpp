@@ -10,10 +10,9 @@
 #include <QtXmlPatterns/QXmlQuery>
 #include <QMapIterator>
 
+#include "testutils.h"
 #include "qtxmlparsertest.h"
 #include "wfsfeature.h"
-#include "xmlstreamparser.h"
-#include "xpathparser.h"
 #include "xmlstreamparser.h"
 
 using namespace Ilwis;
@@ -30,35 +29,50 @@ void QtXmlParserTest::initTestCase()
 
 void QtXmlParserTest::shouldStartParsingAtRootNode()
 {
-    QFile *file = new QFile("extensions/testfiles/test.xml");
-    file->open(QIODevice::ReadOnly);
-
-    QXmlStreamReader reader;
-    reader.setDevice(file);
-
-    XmlStreamParser parser( &reader);
-    parser.addNamespaceMapping("a", "http://test.ns/a");
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
 
     bool atTestNode = parser.startParsing("test");
     if (!atTestNode) {
-        qDebug() << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
+        qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
+        qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
     }
     QVERIFY2(atTestNode, "Starts not at 'test' node.");
-    file->close();
+}
+
+void QtXmlParserTest::shouldStartParsingAtRootNodeWhenNoXmlHeaderPresent()
+{
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test_without_xml_header.xml"));
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+
+    bool atTestNode = parser.startParsing("test");
+    if (!atTestNode) {
+        qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
+        qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
+    }
+    QVERIFY2(atTestNode, "Starts not at 'test' node.");
+}
+
+void QtXmlParserTest::shouldStartParsingXmlSchemaAtRootNode()
+{
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/quad100.xsd"));
+    parser.addNamespaceMapping("xsd", "http://www.w3.org/2001/XMLSchema");
+
+    bool atSchemaNode = parser.startParsing("xsd:schema");
+    if (!atSchemaNode) {
+        qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
+        qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
+    }
+    QVERIFY2(atSchemaNode, "Starts not at 'schema' node.");
 }
 
 void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 {
-    QFile *file = new QFile("extensions/testfiles/test.xml");
-    file->open(QIODevice::ReadOnly);
-
-    QXmlStreamReader reader;
-    reader.setDevice(file);
-
-    XmlStreamParser parser( &reader);
-    parser.addNamespaceMapping("a", "http://test.ns/a");
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
         if (parser.nextLevelMoveTo("a:test")) {
@@ -71,15 +85,9 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 
 void QtXmlParserTest::shouldMoveToElementOnSameLevel()
 {
-    QFile *file = new QFile("extensions/testfiles/test.xml");
-    file->open(QIODevice::ReadOnly);
-
-    QXmlStreamReader reader;
-    reader.setDevice(file);
-
-    XmlStreamParser parser( &reader);
-    parser.addNamespaceMapping("a", "http://test.ns/a");
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
         if (parser.nextLevelMoveTo("a:test")) {
@@ -92,15 +100,9 @@ void QtXmlParserTest::shouldMoveToElementOnSameLevel()
 
 void QtXmlParserTest::shouldParseCorrectAttributeValue()
 {
-    QFile *file = new QFile("extensions/testfiles/test.xml");
-    file->open(QIODevice::ReadOnly);
-
-    QXmlStreamReader reader;
-    reader.setDevice(file);
-
-    XmlStreamParser parser( &reader);
-    parser.addNamespaceMapping("a", "http://test.ns/a");
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
         if (parser.nextLevelMoveTo("a:test")) {
@@ -118,5 +120,6 @@ void QtXmlParserTest::cleanupTestCase()
 {
 
 }
+
 
 #include "moc_qtxmlparsertest.cpp"

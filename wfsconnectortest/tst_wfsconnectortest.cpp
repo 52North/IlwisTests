@@ -24,8 +24,10 @@
 #include "wfsresponse.h"
 #include "wfsfeature.h"
 #include "wfscapabilitiesparser.h"
+#include "wfsfeaturedescriptionparser.h"
 #include "wfsfeatureconnector.h"
 #include "tst_wfsconnectortest.h"
+#include "testutils.h"
 
 #define WFS_TEST_SERVER_1 "http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS"
 #define WFS_TEST_SERVER_2 "http://nsidc.org/cgi-bin/atlas_north?service=WFS&acceptVersions=1.1.0&request=GetCapabilities"
@@ -52,66 +54,51 @@ void WfsConnectorTest::initTestCase() {
 
 void WfsConnectorTest::shouldRecognizeExceptionReport()
 {
-    WfsResponse testResponse;
-    QFile *file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
-    file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(file);
-
+    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
     QVERIFY2(testResponse.isException(), "Response did not recognized exception report!");
-    file->close(); // no delete as file is owned by response
 }
 
 void WfsConnectorTest::shouldParseExceptionReportWithDetails()
 {
-    WfsResponse testResponse;
-    QFile *file = new QFile("extensions/testfiles/wfs_exceptionreport.xml");
-    file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(file);
-
-    QString exceptionLog = testResponse.parseException();
-    QVERIFY2( !exceptionLog.isEmpty(), "No Exception report could be parsed!");
-    qDebug() << "parsed exception report (to verify): " << exceptionLog;
-    file->close(); // no delete as file is owned by response
+    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
+    QVERIFY2( !testResponse.parseException().isEmpty(), "No Exception report could be parsed!");
 }
 
 void WfsConnectorTest::shouldNotRecognizeExceptionReport()
 {
-    WfsResponse testResponse;
-    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
-    file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(file);
-
+    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
     QVERIFY2( !testResponse.isException(), "Response recognized an exception message!");
-    file->close(); // no delete as file is owned by response
 }
 
-void WfsConnectorTest::shouldLoadFeatureMetadata()
+void WfsConnectorTest::shouldParseFeatureDescription()
 {
     //QUrl url("http://localhost/blah/?query=true");
     QUrl url("http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100");
-    Resource featureResource(url, itFEATURE); // TODO: replace when resource.getQuery() is implemented
+    WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
+    featureResource.setName("ogi:quad100");
     WfsFeatureConnector featureConnector(featureResource);
+    Ilwis::FeatureCoverage *fcoverage = new Ilwis::FeatureCoverage(featureResource);
 
-    Ilwis::IlwisObject *feature = featureConnector.create();
+    ITable table;
+    QMap<QString, QString> namespaceMappings;
+    WfsResponse testResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
+    WfsFeatureDescriptionParser parser( &testResponse, fcoverage);
+    parser.parseSchemaDescription(table, namespaceMappings);
+
     QString failureMsg("Could not load metadata for feature '%1'");
-    QVERIFY2(featureConnector.loadMetaData(feature), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
+    QVERIFY2(featureConnector.loadMetaData(fcoverage), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
 }
 
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
-    WfsResponse testResponse;
-    QFile *file = new QFile("extensions/testfiles/wfs_capabilities.xml");
-    file->open(QIODevice::ReadOnly);
-    testResponse.setDevice(file);
-
     QUrl url("http://localhost/wfs");
+    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
     WfsCapabilitiesParser parser( &testResponse, url);
 
     QList<WfsFeature> features;
     parser.parseFeatures(features);
     QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
-    file->close(); // no delete as file is owned by response
 }
 
 void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {

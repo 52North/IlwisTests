@@ -23,10 +23,10 @@ TEMPLATE = app
 
 HEADERS += \
     rasteroperationstest/tst_rasteroperationstest.h \
-    testcontants.h \
     wfsconnectortest/tst_wfsconnectortest.h \
     core/catalog/tst_resourcetest.h \
-    xmltests/qtxmlparsertest.h
+    xmltests/qtxmlparsertest.h \
+    testutils.h
 
 SOURCES += \
     rasteroperationstest/tst_rasteroperationstest.cpp \
@@ -51,13 +51,14 @@ DEPENDPATH += $$PWD/../ilwiscore/core \
 
 OTHER_FILES += \
     global.pri \
-    testfiles/quad100.xsd
 
 
 testtarget.files = testfiles/wfs_capabilities.xml \
+    testfiles/test_without_xml_header.xml \
     testfiles/wfs_exceptionreport.xml \
     testfiles/featurecollection.xml \
-    testfiles/test.xml
+    testfiles/test.xml \
+    testfiles/quad100.xsd
 
 testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
 
