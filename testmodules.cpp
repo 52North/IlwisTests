@@ -1,6 +1,9 @@
 #include <QtWidgets/QApplication>
 #include <QTest>
 
+#include <exception>
+#include <iostream>
+
 //#include "systemtest/systemtest.h"
 #include "core/catalog/tst_resourcetest.h"
 #include "rasteroperationstest/tst_rasteroperationstest.h"
@@ -46,13 +49,18 @@ int main(int argc, char *argv[]) \
     QGuiApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
 
-    return 0
-            //+ testSystem()
-            //+ testResource()
-            //+ testRasterOperations()
-            + testWfsOperations()
-            + testQtXmlParserOperations()
-            //+ testMyNotYetImplementedModule()
+    try {
+        return 0
+                //+ testSystem()
+                //+ testResource()
+                //+ testRasterOperations()
+                + testWfsOperations()
+                + testQtXmlParserOperations()
+                //+ testMyNotYetImplementedModule()
 
-            ;
+                ;
+    } catch (std::exception &e) {
+        std::cout << "Exception occured during testing: " << e.what() << std::endl;
+        return 666;
+    }
 }

@@ -43,6 +43,9 @@ WfsConnectorTest::WfsConnectorTest()
 }
 
 void WfsConnectorTest::initTestCase() {
+
+    // TODO: test against 'wfs-test://extensions/testfiles/wfs_capabilities.xml'?
+
     QString url(WFS_TEST_SERVER_1);
 
     QUrl s(url);
@@ -82,8 +85,10 @@ void WfsConnectorTest::shouldParseFeatureDescription()
     ITable table;
     QMap<QString, QString> namespaceMappings;
     WfsResponse testResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
-    WfsFeatureDescriptionParser parser( &testResponse, fcoverage);
+    WfsFeatureDescriptionParser parser( &testResponse);
     parser.parseSchemaDescription(table, namespaceMappings);
+
+    // TODO: cleanup test case: separate loadMetadata and parseSchemaDescription
 
     QString failureMsg("Could not load metadata for feature '%1'");
     QVERIFY2(featureConnector.loadMetaData(fcoverage), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
@@ -92,13 +97,21 @@ void WfsConnectorTest::shouldParseFeatureDescription()
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
-    QUrl url("http://localhost/wfs");
+    QUrl url("http://localhost/wfs?request=GetCapabilities&service=WFS");
     WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
     WfsCapabilitiesParser parser( &testResponse, url);
 
     QList<WfsFeature> features;
     parser.parseFeatures(features);
     QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
+
+    QUrlQuery actualQuery1 = features.at(0).urlQuery();
+    QVERIFY2(actualQuery1.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery1.toString()).toLatin1().constData());
+    QVERIFY2(actualQuery1.queryItemValue("featureName") == "ogi:quad100", QString("Query is incorrect '%1'").arg(actualQuery1.toString()).toLatin1().constData());
+
+    QUrlQuery actualQuery2 = features.at(1).urlQuery();
+    QVERIFY2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
+    QVERIFY2(actualQuery2.queryItemValue("featureName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
 }
 
 void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {

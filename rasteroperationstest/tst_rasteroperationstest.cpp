@@ -17,7 +17,7 @@
 #include "numericdomain.h"
 #include "numericitemrange.h"
 
-#include "testcontants.h"
+#include "testutils.h"
 #include "rasterstrechoperation.h"
 #include "tst_rasteroperationstest.h"
 
