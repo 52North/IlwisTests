@@ -10,6 +10,8 @@
 
     <a:c>text</a:c>
 
+    <a:c>another text</a:c>
+
   </a:test>
 
   <node foo="bar" />

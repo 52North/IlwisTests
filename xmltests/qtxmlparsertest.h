@@ -21,6 +21,7 @@ private Q_SLOTS:
     void shouldStartParsingXmlSchemaAtRootNode();
     void shouldMoveToElementOnNextLevel();
     void shouldMoveToElementOnSameLevel();
+    void shouldMoveToSecondCNode();
     void shouldParseCorrectAttributeValue();
     void cleanupTestCase();
 
