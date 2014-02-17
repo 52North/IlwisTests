@@ -75,8 +75,8 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.nextLevelMoveToNext("a:test")) {
-            QVERIFY2(parser.nextLevelMoveToNext("a:c"), "Could not find element '//test/a:test/a:c'");
+        if (parser.moveToNext("a:test")) {
+            QVERIFY2(parser.moveToNext("a:c"), "Could not find element '//test/a:test/a:c'");
         } else {
             QFAIL("Parser didn't reach a:test node (want to reach '//test/a:test/a:c').");
         }
@@ -92,11 +92,7 @@ void QtXmlParserTest::shouldMoveToElementOnSameLevel()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.nextLevelMoveToNext("a:test")) {
-            QVERIFY2(parser.currentLevelMoveToNext("node"), "Could not find element '//test/node'");
-        } else {
-            QFAIL("Parser didn't reach a:test node (want to reach '//test/node').");
-        }
+        QVERIFY2(parser.moveToNext("node"), "Could not find element '//test/node'");
     } else {
         QFAIL("Starts not at 'test' node.");
     }
@@ -109,9 +105,9 @@ void QtXmlParserTest::shouldMoveToSecondCNode()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.nextLevelMoveToNext("a:test")) {
-            if (parser.nextLevelMoveToNext("a:c")) {
-                if (parser.currentLevelMoveToNext("a:c")) {
+        if (parser.moveToNext("a:test")) {
+            if (parser.moveToNext("a:c")) {
+                if (parser.moveToNext("a:c")) {
                     QString errorMsg("Read wrong node: ");
                     errorMsg = errorMsg.append(parser.reader()->name().toString());
                     QString text = parser.readElementText();
@@ -137,18 +133,14 @@ void QtXmlParserTest::shouldParseCorrectAttributeValue()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.nextLevelMoveToNext("a:test")) {
-            if (parser.currentLevelMoveToNext("node")) {
-                QXmlStreamAttributes attributes = parser.attributes();
-                QVERIFY2(attributes.value("foo") == "bar", "Incorrect attribute value.");
-            } else {
-                QFAIL("Parser didn't reach node node (want to reach '//test/a:test/node/@foo')");
-            }
+        if (parser.moveToNext("node")) {
+            QXmlStreamAttributes attributes = parser.attributes();
+            QVERIFY2(attributes.value("foo") == "bar", "Incorrect attribute value.");
         } else {
-            QFAIL("Parser didn't reach a:test node (want to reach '//test/a:test/node/@foo')");
+            QFAIL("Parser didn't reach node node (want to reach '//test/node/@foo')");
         }
     } else {
-        QFAIL("Starts not at 'test' node (want to reach '//test/a:test/node/@foo')");
+        QFAIL("Starts not at 'test' node (want to reach '//test/node/@foo')");
     }
 }
 

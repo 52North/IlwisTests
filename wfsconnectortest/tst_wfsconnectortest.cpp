@@ -12,9 +12,18 @@
 
 #include "ilwisdata.h"
 #include "domain.h"
-#include "coverage.h"
+#include "datadefinition.h"
+#include "numericdomain.h"
+#include "numericrange.h"
 #include "columndefinition.h"
+#include "table.h"
+#include "domainitem.h"
+#include "itemdomain.h"
+#include "textdomain.h"
+#include "identifieritem.h"
+#include "identifierrange.h"
 #include "attributerecord.h"
+#include "coverage.h"
 #include "feature.h"
 #include "featurecoverage.h"
 #include "catalogconnector.h"
@@ -25,6 +34,7 @@
 #include "wfsfeature.h"
 #include "wfscapabilitiesparser.h"
 #include "wfsfeaturedescriptionparser.h"
+#include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
 #include "tst_wfsconnectortest.h"
 #include "testutils.h"
@@ -73,28 +83,6 @@ void WfsConnectorTest::shouldNotRecognizeExceptionReport()
     QVERIFY2( !testResponse.isException(), "Response recognized an exception message!");
 }
 
-void WfsConnectorTest::shouldParseFeatureDescription()
-{
-    //QUrl url("http://localhost/blah/?query=true");
-    QUrl url("http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100");
-    WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
-    featureResource.setName("ogi:quad100");
-    WfsFeatureConnector featureConnector(featureResource);
-    Ilwis::FeatureCoverage *fcoverage = new Ilwis::FeatureCoverage(featureResource);
-
-    ITable table;
-    QMap<QString, QString> namespaceMappings;
-    WfsResponse testResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
-    WfsFeatureDescriptionParser parser( &testResponse);
-    parser.parseSchemaDescription(table, namespaceMappings);
-
-    // TODO: cleanup test case: separate loadMetadata and parseSchemaDescription
-
-    QString failureMsg("Could not load metadata for feature '%1'");
-    QVERIFY2(featureConnector.loadMetaData(fcoverage), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
-}
-
-
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
     QUrl url("http://localhost/wfs?request=GetCapabilities&service=WFS");
@@ -112,6 +100,46 @@ void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
     QUrlQuery actualQuery2 = features.at(1).urlQuery();
     QVERIFY2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
     QVERIFY2(actualQuery2.queryItemValue("featureName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
+}
+
+void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
+{
+    // TODO: separate loadMetadata and parseSchemaDescription
+
+    ITable table;
+    QUrl schemaResourceUrl("ilwis://internalcatalog/foo_bar");
+    Resource resource(schemaResourceUrl, itFLATTABLE);
+    if(!table.prepare(resource)) {
+        QFAIL("Could not create table.");
+    }
+
+    QMap<QString, QString> namespaceMappings;
+    WfsResponse featureDescriptionResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
+    WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
+    parser.parseSchemaDescription(table, namespaceMappings);
+
+    quint32 expected = 14;
+    quint32 actual = table->columnCount();
+    QVERIFY2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual).toLatin1().constData());
+
+
+    WfsResponse featureResponse(Utils::openFile("extensions/testfiles/featurecollection.xml"));
+    WfsFeatureParser featureParser( &featureResponse);
+    featureParser.parseFeature(table, namespaceMappings);
+
+}
+
+
+void WfsConnectorTest::shouldPrepareWfsFeature() {
+    //QUrl url("http://localhost/blah/?query=true");
+//    QUrl url("http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100");
+//    WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
+//    featureResource.setName("ogi:quad100");
+//    WfsFeatureConnector featureConnector(featureResource);
+//    Ilwis::FeatureCoverage *fcoverage = new Ilwis::FeatureCoverage(featureResource);
+
+//    QString failureMsg("Could not load metadata for feature '%1'");
+//    QVERIFY2(featureConnector.loadMetaData(fcoverage), failureMsg.arg("CURRENTLY HARD CODED!!").toLatin1().constData());
 }
 
 void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {

@@ -50,7 +50,7 @@ DEPENDPATH += $$PWD/../ilwiscore/core \
     $$PWD/../IlwisConnectors/wfsconnector
 
 OTHER_FILES += \
-    global.pri \
+    global.pri
 
 
 testtarget.files = testfiles/wfs_capabilities.xml \
@@ -58,7 +58,8 @@ testtarget.files = testfiles/wfs_capabilities.xml \
     testfiles/wfs_exceptionreport.xml \
     testfiles/featurecollection.xml \
     testfiles/test.xml \
-    testfiles/quad100.xsd
+    testfiles/quad100.xsd \
+    testfiles/greenlevel_contours.xsd
 
 testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
 
