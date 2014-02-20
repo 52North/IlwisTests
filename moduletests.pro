@@ -43,7 +43,7 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../libraries/$$PLATFORM
 INCLUDEPATH += $$PWD/../IlwisCore/core \
     $$PWD/../IlwisCore/rasteroperations \
     $$PWD/../IlwisConnectors/wfsconnector \
-    $$PWD/../external/
+    $$PWD/../external/geos
 
 DEPENDPATH += $$PWD/../ilwiscore/core \
     $$PWD/../IlwisCore/rasteroperations \
