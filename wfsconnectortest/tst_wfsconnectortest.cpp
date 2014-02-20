@@ -104,29 +104,25 @@ void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 
 void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
 {
-    // TODO: separate loadMetadata and parseSchemaDescription
-
-    ITable table;
-    QUrl schemaResourceUrl("ilwis://internalcatalog/foo_bar");
-    Resource resource(schemaResourceUrl, itFLATTABLE);
-    if(!table.prepare(resource)) {
-        QFAIL("Could not create table.");
-    }
+    QUrl url("http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100");
+    WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
+    FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
 
     QMap<QString, QString> namespaceMappings;
     WfsResponse featureDescriptionResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
-    parser.parseSchemaDescription(table, namespaceMappings);
+
+    parser.parseSchemaDescription(fcoverage, namespaceMappings);
+    ITable table = fcoverage->attributeTable();
 
     quint32 expected = 13;
     quint32 actual = table->columnCount();
     QVERIFY2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual).toLatin1().constData());
 
-
     WfsResponse featureResponse(Utils::openFile("extensions/testfiles/featurecollection.xml"));
     WfsFeatureParser featureParser( &featureResponse);
     featureParser.parseFeature(table, namespaceMappings);
-
+    delete fcoverage;
 }
 
 
