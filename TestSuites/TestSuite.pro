@@ -23,11 +23,21 @@ SOURCES += main.cpp \
     core/util/locationtest.cpp \
     testsuite.cpp \
     ilwistestclass.cpp \
-    core/util/coordinatetest.cpp
+    core/util/coordinatetest.cpp \
+    connectors/gdalconnector/gdalconnectortest.cpp \
+    core/util/sizetest.cpp \
+    core/util/numericrangetest.cpp \
+    core/util/juliantimetests.cpp \
+    core/ilwisobjects/domain/domaintimetests.cpp
 
 HEADERS += \
     testmacros.h \
     core/util/locationtest.h \
     testsuite.h \
     ilwistestclass.h \
-    core/util/coordinatetest.h
+    core/util/coordinatetest.h \
+    connectors/gdalconnector/gdalconnectortest.h \
+    core/util/sizetest.h \
+    core/util/juliantimetests.h \
+    core/ilwisobjects/domain/domaintimetests.h \
+    core/util/numericrangetest.h

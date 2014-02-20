@@ -4,7 +4,7 @@
 
 REGISTER_TEST(PixelTests);
 
-PixelTests::PixelTests() : IlwisTestClass("LocationTests","CoreTest")
+PixelTests::PixelTests() : IlwisTestCase("LocationTests","CoreTest")
 {
 }
 //----------------------------------------------------------------------------------

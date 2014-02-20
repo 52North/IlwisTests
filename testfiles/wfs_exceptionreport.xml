@@ -1,0 +1,5 @@
+<ows:ExceptionReport version="1.0.0" xsi:schemaLocation="http://www.opengis.net/ows http://204.62.18.179:8080/geoserver/schemas/ows/1.0.0/owsExceptionReport.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ows="http://www.opengis.net/ows">
+   <ows:Exception exceptionCode="InvalidParameterValue" locator="service">
+      <ows:ExceptionText>No service: ( WFSs )</ows:ExceptionText>
+   </ows:Exception>
+</ows:ExceptionReport>

@@ -15,4 +15,6 @@ static name *dummy_name
     qDebug() << message; \
     QVERIFY2(std::abs(v1 - v2) < delta,"Failure")
 
+#define APPROX(v1,v2,delta) (std::abs(v1 - v2) < delta)
+
 #endif // TESTMACROS_H

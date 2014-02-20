@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-class IlwisTestClass : public QObject
+class IlwisTestCase : public QObject
 {
     Q_OBJECT
 public:
-    explicit IlwisTestClass(const QString& name, const QString& module, QObject *parent = 0);
+    explicit IlwisTestCase(const QString& name, const QString& module, QObject *parent = 0);
     QString name() const;
     QString module() const;
 private:

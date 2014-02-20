@@ -10,7 +10,7 @@
 #include "testmacros.h"
 #include "ilwistestclass.h"
 
-class CoordinateTest : public IlwisTestClass
+class CoordinateTest : public IlwisTestCase
 {
     Q_OBJECT
 

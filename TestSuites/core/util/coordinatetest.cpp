@@ -4,7 +4,7 @@
 
 REGISTER_TEST(CoordinateTest);
 
-CoordinateTest::CoordinateTest() : IlwisTestClass("CoordinateTest","CoreTest")
+CoordinateTest::CoordinateTest() : IlwisTestCase("CoordinateTest","CoreTest")
 {
 }
 

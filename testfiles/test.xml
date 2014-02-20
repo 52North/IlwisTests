@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test xmlns="http://test.ns/b">
+  <a:test xmlns:a="http://test.ns/a">
+
+    <b />
+
+    <a:b>
+        <a:c>text</a:c>
+    </a:b>
+
+    <a:c>text</a:c>
+
+  </a:test>
+
+  <node foo="bar" />
+
+</test>

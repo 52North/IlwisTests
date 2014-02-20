@@ -10,7 +10,7 @@
 #include "symboltable.h"
 #include "ilwisoperation.h"
 #include "numericrange.h"
-//#include "line.h"
+#include "geos/io/WKTReader.h"
 #include "ellipsoid.h"
 #include "geodeticdatum.h"
 #include "projection.h"
@@ -26,7 +26,7 @@
 #include "conventionalcoordinatesystem.h"
 #include "columndefinition.h"
 #include "basetable.h"
-#include "polygon.h"
+//#include "polygon.h"
 #include "geometry.h"
 #include "attributerecord.h"
 #include "feature.h"
@@ -53,14 +53,17 @@ bool equals(double v1, double v2, double dig) {
 
 }
 
-bool loaders1 = true;
-bool loaders2 = true;
-bool loaders3 = true;
-bool loaders4 = true;
-bool loaders5 = true;
-bool loaders6 = true;
-bool loaders7 = true;
-bool loaders8 = true;
+bool use1 = true;
+bool use2 = true;
+bool use3 = true;
+bool use4 = true;
+bool use5 = true;
+bool use6 = true;
+bool use7 = true;
+bool use8 = true;
+bool use9 = true;
+bool use10 = true;
+bool use11 = true;
 
 LoaderTests::LoaderTests(QObject *parent) :
     QObject(parent)
@@ -72,6 +75,7 @@ LoaderTests::LoaderTests(QObject *parent) :
 void LoaderTests::simpleLoaders()
 {
     try{
+
         context()->addSystemLocation(QUrl("file:///h:/projects/Ilwis4/build/debug/win32/bin/resources"));
 
         QUrl s = QString("file:///%1").arg(ROOT_TESTDATA);
@@ -80,8 +84,7 @@ void LoaderTests::simpleLoaders()
         cat.prepare(s);
         context()->setWorkingCatalog(cat);
 
-
-        if (loaders1) {
+        if (use1) {
             qDebug() << "ellipsoid: should fail, ellipsoid from internal wkt , doesnt exist";
             IEllipsoid ell2;
             QString res = QString("code=wkt:GRS 1987.6");
@@ -154,7 +157,7 @@ void LoaderTests::simpleLoaders()
 }
 void LoaderTests::coordTransformations() {
     try{
-        if ( loaders2) {
+        if (use2) {
             ICoordinateSystem csy1;
             Resource resource(QString("code=proj4:+proj=longlat +ellps=WGS84 +datum=WGS84"), itCOORDSYSTEM);
             csy1.prepare(resource);
@@ -169,9 +172,10 @@ void LoaderTests::coordTransformations() {
             QVERIFY2(equals(ll.lon(),16.55,0.01),ISSUE(csy2));
 
             qDebug() << "latlon to utm zone 29 : proj4";
-            csy2->prepare("code=proj4:+proj=utm +zone=29 +a=6378249.2 +b=6356515 +towgs84=-23,259,-9,0,0,0,0");
+            Resource res2(QString("code=proj4:+proj=utm +zone=29 +a=6378249.2 +b=6356515 +towgs84=-23,259,-9,0,0,0,0"), itCOORDSYSTEM);
+            csy2.prepare(res2);
             Coordinate cc = csy2->latlon2coord(LatLon(9.535, -9.825));
-            QVERIFY2(equals(cc.x(),409453,1),ISSUE(csy2));
+            QVERIFY2(equals(cc.x,409453,1),ISSUE(csy2));
         }
 
     }
@@ -184,7 +188,7 @@ void LoaderTests::coordTransformations() {
 
 void LoaderTests::gridCoverageDataAccess() {
     try{
-        if (loaders3) {
+        if(use3) {
             IRasterCoverage map1;
             QString res = QString("file:///%1/n000302.mpr").arg(ROOT_TESTDATA);
             map1.prepare(res);
@@ -217,8 +221,8 @@ void LoaderTests::gridCoverageDataAccess() {
             res = QString("file:///%1/average_monthly_temperature.mpl").arg(ROOT_TESTDATA);
             maplist.prepare(res);
 
-            qDebug() << "3D Gridcoverage: access value at Voxel location, 898,277,3";
-            QVERIFY2(equals(maplist->pix2value(Voxel(898,277,3)), 24.20,0.001),ISSUE(maplist));
+            qDebug() << "3D Gridcoverage: access value at Pixel location, 898,277,3";
+            QVERIFY2(equals(maplist->pix2value(Pixel(898,277,3)), 24.20,0.001),ISSUE(maplist));
 
             qDebug() << "Pixel access thematic domain";
             res = QString("file:///%1/Landuse.mpr").arg(ROOT_TESTDATA);
@@ -258,6 +262,8 @@ void LoaderTests::gdalConnector()
     try{
         qDebug() << "Starting testing gdal connector";
 
+
+        if (use4){
         IRasterCoverage map1;
         qDebug() << "Gridcoverage: regular load rastercoverage through gdal connector ";
         QString res = QString("file:///%1/f41078a1.tif").arg(ROOT_TESTDATA);
@@ -278,13 +284,13 @@ void LoaderTests::gdalConnector()
         qDebug() << "Gridcoverage: access value through GDAL, maplist";
         res = QString("file:///%1/GCL_INT.tif").arg(ROOT_TESTDATA);
         maplist.prepare(res);
-        QVERIFY2(maplist->pix2value(Voxel(239,297,23)) == 48, ISSUE(maplist));
+        QVERIFY2(maplist->pix2value(Pixel(239,297,23)) == 48, ISSUE(maplist));
 
         qDebug() << "Gridcoverage: access value through GDAL, ENVI-IDL";
         res = QString("file:///%1/a_200006_bv.img").arg(ROOT_TESTDATA);
         QVERIFY2(map1.prepare(res) == true,ISSUE(map1));
 
-        IRasterCoverage map2;
+         IRasterCoverage map2;
         res = QString("file:///%1/n000302.mpr").arg(ROOT_TESTDATA);
         map2.prepare(res) == true,ISSUE(map2);
 
@@ -297,18 +303,19 @@ void LoaderTests::gdalConnector()
         QString res2 = QString("file:///%1/shape/regions.shp").arg(ROOT_TESTDATA);
         QVERIFY2(map4.prepare(res2) == true, QString("FeatureCoverage: %1").arg(res2).toLatin1());
         qDebug() << "FeatureCoverage: testing envelope (bbox)";
-        QVERIFY2(map4->envelope().toString() == "POLYGON(33.006454 3.400880 0.000000,47.960530 14.963722 0.000000)",QString("FeatureCoverage: %1").arg(map4->toString()).toLatin1());
+        QString env = map4->envelope().toString();
+        QVERIFY2(env == "POLYGON(33.0065 3.40088,47.9605 14.9637)",QString("FeatureCoverage: %1").arg(map4->toString()).toLatin1());
 
         qDebug() << "FeatureCoverage: loadBinaryData of featurecoverage (points)";
         QString res3 = QString("file:///%1/shape/rainfall.shp").arg(ROOT_TESTDATA);
         IFeatureCoverage map5;
         QVERIFY2(map5.prepare(res3) == true,QString("FeatureCoverage: %1").arg(res3).toLatin1());
         FeatureIterator iter2(map5);
-        SPFeatureI f4 = *(iter2 + 1);
+        UPFeatureI& f4 = *(iter2 + 1);
         QVariant output = f4->cell("RAINFALL");
         QVERIFY2(output.toString() == "taquina", QString("value: %1").arg(output.toString()).toLatin1());
-        f4 = *(iter2 + 4);
-        output = f4->cell("JANUARY");
+        UPFeatureI& f4s = *(iter2 + 4);
+        output = f4s("JANUARY");
         QVERIFY2(output.toInt() == 85 , QString("value: %1").arg(output.toString()).toLatin1());
 
         qDebug() << "FeatureCoverage: loadBinaryData of featurecoverage (lines)";
@@ -316,11 +323,11 @@ void LoaderTests::gdalConnector()
         IFeatureCoverage map6;
         QVERIFY2(map6.prepare(res4) == true,QString("FeatureCoverage: %1").arg(res4).toLatin1());
         FeatureIterator iter3(map6);
-        SPFeatureI f5 = *(iter3 + 104);
+        UPFeatureI& f5 = *(iter3 + 104);
         output = f5->cell("DRAINAGE");
         QVERIFY2(output.toString() == "lake", QString("value: %1").arg(output.toString()).toLatin1());
-        f5 = *(iter3 + 21);
-        output = f5->cell("C1");
+        UPFeatureI& f5s = *(iter3 + 21);
+        output = f5s->cell("C1");
         QVERIFY2(output.toInt() == 1 , QString("value: %1").arg(output.toString()).toLatin1());
 
         qDebug() << "FeatureCoverage: loadBinaryData of featurecoverage (polygons)";
@@ -328,9 +335,34 @@ void LoaderTests::gdalConnector()
         IFeatureCoverage map7;
         QVERIFY2(map7.prepare(res5) == true, QString("FeatureCoverage: %1").arg(res5).toLatin1());
         FeatureIterator iter4(map7);
-        SPFeatureI f6 = *(iter4 + 40);
+        UPFeatureI& f6 = *(iter4 + 40);
         output = f6->cell("GEOLOGY");
         QVERIFY2(output.toString() == "Shales", QString("value: %1").arg(output.toString()).toLatin1());
+
+        IFeatureCoverage map8;
+        res5 = QString("file:///%1/Rainfall.mpp").arg(ROOT_TESTDATA);
+
+        map8.prepare(res5);
+        QUrl url(QString("file:///%1/aafrainfall.shp").arg(ROOT_TESTDATA)) ;
+        map8->connectTo(url,"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+        map8->store();
+
+        IFeatureCoverage map9;
+        res5 = QString("file:///%1/Drainage.mps").arg(ROOT_TESTDATA);
+
+        map9.prepare(res5);
+        QUrl url2(QString("file:///%1/aafdrainage.shp").arg(ROOT_TESTDATA)) ;
+        map9->connectTo(url2,"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+        map9->store();
+
+        IFeatureCoverage map10;
+        res5 = QString("file:///%1/soils_sadc.mpa").arg(ROOT_TESTDATA);
+
+        map10.prepare(res5);
+        url2 = QUrl(QString("file:///%1/aafsoils.shp").arg(ROOT_TESTDATA)) ;
+        map10->connectTo(url2,"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+        map10->store();
+        }
 
 
     }
@@ -343,7 +375,7 @@ void LoaderTests::gdalConnector()
 void LoaderTests::featureData()
 {
     try{
-        if ( loaders4) {
+        if (use5) {
             qDebug() << "feature coverage, ilwis 3";
             IFeatureCoverage fcoverage;
             QString res = QString("file:///%1/Rainfall.mpp").arg(ROOT_TESTDATA);
@@ -360,11 +392,11 @@ void LoaderTests::featureData()
             fcoverage3.prepare(res);
 
             FeatureIterator iter(fcoverage);
-            SPFeatureI f = *(iter + 4);
+            UPFeatureI& f = *(iter + 4);
             QVERIFY2(f("january").toInt() == 93, ISSUE(fcoverage));
 
             FeatureIterator iter2(fcoverage2);
-            SPFeatureI f2 = *(iter2 + 10);
+            UPFeatureI& f2 = *(iter2 + 10);
             QVERIFY2(f2(FEATUREVALUECOLUMN).toInt() == 2600, ISSUE(fcoverage2));
 
 
@@ -374,11 +406,22 @@ void LoaderTests::featureData()
             QVERIFY2(fcoverage4.prepare(res) == true, ISSUE(fcoverage4));
 
             FeatureIterator iter3(fcoverage4);
-            SPFeatureI f4 = *(iter3 + 4);
+            UPFeatureI& f4 = *(iter3 + 4);
             int val = f4("FAOSOIL").toInt();
 
             QString item = fcoverage4->value("FAOSOIL",val).toString();
             QVERIFY2(item == "Rd18-3ab", ISSUE(fcoverage4));
+
+            geos::io::WKTReader reader(fcoverage4->geomfactory().get());
+            geos::geom::Geometry *geom = reader.read("POLYGON((10.9365 -4.41711,10.3385 -4.8304, 10.7695 -5.3845, 11.5786 -4.8833,10.9365 -4.41711))");
+            UPFeatureI& f4s = fcoverage4->newFeature(geom);
+            f4s->setCell("FAOSOIL","Fx29-3a");
+            f4s->setCell("CNTNAME","CF");
+
+            QUrl url2 = QUrl(QString("file:///%1/aafsoils2.shp").arg(ROOT_TESTDATA)) ;
+            fcoverage4->connectTo(url2,"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+            fcoverage4->store();
+
         }
     } catch(ErrorObject& err) {
         qDebug() << err.message();
@@ -389,7 +432,7 @@ void LoaderTests::featureData()
 void LoaderTests::domainandtableAccess() {
 
     try{
-        if ( loaders5) {
+        if (use6) {
             IDomain dom;
             QString res = QString("file:///%1/landuse.dom").arg(ROOT_TESTDATA);
             qDebug() << "Thematic domain: regular load";
@@ -446,16 +489,19 @@ void LoaderTests::domainandtableAccess() {
 void LoaderTests::indexDomains()
 {
     try{
+        if (use7) {
         IRasterCoverage mpl;
         QString res = QString("file:///%1/small.mpl").arg(ROOT_TESTDATA);
         mpl.prepare(res);
 
-        INumericItemDomain numdom;
+        IlwisData<ItemDomain<NumericItem>> numdom;
         numdom.prepare();
         NumericItemRange nrange;
         nrange.interpolation("%1 + %2");
         nrange << "0 100 1" << "200" << "300" << "400" << "500" << "1000" << "1500";
         numdom->setRange(nrange);
+        IlwisTypes tp2 = numdom->item(0)->valueType();
+        IlwisTypes tp = numdom->valueType();
 
 
         qDebug() << "Sub indexing numeric item domain, continuous, single band";
@@ -485,6 +531,7 @@ void LoaderTests::indexDomains()
         slicer.grid(mpl);
         raster = slicer("5.7");
         QVERIFY2(raster.isValid(), ISSUE(raster));
+        }
 
 
     }    catch (ErrorObject& err) {
@@ -495,6 +542,7 @@ void LoaderTests::indexDomains()
 void LoaderTests::thematicDomains()
 {
     try{
+        if (use8) {
         IThematicDomain parentdom;
         parentdom.prepare();
         ThematicRange rng;
@@ -530,7 +578,7 @@ void LoaderTests::thematicDomains()
         qDebug() << "asking for containement of a item from the parent in a non-strict child";
         childom1->setStrict(false);
         QVERIFY2(childom1->contains("road") == Domain::cPARENT,ISSUE(childom1));
-
+        }
 
     }catch(ErrorObject& err) {
         qDebug() << err.message();
@@ -574,6 +622,7 @@ void LoaderTests::tabcalc()
     SymbolTable symtbl;
     ExecutionContext ctx;
     try{
+        if (use9) {
         qDebug() << "starting tabcalc";
 
         qDebug() << "simple copying of column";
@@ -612,6 +661,7 @@ void LoaderTests::tabcalc()
         QVERIFY(commandhandler()->execute("script aa19=rainfall.tbt[5 8]",&ctx, symtbl));
         tbl1 = symtbl.getValue(ctx._results[0]).value<Ilwis::ITable>();
         QVERIFY2(tbl1->cell(1,1).toDouble() == 87, "finished copying column");
+        }
 
 
     }catch (ErrorObject& err) {
@@ -623,7 +673,7 @@ void LoaderTests::tabcalc()
 
 void LoaderTests::accessCatalog() {
     try{
-        if (loaders6) {
+        if(use10) {
             QUrl res = QString("file:///%1/other").arg(ROOT_TESTDATA);
             qDebug() << "Catalog : loading valid catalog";
             Catalog cat;
@@ -643,7 +693,7 @@ void LoaderTests::accessCatalog() {
 
 void LoaderTests::scriptExecution() {
     try{
-        if (loaders8) {
+        if(use11) {
             SymbolTable symtbl;
             ExecutionContext ctx;
             qDebug() << "basic function on raster : sin";
@@ -731,10 +781,12 @@ void LoaderTests::scriptExecution() {
 
             qDebug() << "script ading two maps from different connectors";
             txt = "script aa15=average_monthly_temperature_august_2.tif + average_monthly_temperature_december_3.mpr";
-            o.setExpression(txt, symtbl);
-            Operation op14(o);
+            OperationExpression oa(txt);
+            Operation op14(oa);
             ctx.clear();
             QVERIFY2(op14->execute(&ctx,symtbl) == true,"map calc done ");
+            dump(ctx, symtbl, itRASTER);
+
 
             qDebug() << "assignment feature coverage";
             txt = "aa10=rainfall.mpp";
@@ -759,7 +811,7 @@ void LoaderTests::scriptExecution() {
             dump(ctx, symtbl, itRASTER);
 
             qDebug() << "aggregate rastermap 2";
-            txt = "aa12=aggregateraster(kenya_2009ndvi_cor_22.mpr,Avg,4,true)";
+            txt = "aa12=aggregateraster(kenya_2009ndvi_cor_22.mpr,Avg,4,True)";
             o.setExpression(txt, symtbl);
             Operation op12(o);
             ctx.clear();
@@ -781,11 +833,23 @@ void LoaderTests::scriptExecution() {
 
             qDebug() << "cross";
             ctx.clear();
-            QVERIFY(commandhandler()->execute("aa14,aa15=cross(small_thema2.mpr, small_thema3.mpr, dontcare)",&ctx, symtbl));
+            QVERIFY(commandhandler()->execute("aa15,aa15a=cross(small_thema2.mpr, small_thema3.mpr, dontcare)",&ctx, symtbl));
+            dump(ctx,symtbl,itRASTER,1);
+
 
             qDebug() << "gridding";
             ctx.clear();
             QVERIFY(commandhandler()->execute("script aa16=gridding(ethiopia_dem.csy, coordinate(34.194008,12.365958), 3,3,10,12)",&ctx, symtbl));
+            IFeatureCoverage fcov;
+            fcov.prepare("aa16");
+            IDomain valdom;
+            valdom.prepare("value");
+            ColumnDefinition coldef("maxy",valdom);
+            fcov->attributeTable()->addColumn(coldef);
+            fcov->attributeTable()->setCell("maxy",0,100);
+            fcov->attributeTable()->setCell("maxy",1,12);
+            fcov->connectTo({"file:///d:/Projects/Ilwis/Ilwis4/testdata/aa16aa.mpa"},"polygonmap", "ilwis3", IlwisObject::cmOUTPUT);
+            fcov->store();
 
 
             qDebug() << "executing script test.isf";
@@ -809,16 +873,26 @@ QUrl LoaderTests::makeUrl(const QString& name) {
     return QUrl::fromLocalFile(outputname);
 }
 
-void LoaderTests::dump(const ExecutionContext& ctx, const SymbolTable& symtbl, quint64 tp) {
+void LoaderTests::dump(const ExecutionContext& ctx, const SymbolTable& symtbl, quint64 tp, int index) {
     if ( ctx._results.size() == 0)
         return;
 
     if ( tp == itRASTER) {
-        IRasterCoverage mp = symtbl.getValue(ctx._results[0]).value<Ilwis::IRasterCoverage>();
+        IRasterCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IRasterCoverage>();
         if ( mp.isValid()) {
-            mp->connectTo(makeUrl(mp->name()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
-            mp->setCreateTime(Ilwis::Time::now());
-            mp->store(IlwisObject::smBINARYDATA | IlwisObject::smMETADATA);
+            if (mp->connectTo(makeUrl(mp->name()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT)) {
+                mp->setCreateTime(Ilwis::Time::now());
+                mp->store();
+            }
+        }
+    }
+    if ( tp == itFEATURE) {
+        IFeatureCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IFeatureCoverage>();
+        if ( mp.isValid()) {
+            if (mp->connectTo(makeUrl(mp->name()), "polygonmap","ilwis3",Ilwis::IlwisObject::cmOUTPUT)) {
+                mp->setCreateTime(Ilwis::Time::now());
+                mp->store();
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
 #include "testmacros.h"
 #include "ilwistestclass.h"
 
-class PixelTests : public IlwisTestClass
+class PixelTests : public IlwisTestCase
 {
     Q_OBJECT
 
