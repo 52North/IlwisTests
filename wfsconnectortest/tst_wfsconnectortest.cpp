@@ -118,7 +118,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
     parser.parseSchemaDescription(table, namespaceMappings);
 
-    quint32 expected = 14;
+    quint32 expected = 13;
     quint32 actual = table->columnCount();
     QVERIFY2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual).toLatin1().constData());
 
