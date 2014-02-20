@@ -5,7 +5,7 @@
     <b />
 
     <a:b>
-        <a:c>text</a:c>
+        <a:c>text deep level</a:c>
     </a:b>
 
     <a:c>text</a:c>
