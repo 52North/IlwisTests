@@ -85,6 +85,19 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
     }
 }
 
+void QtXmlParserTest::shouldFindElements()
+{
+    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
+    parser.addNamespaceMapping("a", "http://test.ns/a");
+
+    if (parser.startParsing("test")) {
+        QVERIFY2(parser.findNextOf( {"a:b"} ), "Could not find element '//test/a:b'");
+    } else {
+        QFAIL("Starts not at 'test' node.");
+    }
+}
+
 void QtXmlParserTest::shouldMoveToElementOnSameLevel()
 {
     XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
