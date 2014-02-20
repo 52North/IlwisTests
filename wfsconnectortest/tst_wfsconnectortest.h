@@ -8,7 +8,6 @@ using namespace Ilwis;
 using namespace Wfs;
 
 class QUrl;
-class FeatureCoverage;
 
 class WfsConnectorTest :  public QObject
 {
