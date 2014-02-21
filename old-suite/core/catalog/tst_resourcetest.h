@@ -2,20 +2,13 @@
 #define TST_RESOURCETEST_H
 
 #include <QObject>
-#include <QTest>
-#include "kernel.h"
-#include "testmacros.h"
-#include "ilwistestclass.h"
 
-class ResourceTests :  public IlwisTestCase
+class ResourceTest :  public QObject
 {
     Q_OBJECT
 
 public:
-    ResourceTests();
-
-private:
-    NEW_TEST(ResourceTests);
+    ResourceTest();
 
 private Q_SLOTS:
 
@@ -25,6 +18,7 @@ private Q_SLOTS:
     void shouldIndicateNotHavingQueryString();
     void cleanupTestCase();
 
+private:
 
 };
 

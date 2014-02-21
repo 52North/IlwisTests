@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core testlib
+QT       += core testlib network xmlpatterns
 
 QT       -= gui
 
@@ -16,8 +16,8 @@ TEMPLATE = app
 
 include(global.pri)
 
-DLLDESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+DLLDESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
+DESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
 
 SOURCES += main.cpp \
     core/util/locationtest.cpp \
@@ -46,4 +46,5 @@ HEADERS += \
     core/util/numericrangetest.h \
     core/catalog/tst_resourcetest.h \
     connectors/wfsconnector/tst_wfsconnectortest.h \
-    connectors/wfsconnector/qtxmlparsertest.h
+    connectors/wfsconnector/qtxmlparsertest.h \
+    testutils.h

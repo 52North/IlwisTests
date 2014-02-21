@@ -12,7 +12,7 @@ CONFIG(release, debug|release) {
 CONF=release
 }
 
-OUTDIR = $$PWD/../output/$$CONF
+OUTDIR = $$PWD/..output/$$CONF
 PLATFORM = generic
 win32{
     PLATFORM = win32
@@ -22,24 +22,17 @@ QT += sql
 BOOST = ../external
 
 plugin{
-DESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/$$TARGET
+DESTDIR = $$PWD/..libraries/$$PLATFORM$$CONF/$$TARGET
+DLLDESTDIR = $$PWD/..output/$$PLATFORM$$CONF/bin/extensions/$$TARGET
 }dll{
-DESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
+DESTDIR = $$PWD/..libraries/$$PLATFORM$$CONF/$$TARGET
+DLLDESTDIR = $$PWD/..output/$$PLATFORM$$CONF/bin
 }else {
-DESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
+DESTDIR = $$PWD/..libraries/$$PLATFORM$$CONF/$$TARGET
+DLLDESTDIR = $$PWD/..output/$$PLATFORM$$CONF/bin
 }
 
-unix|win32: LIBS += -L$$PWD/../libraries/win32debug/core/ -lilwiscore
-unix|win32: LIBS += -L$$PWD/../libraries/win32debug/ -llibgeos
-unix|win32: LIBS += -L$$PWD/../libraries/win32debug/wfsconnector/ -lwfsconnector
-
-INCLUDEPATH += $$PWD/../../IlwisCore/core
-DEPENDPATH += $$PWD/../../IlwisCore/core
-
-INCLUDEPATH +=  ../IlwisCore/core \
+INCLUDEPATH += ../IlwisCore/core \
                 ../IlwisCore/core/ilwisobjects \
                 ../IlwisCore/core/ilwisobjects/geometry \
                 ../IlwisCore/core/util \
@@ -52,11 +45,9 @@ INCLUDEPATH +=  ../IlwisCore/core \
                 ../IlwisCore/core/ilwisobjects/operation \
                 ../IlwisCore/core/catalog \
                 ../IlwisCore/core/ilwisobjects/domain \
-                ../IlwisConnectors/wfsconnector \
                 $$BOOST
 
-INCLUDEPATH +=  $$PWD/../external/geos
-DEPENDPATH +=   $$PWD/../external/geos
+HEADERS +=
 
 
 
