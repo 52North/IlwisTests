@@ -37,8 +37,8 @@ void WfsCatalogConnectorTest::initTestCase() {
 
     QUrl s(url);
     Catalog cat;
-    boolean prepared = cat.prepare(s);
-    DOTEST2(prepared, QString("could not prepare WFS '%1'").arg(url));
+    if (!cat.prepare(s))
+        throw SkipTest(QString("could not prepare WFS '%1'").arg(url).toStdString());
     context()->setWorkingCatalog(cat);
 }
 
