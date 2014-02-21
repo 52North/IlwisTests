@@ -14,14 +14,15 @@ public:
     explicit LoaderTests(QObject *parent = 0);
     
 private:
-    void dump(const Ilwis::ExecutionContext& ctx, const Ilwis::SymbolTable &symtbl, quint64 tp);
+    void dump(const Ilwis::ExecutionContext& ctx, const Ilwis::SymbolTable &symtbl, quint64 tp, int index=0);
     QSharedPointer<Ilwis::Kernel> _kernel;
+    QUrl makeUrl(const QString &name);
 private slots:
     void simpleLoaders();
     void gridCoverageDataAccess();
+    void featureData();
     void gdalConnector();
     void coordTransformations();
-    void featureData();
     void domainandtableAccess();
     void accessCatalog();
     void scriptExecution();
