@@ -36,7 +36,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
 {
     Ilwis::initIlwis();
     _inputDatapath = inputData;
-    _outputDataPath = outputData == "" ? outputData : inputData;
+    _outputDataPath = outputData != "" ? outputData : inputData;
 
     QStringList testcases;
     if ( modules.size() == 1 && modules[0] == "all"){
