@@ -23,7 +23,7 @@ using namespace Wfs;
 
 REGISTER_TEST(QtXmlParserTest);
 
-QtXmlParserTest::QtXmlParserTest(): IlwisTestCase("WfsConnectorTest", "XmlParsingTest")
+QtXmlParserTest::QtXmlParserTest(): IlwisTestCase("XmlParsingTest","WfsConnectorTest")
 {
 
 }
