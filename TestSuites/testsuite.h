@@ -1,6 +1,17 @@
 #ifndef TESTSUITE_H
 #define TESTSUITE_H
 
+#include <exception>
+#include <string>
+
+class SkipTest: public std::exception{
+    private:
+        std::string _what;
+    public:
+        SkipTest(std::string what):_what(what){}
+        const char *what() const throw(){return _what.c_str();}
+};
+
 class IlwisTestCase;
 
 class TestSuite

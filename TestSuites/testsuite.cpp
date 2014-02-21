@@ -3,6 +3,7 @@
 #include "ilwistestclass.h"
 #include "testsuite.h"
 //#include "core/util/locationtest.h"
+#include <iostream>
 
 TestSuite *TestSuite::_instance = 0;
 
@@ -48,7 +49,12 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
 
     testcases.removeDuplicates();
 
-
+    int failcount = 0;
+    int casefailcount = 0;
+    int runcount = 0;
+    int errcount = 0;
+    int skipcount = 0;
+    int fail;
     for(auto testcase : _testclasses) {
         IlwisTestCase *testclass = static_cast<IlwisTestCase *>(_testclasses[testcase.first]);
         for(const QString& test : testcases) {
@@ -56,10 +62,24 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
                 QString outfile = _outputpath + "/" + testclass->module() + ".testlog";
                 QStringList testCmd;
                 testCmd<<" "<<"-o"<< outfile;
-                QTest::qExec(testclass,testCmd);
+                try{
+                    fail = QTest::qExec(testclass,testCmd);
+                }catch(SkipTest){
+                    skipcount++;
+                }catch(std::exception e){
+                    errcount++;
+                    std::cout << QString("ERROR: %1 threw a exception (%2)").arg(testclass->name(), e.what()).toStdString();
+                }
+                //statistic
+                runcount++;
+                if (fail)
+                    failcount++;
+                casefailcount += fail;
             }
         }
     }
+    std::cout << QString("Total: ran %1 tests, %2 failed, %3 errors, %4 skipped, %5 test cases failed \n")
+                 .arg(runcount).arg(failcount).arg(errcount).arg(skipcount).arg(casefailcount).toStdString();
 }
 
 TestSuite *TestSuite::instance()

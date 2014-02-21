@@ -19,10 +19,10 @@ void GDALConnectorTest::initTestCase()
 {
     _baseDataPath = TestSuite::instance()->inputDataPath();
     if ( !_baseDataPath.exists())
-        throw std::logic_error("no data path defined");
+        throw SkipTest("no data path defined");
     _baseDataOutputPath = TestSuite::instance()->outputDataPath();
     if ( !_baseDataOutputPath.exists())
-        throw std::logic_error("no data output path defined");
+        throw SkipTest("no data output path defined");
 }
 
 void GDALConnectorTest::tableLoadTests(){
