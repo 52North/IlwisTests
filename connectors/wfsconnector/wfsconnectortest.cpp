@@ -35,7 +35,7 @@
 #include "wfsfeaturedescriptionparser.h"
 #include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
-#include "tst_wfsconnectortest.h"
+#include "wfsconnectortest.h"
 #include "testutils.h"
 
 #include "testsuite.h"
@@ -176,5 +176,3 @@ void WfsConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
 void WfsConnectorTest::cleanupTestCase() {
     delete _wfs;
 }
-
-#include "moc_tst_wfsconnectortest.cpp"

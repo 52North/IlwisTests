@@ -30,8 +30,9 @@ SOURCES += main.cpp \
     core/util/juliantimetests.cpp \
     core/ilwisobjects/domain/domaintimetests.cpp \
     core/catalog/tst_resourcetest.cpp \
-    connectors/wfsconnector/tst_wfsconnectortest.cpp \
-    connectors/wfsconnector/qtxmlparsertest.cpp
+    connectors/wfsconnector/qtxmlparsertest.cpp \
+    connectors/wfsconnector/wfsconnectortest.cpp \
+    core/rasteroperations/rasteroperationstest.cpp
 
 HEADERS += \
     testmacros.h \
@@ -45,6 +46,7 @@ HEADERS += \
     core/ilwisobjects/domain/domaintimetests.h \
     core/util/numericrangetest.h \
     core/catalog/tst_resourcetest.h \
-    connectors/wfsconnector/tst_wfsconnectortest.h \
     connectors/wfsconnector/qtxmlparsertest.h \
-    testutils.h
+    testutils.h \
+    connectors/wfsconnector/wfsconnectortest.h \
+    core/rasteroperations/rasteroperationstest.h
