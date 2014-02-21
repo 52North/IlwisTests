@@ -74,7 +74,7 @@ void JulianTimeTests::timeInterval() {
     Ilwis::Time t3("2013-04-19T09:10:40");
     Ilwis::TimeInterval ti("20130418T094503", "20130420T120903", Ilwis::Duration("4h"));
     IlwisTypes tp = ti.valueType();
-    DOTEST(tp == itTIME, "Correct value type");
+    DOTEST(tp == itDATETIME, "Correct value type");
     DOTEST(ti.begin() == t1, "Starts correct");
     DOTEST(ti.end() == t2, "end correct");
     DOTEST(ti.contains(t3), "Includes correct value, date/time based");
