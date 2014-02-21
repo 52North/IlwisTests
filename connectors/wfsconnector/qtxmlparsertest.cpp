@@ -23,7 +23,7 @@ using namespace Wfs;
 
 REGISTER_TEST(QtXmlParserTest);
 
-QtXmlParserTest::QtXmlParserTest(): IlwisTestCase("WfsConnectorTest", "XmlParsingTest")
+QtXmlParserTest::QtXmlParserTest(): IlwisTestCase("XmlParsingTest","WfsConnectorTest")
 {
 
 }
@@ -43,7 +43,7 @@ void QtXmlParserTest::shouldStartParsingAtRootNode()
         qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
         qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
     }
-    QVERIFY2(atTestNode, "Starts not at 'test' node.");
+    DOTEST2(atTestNode, "Starts not at 'test' node.");
 }
 
 void QtXmlParserTest::shouldStartParsingAtRootNodeWhenNoXmlHeaderPresent()
@@ -57,7 +57,7 @@ void QtXmlParserTest::shouldStartParsingAtRootNodeWhenNoXmlHeaderPresent()
         qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
         qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
     }
-    QVERIFY2(atTestNode, "Starts not at 'test' node.");
+    DOTEST2(atTestNode, "Starts not at 'test' node.");
 }
 
 void QtXmlParserTest::shouldStartParsingXmlSchemaAtRootNode()
@@ -70,7 +70,7 @@ void QtXmlParserTest::shouldStartParsingXmlSchemaAtRootNode()
         qDebug() << "at node: " << parser.reader()->name() << " startNode: " << parser.reader()->isStartElement();
         qDebug() << "error: " << parser.reader()->error() << ": " << parser.reader()->errorString();
     }
-    QVERIFY2(atSchemaNode, "Starts not at 'schema' node.");
+    DOTEST2(atSchemaNode, "Starts not at 'schema' node.");
 }
 
 void QtXmlParserTest::shouldMoveToElementOnNextLevel()
@@ -81,7 +81,7 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 
     if (parser.startParsing("test")) {
         if (parser.moveToNext("a:test")) {
-            QVERIFY2(parser.moveToNext("a:c"), "Could not find element '//test/a:test/a:c'");
+            DOTEST2(parser.moveToNext("a:c"), "Could not find element '//test/a:test/a:c'");
         } else {
             QFAIL("Parser didn't reach a:test node (want to reach '//test/a:test/a:c').");
         }
@@ -97,7 +97,7 @@ void QtXmlParserTest::shouldFindElements()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        QVERIFY2(parser.findNextOf( {"a:b"} ), "Could not find element '//test/a:b'");
+        DOTEST2(parser.findNextOf( {"a:b"} ), "Could not find element '//test/a:b'");
     } else {
         QFAIL("Starts not at 'test' node.");
     }
@@ -110,7 +110,7 @@ void QtXmlParserTest::shouldMoveToElementOnSameLevel()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        QVERIFY2(parser.moveToNext("node"), "Could not find element '//test/node'");
+        DOTEST2(parser.moveToNext("node"), "Could not find element '//test/node'");
     } else {
         QFAIL("Starts not at 'test' node.");
     }
@@ -129,7 +129,7 @@ void QtXmlParserTest::shouldMoveToSecondCNode()
                     QString errorMsg("Read wrong node: ");
                     errorMsg = errorMsg.append(parser.reader()->name().toString());
                     QString text = parser.readElementText();
-                    QVERIFY2(text == "another text", errorMsg.toLatin1().constData());
+                    DOTEST2(text == "another text", errorMsg.toLatin1().constData());
                 } else {
                     QFAIL("Parser didn't reach a:c[1] node (want to reach '//test/a:test/a:c[1]/string()')");
                 }
@@ -153,7 +153,7 @@ void QtXmlParserTest::shouldParseCorrectAttributeValue()
     if (parser.startParsing("test")) {
         if (parser.moveToNext("node")) {
             QXmlStreamAttributes attributes = parser.attributes();
-            QVERIFY2(attributes.value("foo") == "bar", "Incorrect attribute value.");
+            DOTEST2(attributes.value("foo") == "bar", "Incorrect attribute value.");
         } else {
             QFAIL("Parser didn't reach node node (want to reach '//test/node/@foo')");
         }

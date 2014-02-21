@@ -1,3 +1,6 @@
+
+#include "kernel.h"
+#include "ilwisdata.h"
 #include "juliantimetests.h"
 #include "testsuite.h"
 

@@ -52,6 +52,7 @@ INCLUDEPATH +=  ../IlwisCore/core \
                 ../IlwisCore/core/ilwisobjects/operation \
                 ../IlwisCore/core/catalog \
                 ../IlwisCore/core/ilwisobjects/domain \
+                ../IlwisCore/rasteroperations \
                 ../IlwisConnectors/wfsconnector \
                 $$BOOST
 

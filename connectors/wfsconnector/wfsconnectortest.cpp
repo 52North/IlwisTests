@@ -8,7 +8,6 @@
 #include "catalog.h"
 #include "symboltable.h"
 #include "ilwiscontext.h"
-#include "mastercatalog.h"
 #include "ilwisdata.h"
 #include "domain.h"
 #include "datadefinition.h"
@@ -35,7 +34,7 @@
 #include "wfsfeaturedescriptionparser.h"
 #include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
-#include "tst_wfsconnectortest.h"
+#include "wfsconnectortest.h"
 #include "testutils.h"
 
 #include "testsuite.h"
@@ -55,35 +54,22 @@ WfsConnectorTest::WfsConnectorTest(): IlwisTestCase("WfsConnectorTest", "WfsConn
     _wfs = new WebFeatureService(wfsUrl);
 }
 
-void WfsConnectorTest::initTestCase() {
-
-    // TODO: test against 'wfs-test://extensions/testfiles/wfs_capabilities.xml'?
-
-    QString url(WFS_TEST_SERVER_1);
-
-    QUrl s(url);
-    Catalog cat;
-    if (!cat.prepare(s))
-        throw SkipTest(QString("could not prepare WFS '%1'").arg(url).toStdString());
-    context()->setWorkingCatalog(cat);
-}
-
 void WfsConnectorTest::shouldRecognizeExceptionReport()
 {
     WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
-    QVERIFY2(testResponse.isException(), "Response did not recognized exception report!");
+    DOTEST2(testResponse.isException(), "Response did not recognized exception report!");
 }
 
 void WfsConnectorTest::shouldParseExceptionReportWithDetails()
 {
     WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
-    QVERIFY2( !testResponse.parseException().isEmpty(), "No Exception report could be parsed!");
+    DOTEST2( !testResponse.parseException().isEmpty(), "No Exception report could be parsed!");
 }
 
 void WfsConnectorTest::shouldNotRecognizeExceptionReport()
 {
     WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
-    QVERIFY2( !testResponse.isException(), "Response recognized an exception message!");
+    DOTEST2( !testResponse.isException(), "Response recognized an exception message!");
 }
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
@@ -94,15 +80,15 @@ void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 
     QList<WfsFeature> features;
     parser.parseFeatures(features);
-    QVERIFY2(features.size() == 2, "Wrong amount of feature types found.");
+    DOTEST2(features.size() == 2, "Wrong amount of feature types found.");
 
     QUrlQuery actualQuery1 = features.at(0).urlQuery();
-    QVERIFY2(actualQuery1.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery1.toString()).toLatin1().constData());
-    QVERIFY2(actualQuery1.queryItemValue("featureName") == "ogi:quad100", QString("Query is incorrect '%1'").arg(actualQuery1.toString()).toLatin1().constData());
+    DOTEST2(actualQuery1.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery1.toString()));
+    DOTEST2(actualQuery1.queryItemValue("featureName") == "ogi:quad100", QString("Query is incorrect '%1'").arg(actualQuery1.toString()));
 
     QUrlQuery actualQuery2 = features.at(1).urlQuery();
-    QVERIFY2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
-    QVERIFY2(actualQuery2.queryItemValue("featureName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()).toLatin1().constData());
+    DOTEST2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
+    DOTEST2(actualQuery2.queryItemValue("featureName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
 }
 
 void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
@@ -120,7 +106,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
 
     quint32 expected = 13;
     quint32 actual = table->columnCount();
-    QVERIFY2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual).toLatin1().constData());
+    DOTEST2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual));
 
     WfsResponse featureResponse(Utils::openFile("extensions/testfiles/featurecollection.xml"));
     WfsFeatureParser featureParser( &featureResponse, fcoverage);
@@ -147,34 +133,12 @@ void WfsConnectorTest::shouldPrepareWfsFeature() {
 void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {
     QUrl featureUrl("http://localhost/wfs?service=WFS&request=GetFeature&featureName=FeatureType&version=1.1.0");
     WfsFeature feature(featureUrl);
-    QVERIFY2(feature.bbox().isNull(), "BBox of initial Feature is not null!");
+    DOTEST2(feature.bbox().isNull(), "BBox of initial Feature is not null!");
 }
 
-void WfsConnectorTest::sandbox() {
-    QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
-    QUrl capabilitiesUrl(url);
-    Resource wfsCatalog(capabilitiesUrl, itCATALOG);
-    qDebug() << wfsCatalog.container();
-}
 
-void WfsConnectorTest::canUseValidWfsUrlWithCapitalParameters() {
-    QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
-    QUrl capabilitiesUrl(url);
-    Resource wfsCatalog(capabilitiesUrl, itCATALOG);
-    WfsCatalogConnector connector(wfsCatalog);
-    QVERIFY2(connector.canUse(wfsCatalog), QString("Connector indicates it can't use valid WFS: %1").arg(url).toLatin1().constData());
-}
-
-void WfsConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
-    QString url("http://localhost/wfs?acceptVersions=1.1.0&request=GetCapabilities&service=WFS");
-    Resource wfs1(url, itCATALOG);
-    WfsCatalogConnector connector(wfs1);
-    QVERIFY2(connector.canUse(wfs1), QString("Connector indicates it can't use valid WFS: %1").arg(url).toLatin1().constData());
-}
 
 
 void WfsConnectorTest::cleanupTestCase() {
     delete _wfs;
 }
-
-#include "moc_tst_wfsconnectortest.cpp"

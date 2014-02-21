@@ -68,7 +68,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
                     skipcount++;
                 }catch(std::exception e){
                     errcount++;
-                    std::cout << QString("ERROR: %1 threw a exception (%2)\n").arg(testclass->name(), e.what()).toStdString();
+                    std::cout << QString("ERROR: %1 threw a exception (%2) \n").arg(testclass->name(), e.what()).toStdString();
                 }
                 //statistic
                 runcount++;
