@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core testlib
+QT       += core testlib network xmlpatterns
 
 QT       -= gui
 
@@ -46,4 +46,5 @@ HEADERS += \
     core/util/numericrangetest.h \
     core/catalog/tst_resourcetest.h \
     connectors/wfsconnector/tst_wfsconnectortest.h \
-    connectors/wfsconnector/qtxmlparsertest.h
+    connectors/wfsconnector/qtxmlparsertest.h \
+    testutils.h
