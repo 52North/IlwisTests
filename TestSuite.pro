@@ -56,3 +56,16 @@ HEADERS += \
     connectors/wfsconnector/wfscatalogconnectortest.h \
     connectors/wfsconnector/wfsmoduletest.h \
     connectors/wfsconnector/webfeatureservicetest.h
+
+
+testtarget.files = testfiles/wfs/wfs_capabilities.xml \
+    testfiles/wfs/test_without_xml_header.xml \
+    testfiles/wfs/wfs_exceptionreport.xml \
+    testfiles/wfs/featurecollection.xml \
+    testfiles/wfs/test.xml \
+    testfiles/wfs/quad100.xsd \
+    testfiles/wfs/greenlevel_contours.xsd
+
+testtarget.path = $$PWD/../output/$$PLATFORM$$CONF/bin/extensions/testfiles
+
+INSTALLS += testtarget
