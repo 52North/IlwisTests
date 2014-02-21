@@ -23,11 +23,9 @@ private:
     NEW_TEST(WfsConnectorTest);
 
     WebFeatureService *_wfs;
-    void sandbox();
 
 private Q_SLOTS:
 
-    void initTestCase();
     void shouldRecognizeExceptionReport();
     void shouldNotRecognizeExceptionReport();
     void shouldParseExceptionReportWithDetails();
@@ -35,8 +33,6 @@ private Q_SLOTS:
     void shouldCreateITableFromFeatureDescription();
     void shouldPrepareWfsFeature();
     void testInitialFeatureHasEmptyBBox();
-    void canUseValidWfsUrlWithCapitalParameters();
-    void canUseValidWfsUrlWithMixedCapitalParameters();
     void cleanupTestCase();
 
 };

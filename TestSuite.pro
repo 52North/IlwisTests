@@ -32,7 +32,10 @@ SOURCES += main.cpp \
     core/catalog/tst_resourcetest.cpp \
     connectors/wfsconnector/qtxmlparsertest.cpp \
     connectors/wfsconnector/wfsconnectortest.cpp \
-    core/rasteroperations/rasteroperationstest.cpp
+    core/rasteroperations/rasteroperationstest.cpp \
+    connectors/wfsconnector/wfscatalogconnectortest.cpp \
+    connectors/wfsconnector/wfsmoduletest.cpp \
+    connectors/wfsconnector/webfeatureservicetest.cpp
 
 HEADERS += \
     testmacros.h \
@@ -49,4 +52,7 @@ HEADERS += \
     connectors/wfsconnector/qtxmlparsertest.h \
     testutils.h \
     connectors/wfsconnector/wfsconnectortest.h \
-    core/rasteroperations/rasteroperationstest.h
+    core/rasteroperations/rasteroperationstest.h \
+    connectors/wfsconnector/wfscatalogconnectortest.h \
+    connectors/wfsconnector/wfsmoduletest.h \
+    connectors/wfsconnector/webfeatureservicetest.h
