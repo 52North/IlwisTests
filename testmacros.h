@@ -8,6 +8,10 @@ QVERIFY2(action, "Failure")
 #define DOTEST2(action, failureMsg) \
 QVERIFY2(action, QString(failureMsg).toLatin1().constData())
 
+#define DOCOMPARE(actual,expected,message) \
+qDebug() << message; \
+QCOMPARE(actual,expected)
+
 #define NEW_TEST(name) \
 static name *dummy_name
 
