@@ -3,7 +3,6 @@
 
 #include <QString>
 #include <QTest>
-#include "kernel.h"
 #include "testmacros.h"
 #include "ilwistestclass.h"
 
