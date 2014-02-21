@@ -16,8 +16,8 @@ TEMPLATE = app
 
 include(global.pri)
 
-DLLDESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+DLLDESTDIR = $$PWD/../libraries/$$PLATFORM$$CONF/$$TARGET
+DESTDIR = $$PWD/../output/$$PLATFORM$$CONF/bin
 
 SOURCES += main.cpp \
     core/util/locationtest.cpp \
