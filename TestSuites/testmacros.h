@@ -5,6 +5,10 @@
 qDebug() << message; \
 QVERIFY2(action,"Failure")
 
+#define DOCOMPARE(actual,expected,message) \
+qDebug() << message; \
+QCOMPARE(actual,expected)
+
 #define NEW_TEST(name) \
 static name *dummy_name
 

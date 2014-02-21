@@ -31,9 +31,8 @@ void DomainTimeTests::construction()
     dm.prepare();
     dm->range(new Ilwis::TimeInterval(t4,t5));
 
-    DOTEST(dom->valueType() == itTIME, "correctly set");
-    QString cc = dom->impliedValue(IVARIANT(t2)).toString();
-    DOTEST(dom->impliedValue(IVARIANT(t2)) == "2009-04-12","testing representation");
+    DOTEST(dom->valueType() == itDATE, "correctly set");
+    DOCOMPARE(dom->impliedValue(IVARIANT(t2)).value<Ilwis::Time>().toString(), QString("2009-04-12"), "testing representation");
     DOTEST(dom->contains(IVARIANT(t2)) == Ilwis::Domain::cSELF, "testing containment 1");
     DOTEST(dom->contains(IVARIANT(t3)) == Ilwis::Domain::cNONE, "testing containment 2");
 
