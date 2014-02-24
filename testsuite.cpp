@@ -66,6 +66,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
                     fail = QTest::qExec(testclass,testCmd);
                 }catch(SkipTest){
                     skipcount++;
+                    std::cout << QString("Skip test....\n").toStdString();
                 }catch(std::exception e){
                     errcount++;
                     std::cout << QString("ERROR: %1 threw a exception (%2) \n").arg(testclass->name(), e.what()).toStdString();
