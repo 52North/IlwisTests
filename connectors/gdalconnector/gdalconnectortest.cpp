@@ -49,9 +49,8 @@ void GDALConnectorTest::tableLoadTests(){
     DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
 
     DOTEST(tbl1.isValid(),"Table rainfall.shp succesfully loaded");
-    DOCOMPARE(tbl1->recordCount(),(unsigned int)0,"record count is zero if binary data not loaded!");//TODO to be guarded
-    DOTEST(tbl1->cell(1,0).toString() == "UMSS", "column test 1");
     DOCOMPARE(tbl1->recordCount(),(unsigned int)13,"check record count");
+    DOTEST(tbl1->cell(1,0).toString() == "UMSS", "column test 1");
     DOTEST(tbl1->cell("APRIL",0).toInt() == 36, "column test 2");
     DOTEST(tbl1->cell("JUNE",2).toInt() == 35, "column test 3");
     DOTEST(tbl1->cell("NOVEMBER",4).toInt() == 81, "column test 4");
