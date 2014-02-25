@@ -27,7 +27,6 @@
 #include "columndefinition.h"
 #include "basetable.h"
 //#include "polygon.h"
-#include "geometry.h"
 #include "attributerecord.h"
 #include "feature.h"
 #include "featurecoverage.h"
@@ -228,7 +227,7 @@ void LoaderTests::gridCoverageDataAccess() {
             res = QString("file:///%1/Landuse.mpr").arg(ROOT_TESTDATA);
             map1.prepare(res);
             quint32 val = map1->coord2value(Coordinate(800348.443438,8082390.774796));
-            QString item = map1->datadef().domain()->value(val);
+            QString item = map1->datadef().domain()->impliedValue(val).toString();
             QVERIFY2(item == "Shrubs", ISSUE(map1));
 
             qDebug() << "PixelIterator ";
@@ -243,7 +242,7 @@ void LoaderTests::gridCoverageDataAccess() {
                 if ( v!= rUNDEF)
                     sum += v;
             }
-            quint64 sz = maplist->size().totalSize();
+            quint64 sz = maplist->size().linearSize();
             std::vector<double> vec(sz);
             std::copy(begin(maplist), end(maplist), vec.begin());
             QVERIFY2((int)sum == 12446, ISSUE(maplist));
@@ -874,25 +873,31 @@ QUrl LoaderTests::makeUrl(const QString& name) {
 }
 
 void LoaderTests::dump(const ExecutionContext& ctx, const SymbolTable& symtbl, quint64 tp, int index) {
-    if ( ctx._results.size() == 0)
-        return;
+    try{
+        if ( ctx._results.size() == 0)
+            return;
 
-    if ( tp == itRASTER) {
-        IRasterCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IRasterCoverage>();
-        if ( mp.isValid()) {
-            if (mp->connectTo(makeUrl(mp->name()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT)) {
+        if ( tp == itRASTER) {
+            IRasterCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IRasterCoverage>();
+            if ( mp.isValid()) {
+                mp->connectTo(makeUrl(mp->name()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
                 mp->setCreateTime(Ilwis::Time::now());
                 mp->store();
             }
         }
+        if ( tp == itFEATURE) {
+            IFeatureCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IFeatureCoverage>();
+            if ( mp.isValid()) {
+                mp->connectTo(makeUrl(mp->name()), "vectormap","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+                mp->setCreateTime(Ilwis::Time::now());
+                mp->store();
+            }
+        }
+
+
     }
-    if ( tp == itFEATURE) {
-        IFeatureCoverage mp = symtbl.getValue(ctx._results[index]).value<Ilwis::IFeatureCoverage>();
-        if ( mp.isValid()) {
-            if (mp->connectTo(makeUrl(mp->name()), "polygonmap","ilwis3",Ilwis::IlwisObject::cmOUTPUT)) {
-                mp->setCreateTime(Ilwis::Time::now());
-                mp->store();
-            }
-        }
+    catch (ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
     }
 }

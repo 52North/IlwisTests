@@ -1,0 +1,12 @@
+#ifndef GDALTEST_GLOBAL_H
+#define GDALTEST_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(GDALTEST_LIBRARY)
+#  define GDALTESTSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define GDALTESTSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // GDALTEST_GLOBAL_H
