@@ -52,8 +52,7 @@ void JulianTimeTests::conversions()
     Ilwis::Time t1("20130418T094503");
     QDateTime qt1(QDate(2013,04,18),QTime(9,45,03));
 
-    QString s = t1.toString();
-    DOTEST(s == "2013-04-18T09:45:03","String conversion");
+    DOCOMPARE(t1.toString(), QString("2013-04-18T09:45:03"),"String conversion");
     DOTEST(t1 == qt1, "Automatic conversion to QDateTime");
 }
 
