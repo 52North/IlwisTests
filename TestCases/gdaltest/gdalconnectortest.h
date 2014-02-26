@@ -22,6 +22,7 @@ private:
 private slots:
     void initTestCase();
 
+    void standaloneTableLoad();
     void tableLoadTests();
     void tableStoreTests();
     void rasterLoadTests();

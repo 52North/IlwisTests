@@ -7,6 +7,13 @@
 #include "datadefinition.h"
 #include "columndefinition.h"
 #include "table.h"
+#include "coverage.h"
+#include "attributerecord.h"
+#include "feature.h"
+#include "featurecoverage.h"
+
+#include "catalog.h"
+#include "ilwiscontext.h"
 
 REGISTER_TEST(GDALConnectorTest);
 
@@ -25,11 +32,24 @@ void GDALConnectorTest::initTestCase()
         throw SkipTest("no data output path defined");
 }
 
-void GDALConnectorTest::tableLoadTests(){
-    QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/rainfall.shp");
-    Ilwis::ITable tbl1(file.toString());
+void GDALConnectorTest::standaloneTableLoad(){
+    Ilwis::Catalog cat;
+    cat.prepare(QUrl(_baseDataPath.absolutePath() + "/shape/"));
+    Ilwis::context()->setWorkingCatalog(cat);
+    Ilwis::ITable tbl1("rainfall.shp");
+    DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
 
     DOTEST(tbl1.isValid(),"Table rainfall.shp succesfully loaded");
+}
+
+void GDALConnectorTest::tableLoadTests(){
+
+    QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/rainfall.shp");
+    Ilwis::ITable tbl1(file.toString());
+    DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
+
+    DOTEST(tbl1.isValid(),"Table rainfall.shp succesfully loaded");
+    DOCOMPARE(tbl1->recordCount(),(unsigned int)13,"check record count");
     DOTEST(tbl1->cell(1,0).toString() == "UMSS", "column test 1");
     DOTEST(tbl1->cell("APRIL",0).toInt() == 36, "column test 2");
     DOTEST(tbl1->cell("JUNE",2).toInt() == 35, "column test 3");
