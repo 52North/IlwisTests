@@ -34,13 +34,13 @@ void GDALConnectorTest::initTestCase()
 
 void GDALConnectorTest::standaloneTableLoad(){
     Ilwis::Catalog cat;
-    QUrl url = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/");
+    QUrl url = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape");
     cat.prepare(url);
     Ilwis::context()->setWorkingCatalog(cat);
     Ilwis::ITable tbl1("rainfall.shp");
     DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
-
     DOTEST(tbl1.isValid(),"Table rainfall.shp succesfully loaded");
+    DOCOMPARE(tbl1->recordCount(),(unsigned int)13,"check record count");
 }
 
 void GDALConnectorTest::tableLoadTests(){
