@@ -14,6 +14,8 @@
 *.a
 
 # generated user settings for project 
-/*.pro.user*
+*.pro.user.*
+*.pro.user
 /mytests
 moduletests.pro.*
+
