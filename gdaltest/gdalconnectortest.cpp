@@ -34,7 +34,8 @@ void GDALConnectorTest::initTestCase()
 
 void GDALConnectorTest::standaloneTableLoad(){
     Ilwis::Catalog cat;
-    cat.prepare(QUrl(_baseDataPath.absolutePath() + "/shape/"));
+    QUrl url = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/");
+    cat.prepare(url);
     Ilwis::context()->setWorkingCatalog(cat);
     Ilwis::ITable tbl1("rainfall.shp");
     DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
