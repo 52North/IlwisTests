@@ -108,7 +108,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     parser.parseSchemaDescription(fcoverage, schemaInfo);
     ITable table = fcoverage->attributeTable();
 
-    quint32 expected = 13;
+    quint32 expected = 12;
     quint32 actual = table->columnCount();
     DOTEST2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual));
 
