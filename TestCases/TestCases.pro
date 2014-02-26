@@ -4,4 +4,5 @@ SUBDIRS += \
     CoreTest \
     TestRunner \
     TestSuite \
-    gdaltest
+    gdaltest \
+	postgrestest

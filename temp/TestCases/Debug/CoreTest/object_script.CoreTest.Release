@@ -1,0 +1,17 @@
+INPUT(
+./release\coretest.o
+./release\coordinatetest.o
+./release\sizetest.o
+./release\numericrangetest.o
+./release\locationtest.o
+./release\juliantimetests.o
+./release\tst_resourcetest.o
+./release\domaintimetests.o
+./release\moc_coordinatetest.o
+./release\moc_sizetest.o
+./release\moc_numericrangetest.o
+./release\moc_locationtest.o
+./release\moc_juliantimetests.o
+./release\moc_tst_resourcetest.o
+./release\moc_domaintimetests.o
+);

@@ -58,7 +58,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
     for(auto testcase : _testclasses) {
         IlwisTestCase *testclass = static_cast<IlwisTestCase *>(_testclasses[testcase.first]);
         for(const QString& test : testcases) {
-            if ( test == testclass->module()) {
+            if (test.compare(testclass->module(), Qt::CaseInsensitive) == 0) {
                 QString outfile = _outputpath + "/" + testclass->module() + ".testlog";
                 QStringList testCmd;
                 testCmd<<" "<<"-o"<< outfile;
