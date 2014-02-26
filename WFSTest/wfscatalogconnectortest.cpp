@@ -10,8 +10,9 @@
 #include "ilwiscontext.h"
 #include "mastercatalog.h"
 #include "ilwisdata.h"
-
 #include "catalogconnector.h"
+
+#include "wfsschemainfo.h"
 #include "wfscatalogconnector.h"
 #include "wfscatalogconnectortest.h"
 

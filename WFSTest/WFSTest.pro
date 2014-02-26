@@ -27,7 +27,7 @@ SOURCES += wfstest.cpp \
     qtxmlparsertest.cpp
 
 HEADERS += wfstest.h\
-        wfstest_global.h \
+    wfstest_global.h \
     wfsmoduletest.h \
     wfsconnectortest.h \
     wfscatalogconnectortest.h \

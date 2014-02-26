@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QTextStream>
 
+#include "geos/geom/LinearRing.h"
+#include "geos/geom/Polygon.h"
+
 #include "kernel.h"
 #include "catalog.h"
 #include "symboltable.h"
@@ -31,6 +34,7 @@
 #include "wfsresponse.h"
 #include "wfsfeature.h"
 #include "wfscapabilitiesparser.h"
+#include "wfsschemainfo.h"
 #include "wfsfeaturedescriptionparser.h"
 #include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
@@ -97,11 +101,11 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
     FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
 
-    QMap<QString, QString> namespaceMappings;
+    WfsSchemaInfo schemaInfo;
     WfsResponse featureDescriptionResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
-    parser.parseSchemaDescription(fcoverage, namespaceMappings);
+    parser.parseSchemaDescription(fcoverage, schemaInfo);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 13;
@@ -110,7 +114,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
 
     WfsResponse featureResponse(Utils::openFile("extensions/testfiles/featurecollection.xml"));
     WfsFeatureParser featureParser( &featureResponse, fcoverage);
-    featureParser.parseFeatureMembers(namespaceMappings);
+    featureParser.parseFeatureMembers(schemaInfo);
 
     // TODO: Add tests here
 
