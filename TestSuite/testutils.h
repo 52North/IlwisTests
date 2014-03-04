@@ -1,8 +1,6 @@
 #ifndef TESTUTILS_H
 #define TESTUTILS_H
 
-#define ROOT_TESTDATA "D:/data/coding/ilwis/testdata"
-
 class QIODevice;
 class QString;
 class QFile;

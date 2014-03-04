@@ -22,19 +22,15 @@ public:
 private:
     NEW_TEST(WfsConnectorTest);
 
-    WebFeatureService *_wfs;
-
     void shouldCreateITableFromFeatureDescription();
 
 private Q_SLOTS:
-
     void shouldRecognizeExceptionReport();
     void shouldNotRecognizeExceptionReport();
     void shouldParseExceptionReportWithDetails();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
     void shouldPrepareWfsFeature();
     void testInitialFeatureHasEmptyBBox();
-    void cleanupTestCase();
 
 };
 
