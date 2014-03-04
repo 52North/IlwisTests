@@ -24,7 +24,8 @@ SOURCES += wfstest.cpp \
     wfsconnectortest.cpp \
     wfscatalogconnectortest.cpp \
     webfeatureservicetest.cpp \
-    qtxmlparsertest.cpp
+    qtxmlparsertest.cpp \
+    wfsresponsetest.cpp
 
 HEADERS += wfstest.h\
     wfstest_global.h \
@@ -33,7 +34,8 @@ HEADERS += wfstest.h\
     wfscatalogconnectortest.h \
     webfeatureservicetest.h \
     qtxmlparsertest.h \
-    wfstestconstants.h
+    wfstestconstants.h \
+    wfsresponsetest.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector

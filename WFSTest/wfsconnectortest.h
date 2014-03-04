@@ -1,4 +1,4 @@
-    #ifndef TST_WFSCONNECTORTEST_H
+#ifndef TST_WFSCONNECTORTEST_H
 #define TST_WFSCONNECTORTEST_H
 
 #include "kernel.h"
@@ -21,13 +21,10 @@ public:
 
 private:
     NEW_TEST(WfsConnectorTest);
-
     void shouldCreateITableFromFeatureDescription();
 
+
 private Q_SLOTS:
-    void shouldRecognizeExceptionReport();
-    void shouldNotRecognizeExceptionReport();
-    void shouldParseExceptionReportWithDetails();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
     void shouldPrepareWfsFeature();
     void testInitialFeatureHasEmptyBBox();

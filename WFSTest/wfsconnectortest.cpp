@@ -34,7 +34,7 @@
 #include "wfsresponse.h"
 #include "wfsfeature.h"
 #include "wfscapabilitiesparser.h"
-#include "wfsschemainfo.h"
+#include "wfsparsingcontext.h"
 #include "wfsfeaturedescriptionparser.h"
 #include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
@@ -43,7 +43,6 @@
 
 #include "testsuite.h"
 
-
 using namespace Ilwis;
 using namespace Wfs;
 
@@ -51,24 +50,6 @@ REGISTER_TEST(WfsConnectorTest);
 
 WfsConnectorTest::WfsConnectorTest(): IlwisTestCase("WfsConnectorTest", "WfsConnectorTest")
 {
-}
-
-void WfsConnectorTest::shouldRecognizeExceptionReport()
-{
-    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_exceptionreport.xml"));
-    DOTEST2(testResponse.isException(), "Response did not recognized exception report!");
-}
-
-void WfsConnectorTest::shouldParseExceptionReportWithDetails()
-{
-    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_exceptionreport.xml"));
-    DOTEST2( !testResponse.parseException().isEmpty(), "No Exception report could be parsed!");
-}
-
-void WfsConnectorTest::shouldNotRecognizeExceptionReport()
-{
-    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
-    DOTEST2( !testResponse.isException(), "Response recognized an exception message!");
 }
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
@@ -96,20 +77,24 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     WfsFeature featureResource(url); // TODO: replace when resource.getQuery() is implemented
     FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
 
-    WfsSchemaInfo schemaInfo;
+    WfsParsingContext context;
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
-    parser.parseSchemaDescription(fcoverage, schemaInfo);
+    parser.parseSchemaDescription(fcoverage, context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 12;
     quint32 actual = table->columnCount();
     DOTEST2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual));
 
-    WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection.xml"));
-    WfsFeatureParser featureParser( &featureResponse, fcoverage);
-    featureParser.parseFeatureMembers(schemaInfo);
+    try {
+        WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection.xml"));
+        WfsFeatureParser featureParser( &featureResponse, fcoverage);
+        featureParser.parseFeatureMembers(context);
+    } catch(std::exception &e) {
+        std::cout << "Could not parse feature collection: " << e.what() << std::endl;
+    }
 
     // TODO: Add tests here
 

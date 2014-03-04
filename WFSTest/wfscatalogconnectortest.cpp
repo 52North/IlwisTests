@@ -12,7 +12,6 @@
 #include "ilwisdata.h"
 #include "catalogconnector.h"
 
-#include "wfsschemainfo.h"
 #include "wfscatalogconnector.h"
 #include "wfscatalogconnectortest.h"
 #include "wfstestconstants.h"
