@@ -23,9 +23,9 @@ SOURCES += testsuite.cpp \
 
 HEADERS += testsuite.h\
         testsuite_global.h \
-    testutils.h \
-    testmacros.h \
-    ilwistestclass.h
+        testutils.h \
+        testmacros.h \
+        ilwistestclass.h
 
 LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
         -L$$PWD/../../libraries/$$PLATFORM$$CONF/ -llibgeos
