@@ -60,26 +60,26 @@ WfsConnectorTest::WfsConnectorTest(): IlwisTestCase("WfsConnectorTest", "WfsConn
 
 void WfsConnectorTest::shouldRecognizeExceptionReport()
 {
-    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
+    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_exceptionreport.xml"));
     DOTEST2(testResponse.isException(), "Response did not recognized exception report!");
 }
 
 void WfsConnectorTest::shouldParseExceptionReportWithDetails()
 {
-    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_exceptionreport.xml"));
+    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_exceptionreport.xml"));
     DOTEST2( !testResponse.parseException().isEmpty(), "No Exception report could be parsed!");
 }
 
 void WfsConnectorTest::shouldNotRecognizeExceptionReport()
 {
-    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
+    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
     DOTEST2( !testResponse.isException(), "Response recognized an exception message!");
 }
 
 void WfsConnectorTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
     QUrl url("http://localhost/wfs?request=GetCapabilities&service=WFS");
-    WfsResponse testResponse(Utils::openFile("extensions/testfiles/wfs_capabilities.xml"));
+    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
     WfsCapabilitiesParser parser( &testResponse, url);
 
     QList<WfsFeature> features;
@@ -102,7 +102,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
 
     WfsSchemaInfo schemaInfo;
-    WfsResponse featureDescriptionResponse(Utils::openFile("extensions/testfiles/quad100.xsd"));
+    WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     parser.parseSchemaDescription(fcoverage, schemaInfo);
@@ -112,7 +112,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
     quint32 actual = table->columnCount();
     DOTEST2(actual == expected, QString("Incorrect number of columns (expected %1, was %2).").arg(expected, actual));
 
-    WfsResponse featureResponse(Utils::openFile("extensions/testfiles/featurecollection.xml"));
+    WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection.xml"));
     WfsFeatureParser featureParser( &featureResponse, fcoverage);
     featureParser.parseFeatureMembers(schemaInfo);
 

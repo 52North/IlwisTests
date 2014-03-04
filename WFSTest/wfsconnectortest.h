@@ -24,13 +24,14 @@ private:
 
     WebFeatureService *_wfs;
 
+    void shouldCreateITableFromFeatureDescription();
+
 private Q_SLOTS:
 
     void shouldRecognizeExceptionReport();
     void shouldNotRecognizeExceptionReport();
     void shouldParseExceptionReportWithDetails();
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
-    void shouldCreateITableFromFeatureDescription();
     void shouldPrepareWfsFeature();
     void testInitialFeatureHasEmptyBBox();
     void cleanupTestCase();

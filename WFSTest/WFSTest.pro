@@ -34,9 +34,6 @@ HEADERS += wfstest.h\
     webfeatureservicetest.h \
     qtxmlparsertest.h
 
-unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
-unix|win32: LIBS += -L$$PWD/../../libraries/win32debug/wfsconnector/ -lwfsconnector
-
 INCLUDEPATH += $$PWD/../TestSuite \
                $$PWD/../../IlwisConnectors/wfsconnector
 DEPENDPATH += $$PWD/../TestSuite \
@@ -51,7 +48,10 @@ OTHER_FILES += \
     testfiles/greenlevel_contours.xsd \
     testfiles/featurecollection.xml
 
-testtarget.files = \
+testdll.files = \
+     $$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/wfsconnector.dll
+
+testfiles.files = \
     testfiles/wfs_exceptionreport.xml \
     testfiles/wfs_capabilities.xml \
     testfiles/test_without_xml_header.xml \
@@ -60,6 +60,9 @@ testtarget.files = \
     testfiles/greenlevel_contours.xsd \
     testfiles/featurecollection.xml
 
-testtarget.path = $$PWD/../../output/$$PLATFORM$$CONF/bin/extensions/testfiles
+testdll.path = \
+    $$PWD/../../output/$$PLATFORM$$CONF/bin/
 
-INSTALLS += testtarget
+testfiles.path = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases/testfiles
+
+INSTALLS += testfiles testdll

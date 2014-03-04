@@ -34,7 +34,7 @@ void QtXmlParserTest::initTestCase()
 
 void QtXmlParserTest::shouldStartParsingAtRootNode()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -48,7 +48,7 @@ void QtXmlParserTest::shouldStartParsingAtRootNode()
 
 void QtXmlParserTest::shouldStartParsingAtRootNodeWhenNoXmlHeaderPresent()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test_without_xml_header.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test_without_xml_header.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -62,7 +62,7 @@ void QtXmlParserTest::shouldStartParsingAtRootNodeWhenNoXmlHeaderPresent()
 
 void QtXmlParserTest::shouldStartParsingXmlSchemaAtRootNode()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/quad100.xsd"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/quad100.xsd"));
     parser.addNamespaceMapping("xsd", "http://www.w3.org/2001/XMLSchema");
 
     bool atSchemaNode = parser.startParsing("xsd:schema");
@@ -75,7 +75,7 @@ void QtXmlParserTest::shouldStartParsingXmlSchemaAtRootNode()
 
 void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -92,7 +92,7 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
 
 void QtXmlParserTest::shouldFindElements()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -105,7 +105,7 @@ void QtXmlParserTest::shouldFindElements()
 
 void QtXmlParserTest::shouldMoveToElementOnSameLevel()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -118,7 +118,7 @@ void QtXmlParserTest::shouldMoveToElementOnSameLevel()
 
 void QtXmlParserTest::shouldMoveToSecondCNode()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
@@ -146,7 +146,7 @@ void QtXmlParserTest::shouldMoveToSecondCNode()
 
 void QtXmlParserTest::shouldParseCorrectAttributeValue()
 {
-    XmlStreamParser parser(Utils::openFile("extensions/testfiles/test.xml"));
+    XmlStreamParser parser(Utils::openFile("testcases/testfiles/test.xml"));
     parser.addNamespaceMapping("", "http://test.ns/b"); // default ns
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
