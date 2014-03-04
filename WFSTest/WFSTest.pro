@@ -32,7 +32,8 @@ HEADERS += wfstest.h\
     wfsconnectortest.h \
     wfscatalogconnectortest.h \
     webfeatureservicetest.h \
-    qtxmlparsertest.h
+    qtxmlparsertest.h \
+    wfstestconstants.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector

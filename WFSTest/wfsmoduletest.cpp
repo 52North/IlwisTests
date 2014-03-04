@@ -4,6 +4,7 @@
 #include "ilwiscontext.h"
 #include "mastercatalog.h"
 #include "wfsmoduletest.h"
+#include "wfstestconstants.h"
 
 using namespace Ilwis;
 

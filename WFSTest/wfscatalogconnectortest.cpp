@@ -15,11 +15,10 @@
 #include "wfsschemainfo.h"
 #include "wfscatalogconnector.h"
 #include "wfscatalogconnectortest.h"
+#include "wfstestconstants.h"
 
 #include "testutils.h"
 #include "testsuite.h"
-
-#define WFS_TEST_SERVER_1 "http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS"
 
 using namespace Ilwis;
 using namespace Wfs;

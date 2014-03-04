@@ -43,9 +43,6 @@
 
 #include "testsuite.h"
 
-#define WFS_TEST_SERVER_1 "http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS"
-#define WFS_TEST_SERVER_2 "http://nsidc.org/cgi-bin/atlas_north?service=WFS&acceptVersions=1.1.0&request=GetCapabilities"
-#define WFS_TEST_SERVER_3 "http://www2.ign.es/sioseinspire?SERVICE=WFS&REQUEST=GetCapabilities"
 
 using namespace Ilwis;
 using namespace Wfs;
@@ -54,8 +51,6 @@ REGISTER_TEST(WfsConnectorTest);
 
 WfsConnectorTest::WfsConnectorTest(): IlwisTestCase("WfsConnectorTest", "WfsConnectorTest")
 {
-    QUrl wfsUrl(WFS_TEST_SERVER_1);
-    _wfs = new WebFeatureService(wfsUrl);
 }
 
 void WfsConnectorTest::shouldRecognizeExceptionReport()
@@ -143,6 +138,3 @@ void WfsConnectorTest::testInitialFeatureHasEmptyBBox() {
 
 
 
-void WfsConnectorTest::cleanupTestCase() {
-    delete _wfs;
-}
