@@ -34,6 +34,9 @@ HEADERS += wfstest.h\
     webfeatureservicetest.h \
     qtxmlparsertest.h
 
+unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
+unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
+
 INCLUDEPATH += $$PWD/../TestSuite \
                $$PWD/../../IlwisConnectors/wfsconnector
 DEPENDPATH += $$PWD/../TestSuite \
