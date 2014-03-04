@@ -14,8 +14,7 @@ CONFIG   -= app_bundle
 
 include(../global.pri)
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+DESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
 
 TEMPLATE = app
 
