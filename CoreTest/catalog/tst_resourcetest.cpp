@@ -32,30 +32,30 @@ void ResourceTests::shouldParseLastUrlPartAsName()
 {
     QUrl url1("http://localhost/context");
     Resource resource1(url1, itFEATURE);
-    DOTEST(resource1.name() == "context", QString("Resource name has been parsed correctly (was: '%1')").arg(resource1.name()));
+    DOTEST2(resource1.name() == "context", QString("Resource name has not been parsed correctly (was: '%1')").arg(resource1.name()));
 
     QUrl url2("http://localhost/context/");
     Resource resource2(url2, itFEATURE);
     // TODO: fails! this is a bug in Resource class
-    DOTEST(resource2.name() == "", QString("Resource name has been parsed correctly (empty name"));
+    DOTEST2(resource2.name() == "", QString("Resource name has not been parsed correctly (empty name"));
 }
 
 void ResourceTests::shouldIndicateHavingQueryString()
 {
     QUrl urlWithQuery("http://localhost/context?query=true&list=first,second&special=#&withSpace=one two");
     Resource resourceWithQuery(urlWithQuery, itUNKNOWN);
-    DOTEST(resourceWithQuery.hasUrlQuery(), "Resource did store URL query!");
+    DOTEST2(resourceWithQuery.hasUrlQuery(), "Resource did not store URL query!");
 }
 
 void ResourceTests::shouldIndicateNotHavingQueryString()
 {
     QUrl urlWithoutQuery1("http://localhost/context");
     Resource resourceWithQuery1(urlWithoutQuery1, itUNKNOWN);
-    DOTEST(!resourceWithQuery1.hasUrlQuery(), "Resource has no query string ");
+    DOTEST2(!resourceWithQuery1.hasUrlQuery(), "Resource wrongly indicates it has a query string ");
 
     QUrl urlWithoutQuery2("http://localhost/context?");
     Resource resourceWithQuery2(urlWithoutQuery2, itUNKNOWN);
-    DOTEST(!resourceWithQuery2.hasUrlQuery(), "Resource has no query string");
+    DOTEST2(!resourceWithQuery2.hasUrlQuery(), "Resource wrongly indicates it has a query string ");
 }
 
 void ResourceTests::cleanupTestCase()
