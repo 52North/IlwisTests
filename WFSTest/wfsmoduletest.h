@@ -12,7 +12,7 @@ public:
     WfsModuleTest();
 
 private:
-    NEW_TEST(WfsModuleTest);
+    //NEW_TEST(WfsModuleTest);
 
 private Q_SLOTS:
 

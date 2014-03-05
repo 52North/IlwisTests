@@ -21,11 +21,11 @@ public:
 
 private:
     NEW_TEST(WfsConnectorTest);
-    void shouldCreateITableFromFeatureDescription();
 
 
 private Q_SLOTS:
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
+    void shouldCreateITableFromFeatureDescription();
     void shouldPrepareWfsFeature();
     void testInitialFeatureHasEmptyBBox();
 

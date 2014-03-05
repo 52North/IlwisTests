@@ -10,6 +10,8 @@
 #include "ilwiscontext.h"
 #include "mastercatalog.h"
 #include "ilwisdata.h"
+#include "connectorinterface.h"
+#include "ilwisobjectconnector.h"
 #include "catalogconnector.h"
 
 #include "wfscatalogconnector.h"
@@ -28,25 +30,6 @@ WfsCatalogConnectorTest::WfsCatalogConnectorTest(): IlwisTestCase("WfsCatalogCon
 {
 }
 
-void WfsCatalogConnectorTest::initTestCase() {
-
-    // TODO: test against 'wfs-test://testcases/testfiles/wfs_capabilities.xml'?
-
-    QString url(WFS_TEST_SERVER_1);
-
-    QUrl s(url);
-    Catalog cat;
-    if (!cat.prepare(s))
-        throw SkipTest(QString("could not prepare WFS '%1'").arg(url).toStdString());
-    context()->setWorkingCatalog(cat);
-}
-
-void WfsCatalogConnectorTest::sandbox() {
-    QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
-    QUrl capabilitiesUrl(url);
-    Resource wfsCatalog(capabilitiesUrl, itCATALOG);
-    qDebug() << wfsCatalog.container();
-}
 
 void WfsCatalogConnectorTest::canUseValidWfsUrlWithCapitalParameters() {
     QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
