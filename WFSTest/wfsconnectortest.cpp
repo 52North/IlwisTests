@@ -92,6 +92,7 @@ void WfsConnectorTest::shouldCreateITableFromFeatureDescription()
         WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection.xml"));
         WfsFeatureParser featureParser( &featureResponse, fcoverage);
         featureParser.parseFeatureMembers(context);
+        DOCOMPARE(fcoverage->featureCount(), (unsigned int)5, "Should parse 5 features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
