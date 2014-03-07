@@ -22,10 +22,9 @@ public:
 private:
     NEW_TEST(WfsCatalogConnectorTest);
 
-    void sandbox();
-
 private Q_SLOTS:
 
+    void sandbox();
     void initTestCase();
     void canUseValidWfsUrlWithCapitalParameters();
     void canUseValidWfsUrlWithMixedCapitalParameters();

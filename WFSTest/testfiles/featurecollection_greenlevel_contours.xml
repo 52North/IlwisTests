@@ -1,0 +1,43 @@
+<wfs:FeatureCollection xsi:schemaLocation="http://mapserver.gis.umn.edu/mapserver http://nsidc.org/cgi-bin/atlas_north?SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=DescribeFeatureType&amp;TYPENAME=greenland_elevation_contours&amp;OUTPUTFORMAT=text/xml; subtype=gml/3.1.1  http://www.opengis.net/wfs http://schemas.opengis.net/wfs/1.1.0/wfs.xsd" xmlns:ms="http://mapserver.gis.umn.edu/mapserver" xmlns:gml="http://www.opengis.net/gml" xmlns:wfs="http://www.opengis.net/wfs" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <gml:boundedBy>
+      <gml:Envelope srsName="EPSG:32661">
+         <gml:lowerCorner>-406699.951843 -456661.863393</gml:lowerCorner>
+         <gml:upperCorner>1677349.428068 1589388.039689</gml:upperCorner>
+      </gml:Envelope>
+   </gml:boundedBy>
+   <!--WARNING: FeatureId item 'ID' not found in typename 'greenland_elevation_contours'.-->
+   <gml:featureMember>
+      <ms:greenland_elevation_contours>
+         <gml:boundedBy>
+            <gml:Envelope srsName="EPSG:32661">
+               <gml:lowerCorner>-327189.501776 -456661.863393</gml:lowerCorner>
+               <gml:upperCorner>-327164.993574 -456636.649888</gml:upperCorner>
+            </gml:Envelope>
+         </gml:boundedBy>
+         <ms:msGeometry>
+            <gml:LineString srsName="EPSG:32661">
+               <gml:posList srsDimension="2">-327164.993574 -456638.840870 -327189.501776 -456636.649888 -327183.636846 -456661.863393 -327168.660334 -456653.526955 -327164.993574 -456638.840870</gml:posList>
+            </gml:LineString>
+         </ms:msGeometry>
+         <ms:Label>1000 m</ms:Label>
+         <ms:Elevation>1000.000000</ms:Elevation>
+      </ms:greenland_elevation_contours>
+   </gml:featureMember>
+   <gml:featureMember>
+      <ms:greenland_elevation_contours>
+         <gml:boundedBy>
+            <gml:Envelope srsName="EPSG:32661">
+               <gml:lowerCorner>-355956.750505 -434210.756389</gml:lowerCorner>
+               <gml:upperCorner>-354883.173891 -433287.933862</gml:upperCorner>
+            </gml:Envelope>
+         </gml:boundedBy>
+         <ms:msGeometry>
+            <gml:LineString srsName="EPSG:32661">
+               <gml:posList srsDimension="2">-355449.456443 -433287.933862 -355956.750505 -433341.391189 -355903.371050 -433848.471719 -354883.173891 -434210.756389 -355449.456443 -433287.933862</gml:posList>
+            </gml:LineString>
+         </ms:msGeometry>
+         <ms:Label>1000 m</ms:Label>
+         <ms:Elevation>1000.000000</ms:Elevation>
+      </ms:greenland_elevation_contours>
+   </gml:featureMember>
+</wfs:FeatureCollection>

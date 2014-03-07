@@ -11,7 +11,7 @@
 using namespace Ilwis;
 using namespace Wfs;
 
-WfsResponseTest(WfsConnectorTest);
+WfsResponseTest(WfsParserTest);
 
 WfsResponseTest::WfsResponseTest(): IlwisTestCase("WfsConnectorTest", "WfsConnectorTest")
 {

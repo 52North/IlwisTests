@@ -21,21 +21,21 @@ DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
 SOURCES += wfstest.cpp \
     wfsmoduletest.cpp \
-    wfsconnectortest.cpp \
     wfscatalogconnectortest.cpp \
     webfeatureservicetest.cpp \
     qtxmlparsertest.cpp \
-    wfsresponsetest.cpp
+    wfsresponsetest.cpp \
+    wfsparsertest.cpp
 
 HEADERS += wfstest.h\
     wfstest_global.h \
     wfsmoduletest.h \
-    wfsconnectortest.h \
     wfscatalogconnectortest.h \
     webfeatureservicetest.h \
     qtxmlparsertest.h \
     wfstestconstants.h \
-    wfsresponsetest.h
+    wfsresponsetest.h \
+    wfsparsertest.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
@@ -52,7 +52,10 @@ OTHER_FILES += \
     testfiles/test.xml \
     testfiles/quad100.xsd \
     testfiles/greenlevel_contours.xsd \
-    testfiles/featurecollection.xml
+    testfiles/featurecollection_quad100.xml \
+    testfiles/featurecollection_greenlevel_contours.xml \
+    testfiles/featurecollection_sioseinspire_lu_es_14.xml \
+    testfiles/sioseinspire_lu_es_14.xsd
 
 testdll.files = \
      $$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/wfsconnector.dll
@@ -64,7 +67,10 @@ testfiles.files = \
     testfiles/test.xml \
     testfiles/quad100.xsd \
     testfiles/greenlevel_contours.xsd \
-    testfiles/featurecollection.xml
+    testfiles/featurecollection_quad100.xml \
+    testfiles/featurecollection_greenlevel_contours.xml \
+    testfiles/featurecollection_sioseinspire_lu_es_14.xml \
+    testfiles/sioseinspire_lu_es_14.xsd
 
 testdll.path = \
     $$PWD/../../output/$$PLATFORM$$CONF/bin/
