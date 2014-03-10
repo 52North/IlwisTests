@@ -75,7 +75,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
     int runcount = 0;
     int errcount = 0;
     int skipcount = 0;
-    int fail;
+    int fail = 0;
     for(auto testcase : _testclasses) {
         IlwisTestCase *testclass = static_cast<IlwisTestCase *>(_testclasses[testcase.first]);
         for(const QString& test : testcases) {
@@ -93,8 +93,7 @@ void TestSuite::run(const QStringList &modules, const QString& inputData, const 
                 }
                 //statistic
                 runcount++;
-                if (fail)
-                    failcount++;
+                if (fail > 0) failcount++;
                 casefailcount += fail;
             }
         }
