@@ -16,8 +16,6 @@ WfsModuleTest::WfsModuleTest(): IlwisTestCase("WfsConnectorModuleTest", "WfsConn
 
 void WfsModuleTest::recognizeWfsModule()
 {
-    // TODO: test against 'wfs-test://testcases/testfiles/wfs_capabilities.xml'?
-
     QString url(WFS_TEST_SERVER_1);
 
     QUrl s(url);
