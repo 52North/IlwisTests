@@ -19,15 +19,16 @@ DEFINES += WFSTEST_LIBRARY
 DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
 DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
-SOURCES += wfstest.cpp \
+SOURCES += \
     wfsmoduletest.cpp \
     wfscatalogconnectortest.cpp \
     webfeatureservicetest.cpp \
     qtxmlparsertest.cpp \
     wfsresponsetest.cpp \
-    wfsparsertest.cpp
+    wfsparsertest.cpp \
+    wfsdemo.cpp
 
-HEADERS += wfstest.h\
+HEADERS +=\
     wfstest_global.h \
     wfsmoduletest.h \
     wfscatalogconnectortest.h \
@@ -35,7 +36,8 @@ HEADERS += wfstest.h\
     qtxmlparsertest.h \
     wfstestconstants.h \
     wfsresponsetest.h \
-    wfsparsertest.h
+    wfsparsertest.h \
+    wfsdemo.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
