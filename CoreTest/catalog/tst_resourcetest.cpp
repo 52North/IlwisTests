@@ -36,7 +36,6 @@ void ResourceTests::shouldParseLastUrlPartAsName()
 
     QUrl url2("http://localhost/context/");
     Resource resource2(url2, itFEATURE);
-    // TODO: fails! this is a bug in Resource class
     DOTEST2(resource2.name() == "", QString("Resource name has not been parsed correctly (empty name"));
 }
 
