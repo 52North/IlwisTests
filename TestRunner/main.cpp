@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
             inputData = QString(argv[2])    ;
         }
         if ( argc == 4){
-            inputData = QString(argv[3])    ;
+            outputData = QString(argv[3])    ;
         }
     }
     if ( input != "") {

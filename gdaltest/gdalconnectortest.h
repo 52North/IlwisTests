@@ -19,19 +19,17 @@ private:
     QDir _baseDataPath;
     QDir _baseDataOutputPath;
 
+
+
 private slots:
     void initTestCase();
 
-    void standaloneTableLoad();
     void tableLoadTests();
     void tableStoreTests();
     void rasterLoadTests();
     void rasterStoreTests();
     void featureLoadTests();
     void featureStoreTests();
-    void attributeLoadTests();
-    void attributeStoreTests();
-
 };
 
 #endif // GDALCONNECTORTEST_H

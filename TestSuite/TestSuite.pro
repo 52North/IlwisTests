@@ -27,12 +27,9 @@ HEADERS += testsuite.h\
     testmacros.h \
     ilwistestclass.h
 
-LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/core/ -lilwiscore \
-        -L$$PWD/../../libraries/$$PLATFORM$$CONF/ -llibgeos
+LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
 
 INCLUDEPATH +=  $$PWD/core \
-                $$PWD/../external/geos
-DEPENDPATH +=   $$PWD/core \
                 $$PWD/../external/geos
 
 OTHER_FILES +=
