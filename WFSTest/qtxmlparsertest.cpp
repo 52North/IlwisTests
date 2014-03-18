@@ -80,8 +80,8 @@ void QtXmlParserTest::shouldMoveToElementOnNextLevel()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.moveToNext("a:test")) {
-            DOTEST2(parser.moveToNext("a:c"), "Could not find element '//test/a:test/a:c'");
+        if (parser.findNextOf( { "a:test" } )) {
+            DOTEST2(parser.findNextOf( { "a:c" } ), "Could not find element '//test/a:test/a:c'");
         } else {
             QFAIL("Parser didn't reach a:test node (want to reach '//test/a:test/a:c').");
         }
@@ -110,7 +110,7 @@ void QtXmlParserTest::shouldMoveToElementOnSameLevel()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        DOTEST2(parser.moveToNext("node"), "Could not find element '//test/node'");
+        DOTEST2(parser.findNextOf( { "node" } ), "Could not find element '//test/node'");
     } else {
         QFAIL("Starts not at 'test' node.");
     }
@@ -123,9 +123,9 @@ void QtXmlParserTest::shouldMoveToSecondCNode()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.moveToNext("a:test")) {
-            if (parser.moveToNext("a:c")) {
-                if (parser.moveToNext("a:c")) {
+        if (parser.findNextOf( { "a:test" } )) {
+            if (parser.findNextOf( { "a:c" } )) {
+                if (parser.findNextOf( { "a:c" } )) {
                     QString errorMsg("Read wrong node: ");
                     errorMsg = errorMsg.append(parser.reader()->name().toString());
                     QString text = parser.readElementText();
@@ -151,7 +151,7 @@ void QtXmlParserTest::shouldParseCorrectAttributeValue()
     parser.addNamespaceMapping("a", "http://test.ns/a");
 
     if (parser.startParsing("test")) {
-        if (parser.moveToNext("node")) {
+        if (parser.findNextOf( { "node" } )) {
             QXmlStreamAttributes attributes = parser.attributes();
             DOTEST2(attributes.value("foo") == "bar", "Incorrect attribute value.");
         } else {
