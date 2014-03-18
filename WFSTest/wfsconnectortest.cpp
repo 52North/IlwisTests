@@ -24,6 +24,7 @@
 #include "coverage.h"
 #include "feature.h"
 #include "featurecoverage.h"
+#include
 #include "catalogconnector.h"
 #include "wfscatalogconnector.h"
 #include "wfsconnector.h"

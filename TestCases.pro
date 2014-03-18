@@ -2,8 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \ 
     TestSuite \
-    CoreTest \
     TestRunner \
-    gdaltest \
-    postgrestest \
-    WFSTest
+    ilws3connectortest \
+    gdaltest

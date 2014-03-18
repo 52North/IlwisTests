@@ -26,7 +26,6 @@ OUTPUTPATH = $$PWD/../output/bin
 
 unix|win32: LIBS += -L$$PWD/../libraries/win32debug/core/ -lilwiscore
 unix|win32: LIBS += -L$$PWD/../libraries/win32debug/ -llibgeos
-unix|win32: LIBS += -L$$PWD/../libraries/win32debug/ -llibgeos
 
 INCLUDEPATH += $$PWD/../IlwisCore/core
 DEPENDPATH += $$PWD/../IlwisCore/core
