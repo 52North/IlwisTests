@@ -1,6 +1,8 @@
 #ifndef TESTUTILS_H
 #define TESTUTILS_H
 
+#include <QCoreApplication>
+
 class QIODevice;
 class QString;
 class QFile;
