@@ -6,4 +6,5 @@ SUBDIRS += \
     TestRunner \
     gdaltest \
     postgrestest \
-    WFSTest
+    WFSTest \
+    rasteroperationsTest
