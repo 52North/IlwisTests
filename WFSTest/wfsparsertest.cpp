@@ -27,8 +27,10 @@
 #include "coverage.h"
 #include "feature.h"
 #include "featurecoverage.h"
+#include "connectorinterface.h"
+#include "ilwisobjectconnector.h"
+#include "catalogexplorer.h"
 #include "catalogconnector.h"
-#include "wfscatalogconnector.h"
 #include "wfsconnector.h"
 #include "wfs.h"
 #include "wfsresponse.h"
@@ -58,7 +60,7 @@ void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
     WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
     WfsCapabilitiesParser parser( &testResponse, url);
 
-    QList<WfsFeature> features;
+    std::vector<Resource> features;
     parser.parseFeatures(features);
     DOTEST2(features.size() == 2, "Wrong amount of feature types found.");
 
@@ -97,8 +99,10 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
 
-    QString outputFeature = TestSuite::instance()->outputDataPath().append("/feature.shp");
-    fcoverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
+    QDir baseDataPath = TestSuite::instance()->outputDataPath();
+    QUrl outputFeature = QUrl::fromLocalFile(baseDataPath.absolutePath() + "/feature.shp");
+    fcoverage->connectTo(outputFeature.toString(), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
+    //fcoverage->store(); // fails!
     delete fcoverage;
 }
 

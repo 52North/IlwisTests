@@ -18,13 +18,16 @@
 #include "columndefinition.h"
 #include "table.h"
 #include "connectorinterface.h"
+#include "ilwisobjectconnector.h"
+#include "catalogexplorer.h"
+#include "catalogconnector.h"
 #include "attributerecord.h"
 #include "coordinatesystem.h"
 #include "feature.h"
 #include "coverage.h"
 #include "featurecoverage.h"
 
-#include "wfscatalogconnector.h"
+#include "wfscatalogexplorer.h"
 
 #include "wfsdemo.h"
 #include "wfstestconstants.h"
@@ -41,13 +44,9 @@ WfsDemo::WfsDemo(): IlwisTestCase("WfsDemo", "Demo")
 
 void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered()
 {
-    Catalog cat;
-    QUrl url("http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
-    if ( !cat.prepare(url)) {
-        QFAIL("Unable to prepare catalog.");
-    }
+    ICatalog cat("http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
 
-    std::list<Resource> items = cat.items();
+    std::vector<Resource> items = cat->items();
     Resource feature(items.front());
     IFeatureCoverage coverage;
     if ( !coverage.prepare(feature)) {

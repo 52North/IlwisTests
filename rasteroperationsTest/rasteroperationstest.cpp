@@ -34,17 +34,12 @@ RasterOperationsTest::RasterOperationsTest(): IlwisTestCase("RasterOperationsTes
 
 void RasterOperationsTest::initTestCase()
 {
-    QString input = TestSuite::instance()->inputDataPath();
-    QUrl s = QUrl::fromLocalFile(input);
-    Catalog cat;
-    if ( !cat.prepare(s)) {
-        QFAIL("Could not prepare working catalog.");
-    }
+    ICatalog cat(TestSuite::instance()->inputDataPath());
     context()->setWorkingCatalog(cat);
 
     IRasterCoverage mpl;
-    QString res = QString("file:///%1/%2").arg(input).arg(IMAGE_TO_STRETCH);
-    DOTEST2(mpl.prepare(res), QString("could not prepare '%1'").arg(res).toLatin1().constData());
+    //QString res = QString("file:///%1/%2").arg(input).arg(IMAGE_TO_STRETCH);
+    DOTEST2(mpl.prepare(IMAGE_TO_STRETCH), QString("could not prepare '%1'").arg(IMAGE_TO_STRETCH).toLatin1().constData());
 }
 
 void RasterOperationsTest::cleanupTestCase()

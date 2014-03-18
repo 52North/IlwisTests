@@ -10,9 +10,12 @@
 #include "ilwiscontext.h"
 #include "mastercatalog.h"
 #include "ilwisdata.h"
+#include "connectorinterface.h"
+#include "ilwisobjectconnector.h"
+#include "catalogexplorer.h"
 #include "catalogconnector.h"
 
-#include "wfscatalogconnector.h"
+#include "wfscatalogexplorer.h"
 #include "wfscatalogconnectortest.h"
 #include "wfstestconstants.h"
 
@@ -32,9 +35,8 @@ void WfsCatalogConnectorTest::initTestCase() {
 
     QString url(WFS_TEST_SERVER_1);
 
-    QUrl s(url);
-    Catalog cat;
-    if (!cat.prepare(s))
+    ICatalog cat;
+    if (!cat.prepare(url, itCATALOG))
         throw SkipTest(QString("could not prepare WFS '%1'").arg(url).toStdString());
     context()->setWorkingCatalog(cat);
 }
