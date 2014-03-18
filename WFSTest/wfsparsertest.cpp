@@ -96,6 +96,9 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
+
+    QString outputFeature = TestSuite::instance()->outputDataPath().append("/feature.shp");
+    fcoverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
     delete fcoverage;
 }
 

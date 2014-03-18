@@ -7,6 +7,7 @@
 #include "geos/geom/Polygon.h"
 
 #include "kernel.h"
+#include "ilwisobject.h"
 #include "ilwisdata.h"
 #include "geometries.h"
 #include "ilwiscontext.h"
@@ -16,6 +17,7 @@
 #include "datadefinition.h"
 #include "columndefinition.h"
 #include "table.h"
+#include "connectorinterface.h"
 #include "attributerecord.h"
 #include "coordinatesystem.h"
 #include "feature.h"
@@ -39,15 +41,21 @@ WfsDemo::WfsDemo(): IlwisTestCase("WfsDemo", "Demo")
 
 void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered()
 {
+    Catalog cat;
+    QUrl url("http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
+    if ( !cat.prepare(url)) {
+        QFAIL("Unable to prepare catalog.");
+    }
 
-//    Catalog cat;
-//    if ( !cat.prepare( { WFS_TEST_SERVER_1 })) {
-//        QFAIL("Unable to prepare catalog.");
-//    }
-//    context()->setWorkingCatalog(cat);
+    std::list<Resource> items = cat.items();
+    Resource feature(items.front());
+    IFeatureCoverage coverage;
+    if ( !coverage.prepare(feature)) {
+        QFAIL("Could not prepare coverage.");
+    }
 
-//    std::list<Resource> items = context()->workingCatalog()->items();
-//    qDebug() << items.size();
+    QString outputFeature = TestSuite::instance()->outputDataPath().append("/feature.shp");
+    coverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
 }
 
 void WfsDemo::wfsCatalog_prepareFeatureCoverageViaUrl_validFeatureCoverage()
