@@ -50,14 +50,14 @@ void WfsCatalogConnectorTest::canUseValidWfsUrlWithCapitalParameters() {
     QString url("http://localhost/wfs?ACCEPTVERSIONS=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
     QUrl capabilitiesUrl(url);
     Resource wfsCatalog(capabilitiesUrl, itCATALOG);
-    WfsCatalogConnector connector(wfsCatalog);
+    WfsCatalogExplorer connector(wfsCatalog);
     DOTEST2(connector.canUse(wfsCatalog), QString("Connector indicates it can't use valid WFS: %1").arg(url));
 }
 
 void WfsCatalogConnectorTest::canUseValidWfsUrlWithMixedCapitalParameters() {
     QString url("http://localhost/wfs?acceptVersions=1.1.0&request=GetCapabilities&service=WFS");
     Resource wfs1(url, itCATALOG);
-    WfsCatalogConnector connector(wfs1);
+    WfsCatalogExplorer connector(wfs1);
     DOTEST2(connector.canUse(wfs1), QString("Connector indicates it can't use valid WFS: %1").arg(url));
 }
 
