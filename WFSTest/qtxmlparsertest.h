@@ -29,6 +29,7 @@ private Q_SLOTS:
     void shouldMoveToElementOnNextLevel();
     void shouldFindElements();
     void shouldMoveToElementOnSameLevel();
+    void shouldMoveToEndOfElement();
     void shouldMoveToSecondCNode();
     void shouldParseCorrectAttributeValue();
     void cleanupTestCase();
