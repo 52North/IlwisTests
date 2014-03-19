@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
      std::cin >> input;
     }else {
         input = argv[1];
-        if ( argc == 3){
+        if ( argc > 2){
             inputData = QString(argv[2])    ;
         }
         if ( argc == 4){
