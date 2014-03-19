@@ -67,11 +67,11 @@ void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 
     QUrlQuery actualQuery1 = features.at(0).urlQuery();
     DOTEST2(actualQuery1.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery1.toString()));
-    DOTEST2(actualQuery1.queryItemValue("featureName") == "ogi:quad100", QString("Query is incorrect '%1'").arg(actualQuery1.toString()));
+    DOTEST2(actualQuery1.queryItemValue("typeName") == "ogi:quad100", QString("Query is incorrect '%1'").arg(actualQuery1.toString()));
 
     QUrlQuery actualQuery2 = features.at(1).urlQuery();
     DOTEST2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
-    DOTEST2(actualQuery2.queryItemValue("featureName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
+    DOTEST2(actualQuery2.queryItemValue("typeName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
 }
 
 void WfsParserTest::shouldParseQuad100FeatureCollection()

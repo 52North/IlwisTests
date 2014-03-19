@@ -26,6 +26,9 @@
 #include "feature.h"
 #include "coverage.h"
 #include "featurecoverage.h"
+#include "featureiterator.h"
+#include "feature.h"
+#include "geometryhelper.h"
 
 #include "wfsdemo.h"
 #include "wfscatalogexplorer.h"
@@ -53,6 +56,17 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
     if ( !coverage.prepare(feature)) {
         QFAIL("Could not prepare coverage.");
     }
+
+    ITable table = coverage->attributeTable();
+    DOCOMPARE(table->columnCount(), (unsigned int)12, "12 attribute columns expected in table.");
+
+//    FeatureIterator fiter(coverage);
+//    FeatureIterator endIter = end(coverage);
+//    for(; fiter != endIter; ++fiter) {
+//        UPFeatureI& feature = *fiter;
+//        const geos::geom::Geometry* geometry = feature->geometry().get();
+//        std::cout << GeometryHelper::toWKT(geometry);
+//    }
 
     QString outputFeature = TestSuite::instance()->outputDataPath().append("/feature.shp");
     coverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);

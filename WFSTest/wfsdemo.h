@@ -14,13 +14,13 @@ class WFSTESTSHARED_EXPORT WfsDemo: public IlwisTestCase
 public:
     WfsDemo();
 
-    void wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered();
     void wfsCatalog_prepareFeatureCoverageViaUrl_validFeatureCoverage();
 
 private:
     NEW_TEST(WfsDemo);
 
 private Q_SLOTS:
+    void wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered();
 
 };
 
