@@ -22,13 +22,13 @@ public:
 private:
     NEW_TEST(WfsParserTest);
 
-    void shouldParseSioseINSPIRE_lu_es_14_FeatureCollection(); // seg_faults when parsing inner rings :/
 
 private Q_SLOTS:
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
 
     void shouldParseQuad100FeatureCollection();
     void shouldParseGreenlandElevationContoursFeatureCollection();
+    void shouldParseSioseINSPIRE_lu_es_14_FeatureCollection();
 
 };
 
