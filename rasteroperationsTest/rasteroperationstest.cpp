@@ -1,6 +1,8 @@
 #include <QString>
 #include <QFileInfo>
 #include <QFile>
+#include <QUrl>
+#include <QDir>
 
 #include "kernel.h"
 #include "raster.h"
@@ -34,12 +36,12 @@ RasterOperationsTest::RasterOperationsTest(): IlwisTestCase("RasterOperationsTes
 
 void RasterOperationsTest::initTestCase()
 {
-    ICatalog cat(TestSuite::instance()->inputDataPath());
+    QDir input = TestSuite::instance()->inputDataPath();
+    ICatalog cat(QUrl::fromLocalFile(input.absolutePath()).toString());
     context()->setWorkingCatalog(cat);
 
     IRasterCoverage mpl;
-    //QString res = QString("file:///%1/%2").arg(input).arg(IMAGE_TO_STRETCH);
-    DOTEST2(mpl.prepare(IMAGE_TO_STRETCH), QString("could not prepare '%1'").arg(IMAGE_TO_STRETCH).toLatin1().constData());
+    DOTEST2(mpl.prepare(IMAGE_TO_STRETCH), QString("could not prepare '%1'").arg(IMAGE_TO_STRETCH));
 }
 
 void RasterOperationsTest::cleanupTestCase()
