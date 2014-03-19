@@ -6,6 +6,9 @@
 using namespace Ilwis;
 using namespace Wfs;
 
+
+//REGISTER_TEST(WebFeatureServiceTest);
+
 WebFeatureServiceTest::WebFeatureServiceTest():
     IlwisTestCase("WebFeatureServiceTest","WfsConnectorTest")
 {

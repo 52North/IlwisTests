@@ -31,7 +31,7 @@
 #include "ilwisobjectconnector.h"
 #include "catalogexplorer.h"
 #include "catalogconnector.h"
-#include "wfsconnector.h"
+
 #include "wfs.h"
 #include "wfsresponse.h"
 #include "wfsfeature.h"
@@ -41,8 +41,8 @@
 #include "wfsfeatureparser.h"
 #include "wfsfeatureconnector.h"
 #include "wfsparsertest.h"
-#include "testutils.h"
 
+#include "testutils.h"
 #include "testsuite.h"
 
 using namespace Ilwis;
@@ -50,7 +50,8 @@ using namespace Wfs;
 
 REGISTER_TEST(WfsParserTest);
 
-WfsParserTest::WfsParserTest(): IlwisTestCase("WfsConnectorTest", "WfsConnectorTest")
+WfsParserTest::WfsParserTest():
+    IlwisTestCase("WfsParserTest", "WfsConnectorTest")
 {
 }
 

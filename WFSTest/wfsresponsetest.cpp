@@ -4,16 +4,17 @@
 
 #include "wfsresponse.h"
 #include "wfsresponsetest.h"
-#include "testutils.h"
 
+#include "testutils.h"
 #include "testsuite.h"
 
 using namespace Ilwis;
 using namespace Wfs;
 
-WfsResponseTest(WfsParserTest);
+REGISTER_TEST(WfsResponseTest);
 
-WfsResponseTest::WfsResponseTest(): IlwisTestCase("WfsConnectorTest", "WfsConnectorTest")
+WfsResponseTest::WfsResponseTest():
+    IlwisTestCase("WfsResponseTest", "WfsConnectorTest")
 {
 }
 

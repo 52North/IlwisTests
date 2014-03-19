@@ -21,6 +21,9 @@ private:
 
 private Q_SLOTS:
     void createWebFeatureService();
+
+    // TODO: perform remote requests here?!
+
     void cleanupTestCase();
 
 };

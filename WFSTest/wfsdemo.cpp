@@ -27,18 +27,19 @@
 #include "coverage.h"
 #include "featurecoverage.h"
 
-#include "wfscatalogexplorer.h"
-
 #include "wfsdemo.h"
+#include "wfscatalogexplorer.h"
 #include "wfstestconstants.h"
-#include "testsuite.h"
 
-REGISTER_TEST(WfsDemo);
+#include "testsuite.h"
 
 using namespace Ilwis;
 using namespace Wfs;
 
-WfsDemo::WfsDemo(): IlwisTestCase("WfsDemo", "Demo")
+REGISTER_TEST(WfsDemo);
+
+WfsDemo::WfsDemo():
+    IlwisTestCase("WfsDemo", "Demo")
 {
 }
 

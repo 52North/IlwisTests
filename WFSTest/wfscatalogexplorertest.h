@@ -12,15 +12,15 @@ using namespace Wfs;
 
 class QUrl;
 
-class WfsCatalogConnectorTest : public IlwisTestCase
+class WfsCatalogExplorerTest : public IlwisTestCase
 {
     Q_OBJECT
 
 public:
-    WfsCatalogConnectorTest();
+    WfsCatalogExplorerTest();
 
 private:
-    NEW_TEST(WfsCatalogConnectorTest);
+    NEW_TEST(WfsCatalogExplorerTest);
 
     void sandbox();
 

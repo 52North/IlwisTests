@@ -10,11 +10,11 @@
 #include <QtXmlPatterns/QXmlQuery>
 #include <QMapIterator>
 
-#include "testutils.h"
 #include "qtxmlparsertest.h"
 #include "wfsfeature.h"
 #include "xmlstreamparser.h"
 
+#include "testutils.h"
 #include "testsuite.h"
 
 using namespace Ilwis;

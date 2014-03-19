@@ -21,23 +21,23 @@ DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
 SOURCES += \
     wfsmoduletest.cpp \
-    wfscatalogconnectortest.cpp \
     webfeatureservicetest.cpp \
     qtxmlparsertest.cpp \
     wfsresponsetest.cpp \
     wfsparsertest.cpp \
-    wfsdemo.cpp
+    wfsdemo.cpp \
+    wfscatalogexplorertest.cpp
 
 HEADERS +=\
     wfstest_global.h \
     wfsmoduletest.h \
-    wfscatalogconnectortest.h \
     webfeatureservicetest.h \
     qtxmlparsertest.h \
     wfstestconstants.h \
     wfsresponsetest.h \
     wfsparsertest.h \
-    wfsdemo.h
+    wfsdemo.h \
+    wfscatalogexplorertest.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector
