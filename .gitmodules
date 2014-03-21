@@ -1,0 +1,5 @@
+
+[submodule "gh-pages"]
+	path = gh-pages
+	url = https://github.com/52North/IlwisTests.git
+	branch = gh-pages
