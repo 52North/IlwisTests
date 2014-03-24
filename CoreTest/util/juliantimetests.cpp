@@ -67,8 +67,7 @@ void JulianTimeTests::operations(){
     DOTEST(t1 + d1 == t2, "Adding 2 days to time");
     DOTEST(t1 + d2 == t3, "Adding complex duration");
 
-    //TODO
-    // test for subtraction; tests for comparison
+    //TODO test for subtraction; tests for comparison
 }
 
 void JulianTimeTests::timeInterval() {

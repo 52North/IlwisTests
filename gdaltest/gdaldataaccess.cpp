@@ -101,10 +101,10 @@ void GdalDataAccess::accessingRasterData() {
         qDebug() << "Gridcoverage: access value through GDAL";
 
         Ilwis::IRasterCoverage raster(QString("file:///%1/f41078a1.tif").arg(_baseDataPath.absolutePath()));
-        DOTEST(raster->pix2value(Ilwis::Pixel(3278,2669)) == 4,"accessing numerical value raster map");
+        DOCOMPARE(raster->pix2value(Ilwis::Pixel(3278,2669)), 4.0,"accessing numerical value raster map");
 
         raster.prepare(QString("file:///%1/GCL_INT.tif").arg(_baseDataPath.absolutePath()));
-        DOTEST(raster->pix2value(Ilwis::Pixel(239,297,23)) == 48, "accessing numerical value in stack of raster (layer 24)");
+        DOCOMPARE(raster->pix2value(Ilwis::Pixel(239,297,23)), 48.0, "accessing numerical value in stack of raster (layer 24)");
 
 //        raster.prepare(QString("file:///%1/vnir.tif").arg(_baseDataPath.absolutePath()));
 //        //Ilwis::PixelIterator iter(raster);
