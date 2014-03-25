@@ -30,6 +30,7 @@ private slots:
     void rasterStoreTests();
     void featureLoadTests();
     void featureStoreTests();
+    void catalogLoadTests();
 };
 
 #endif // GDALCONNECTORTEST_H

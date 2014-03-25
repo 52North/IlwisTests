@@ -13,6 +13,7 @@
 #include "featurecoverage.h"
 #include "featureiterator.h"
 #include "catalog.h"
+#include "catalogview.h"
 #include "ilwiscontext.h"
 
 REGISTER_TEST(GDALConnectorTest);
@@ -153,6 +154,23 @@ void GDALConnectorTest::featureStoreTests() {
     }
 
 
+}
+
+void GDALConnectorTest::catalogLoadTests(){
+    try{
+        qDebug() << "Loading Catalog. Test the output result in suitable client";
+
+        Ilwis::CatalogView cat;
+        cat.prepare(QUrl(QString("file:///%1/gpx/101_101.gpx").arg(_baseDataPath.absolutePath())),"");
+//        cat.prepare(QUrl(QString("file:///%1/pytest/feature/test.gpx").arg(_baseDataPath.absolutePath())),"");
+        DOCOMPARE(cat.isValid(), true, "is catalog valid");
+        std::vector<Ilwis::Resource> res = cat.items();
+        DOCOMPARE(res.size(), (unsigned int)5, "gpx always has 5 layers");
+
+    }catch (const Ilwis::ErrorObject& err) {
+        QString error = "Test threw exception : " + err.message();
+        QFAIL(error.toLatin1());
+    }
 }
 
 

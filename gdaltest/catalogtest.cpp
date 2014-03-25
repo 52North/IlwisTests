@@ -36,7 +36,7 @@ void CatalogTest::readCatalog() {
 
     Ilwis::ICatalog cat(QString("file:///%1/gpx/101_101.gpx").arg(_baseDataPath.absolutePath()));
     DOTEST(cat.isValid(),"is valid gpx catalog");
-    DOTEST(cat->items().size() == 5, " 5 layers in the catalog");
+    DOCOMPARE(cat->items().size(), (unsigned int)5, " 5 layers in the catalog");
 
     DOTEST(Ilwis::IFeatureCoverage(cat->items()[2]).isValid(),"loading lines from gpx file");
 
