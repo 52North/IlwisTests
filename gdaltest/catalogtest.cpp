@@ -1,3 +1,4 @@
+#include "geos/io/ParseException.h"
 #include "ilwis.h"
 #include "testsuite.h"
 #include "gdalconnectortest.h"
@@ -14,6 +15,8 @@
 #include "catalog.h"
 #include "ilwiscontext.h"
 #include "catalogtest.h"
+#include "featureiterator.h"
+#include "geometryhelper.h"
 
 REGISTER_TEST(CatalogTest);
 
@@ -36,8 +39,24 @@ void CatalogTest::readCatalog() {
 
     Ilwis::ICatalog cat(QString("file:///%1/gpx/101_101.gpx").arg(_baseDataPath.absolutePath()));
     DOTEST(cat.isValid(),"is valid gpx catalog");
-    DOCOMPARE(cat->items().size(), (unsigned int)5, " 5 layers in the catalog");
+    std::vector<Ilwis::Resource> items = cat->items();
+    DOCOMPARE(items.size(), (unsigned int)10, " 10 objects in the catalog, 5 layers, 5 attribute tables");
+    Ilwis::context()->setWorkingCatalog(cat);
 
-    DOTEST(Ilwis::IFeatureCoverage(cat->items()[2]).isValid(),"loading lines from gpx file");
+    Ilwis::IFeatureCoverage fc("track_points");
+    DOTEST(fc.isValid(),"loading points from gpx file");
+
+    Ilwis::FeatureIterator iter(fc);
+    Ilwis::UPFeatureI& feature = *iter;
+    QString wkt = Ilwis::GeometryHelper::toWKT(feature->geometry().get());
+    DOTEST(wkt == "POINT (4.3558570000000003 52.0103980000000021)","loading geometry from point layer");
+
+    Ilwis::ICatalog cat2(QString("file:///%1/gpx").arg(_baseDataPath.absolutePath()));
+    Ilwis::context()->setWorkingCatalog(cat2);
+
+    Ilwis::IFeatureCoverage fc2("101_101.gpx/track_points");
+    DOTEST(fc2.isValid(),"loading points from gpx file");
+
+
 
 }
