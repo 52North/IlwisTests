@@ -165,7 +165,7 @@ void GDALConnectorTest::catalogLoadTests(){
 //        cat.prepare(QUrl(QString("file:///%1/pytest/feature/test.gpx").arg(_baseDataPath.absolutePath())),"");
         DOCOMPARE(cat.isValid(), true, "is catalog valid");
         std::vector<Ilwis::Resource> res = cat.items();
-        DOCOMPARE(res.size(), (unsigned int)5, "gpx always has 5 layers");
+        DOCOMPARE(res.size(), (unsigned int)10, "this gpx always has 10 object, 5 layers and 5 attribute tables");
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
