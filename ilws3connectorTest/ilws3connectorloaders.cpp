@@ -36,7 +36,7 @@ void Ilws3connectorTest::initTestCase()
 void Ilws3connectorTest::loadCoverages() {
     try{
         Ilwis::IRasterCoverage map1;
-        QString res = QString("file:///%1/test/n000302.mpr").arg(_baseDataPath.absolutePath());
+        QString res = QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath());
         DOTEST(map1.prepare(res) == true,"loading raster map");
 
         Ilwis::IRasterCoverage map2;
@@ -56,6 +56,11 @@ void Ilws3connectorTest::loadCoverages() {
 
         Ilwis::IIlwisObject obj;
         DOTEST(obj.prepare(QString("file:///%1/average_monthly_temperature_october_11.mpr").arg(_baseDataPath.absolutePath())),"loading coverage as bare ilwis-object");
+
+        res = QString("file:///%1/cc43.mpr").arg(_baseDataPath.absolutePath());
+        DOTEST(map1.prepare(res), "loading raster with domain color");
+
+
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
         QFAIL(error.toLatin1());
