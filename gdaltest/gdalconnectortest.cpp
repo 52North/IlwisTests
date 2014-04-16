@@ -65,6 +65,8 @@ void GDALConnectorTest::rasterLoadTests() {
 
         DOTEST(map1.prepare(QString("file:///%1/GCL_FLOAT.tif").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
 
+//        DOTEST(map1.prepare(QString("file:///%1/test/at.tif").arg(_baseDataPath.absolutePath())),"loading color geotif");
+
     } catch(const Ilwis::ErrorObject& err){
         QString error = "Test threw exception : " + err.message();
         QFAIL(error.toLatin1()) ;
@@ -83,14 +85,14 @@ void GDALConnectorTest::rasterStoreTests() {
 
         res = QString("file:///%1/aaraster1.mpr").arg(_baseDataPath.absolutePath());
         map1->connectTo(res, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
-        map1->setCreateTime(Ilwis::Time::now());
+        map1->createTime(Ilwis::Time::now());
         map1->store();
 
         res = QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath());
         DOTEST(map1.prepare(res), "loading mpr");
         qDebug() << "loading ilwis3, toring as geotif; output os aaraster2.tif";
         map1->connectTo(res = QString("file:///%1/aaraster2.tif").arg(_baseDataPath.absolutePath()), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
-        map1->setCreateTime(Ilwis::Time::now());
+        map1->createTime(Ilwis::Time::now());
         map1->store();
 
 
