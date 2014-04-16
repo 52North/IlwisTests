@@ -23,8 +23,6 @@ HEADERS +=\
 
 QT       += testlib
 
-QT       -= gui
-
 include(../global.pri)
 
 DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
