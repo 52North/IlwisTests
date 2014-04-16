@@ -1,3 +1,4 @@
+#include <QColor>
 #include "ilwis.h"
 #include "../TestSuite/testsuite.h"
 #include "kernel.h"
@@ -53,6 +54,10 @@ void DataAccess::rasters(){
     map1.prepare(QString("file:///%1/average_monthly_temperature.mpl").arg(_baseDataPath.absolutePath()));
 
     DOCOMPARE(map1->pix2value(Ilwis::Pixel(898,277,3)), 24.20,"Accessing pixels in a maplist");
+
+    map1.prepare(QString("file:///%1/cc43.mpr").arg(_baseDataPath.absolutePath()));
+    QColor clr = map1->datadef().domain<>()->impliedValue(map1->pix2value(Ilwis::Pixel(136,199))).value<QColor>();
+    DOCOMPARE(clr, QColor(46,47,51), "accessing color values");
 }
 
 void DataAccess::features() {
