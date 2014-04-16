@@ -12,6 +12,7 @@ class TESTSUITESHARED_EXPORT IlwisTestCase : public QObject
 public:
     explicit IlwisTestCase(const QString& name, const QString& module, QObject *parent = 0);
     QString name() const;
+    QString qualifiedName() const;
     QString module() const;
 private:
     QString _name;
