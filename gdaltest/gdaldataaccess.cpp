@@ -106,18 +106,6 @@ void GdalDataAccess::accessingRasterData() {
         raster.prepare(QString("file:///%1/GCL_INT.tif").arg(_baseDataPath.absolutePath()));
         DOCOMPARE(raster->pix2value(Ilwis::Pixel(239,297,23)), 48.0, "accessing numerical value in stack of raster (layer 24)");
 
-//        raster.prepare(QString("file:///%1/vnir.tif").arg(_baseDataPath.absolutePath()));
-//        //Ilwis::PixelIterator iter(raster);
-//        int count = 0;
-//        int count1 = 0;
-//        Ilwis::kernel()->startClock();
-//        for(double& v : raster){
-//            if ( v > 0)
-//                ++count;
-//            ++count1;
-//        }
-//        Ilwis::kernel()->endClock();
-
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
         QFAIL(error.toLatin1());

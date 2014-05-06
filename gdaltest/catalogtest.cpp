@@ -37,7 +37,7 @@ void CatalogTest::initTestCase()
 void CatalogTest::readCatalog() {
     DOTEST(Ilwis::mastercatalog()->addContainer(QUrl(QString("file:///%1/gpx").arg(_baseDataPath.absolutePath()))),"adding catalog with gpx file");
 
-    Ilwis::ICatalog cat(QString("file:///%1/gpx/101_101.gpx").arg(_baseDataPath.absolutePath()));
+    Ilwis::ICatalog cat(QString("file:///%1/101_101.gpx").arg(_baseDataPath.absolutePath()));
     DOTEST(cat.isValid(),"is valid gpx catalog");
     std::vector<Ilwis::Resource> items = cat->items();
     DOCOMPARE(items.size(), (unsigned int)10, " 10 objects in the catalog, 5 layers, 5 attribute tables");
@@ -51,7 +51,7 @@ void CatalogTest::readCatalog() {
     QString wkt = Ilwis::GeometryHelper::toWKT(feature->geometry().get());
     DOTEST(wkt == "POINT (4.3558570000000003 52.0103980000000021)","loading geometry from point layer");
 
-    Ilwis::ICatalog cat2(QString("file:///%1/gpx").arg(_baseDataPath.absolutePath()));
+    Ilwis::ICatalog cat2(QString("file:///%1").arg(_baseDataPath.absolutePath()));
     Ilwis::context()->setWorkingCatalog(cat2);
 
     Ilwis::IFeatureCoverage fc2("101_101.gpx/track_points");

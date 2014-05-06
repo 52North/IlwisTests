@@ -61,11 +61,10 @@ void GDALConnectorTest::rasterLoadTests() {
 
         DOTEST(map1.prepare(QString("file:///%1/f41078a1.tif").arg(_baseDataPath.absolutePath())),"basic loading raster, geotiff");
 
-        DOTEST(map1.prepare(QString("file:///%1/hanigodu-megelta4.img").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+        DOTEST(map1.prepare(QString("file:///%1/kenya_2009ndvi_cor_22.img").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
 
-        DOTEST(map1.prepare(QString("file:///%1/GCL_FLOAT.tif").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+        DOTEST(map1.prepare(QString("file:///%1/GCL_INT.tif").arg(_baseDataPath.absolutePath())),"loading geotiff");
 
-//        DOTEST(map1.prepare(QString("file:///%1/test/at.tif").arg(_baseDataPath.absolutePath())),"loading color geotif");
 
     } catch(const Ilwis::ErrorObject& err){
         QString error = "Test threw exception : " + err.message();
@@ -78,7 +77,7 @@ void GDALConnectorTest::rasterStoreTests() {
     try{
         Ilwis::IRasterCoverage map1;
         qDebug() << "Test the output result in suitable client";
-        QString res = QString("file:///%1/average_monthly_temperature_august_2.tif").arg(_baseDataPath.absolutePath());
+        QString res = QString("file:///%1/average_monthly_temperature_august_2.mpr").arg(_baseDataPath.absolutePath());
         map1.prepare(res);
 
         qDebug() << "storing to ilwis3 format; value map; output result is aaraster1.mpr";
@@ -162,8 +161,8 @@ void GDALConnectorTest::catalogLoadTests(){
     try{
         qDebug() << "Loading Catalog. Test the output result in suitable client";
 
-        Ilwis::CatalogView cat;
-        cat.prepare(QUrl(QString("file:///%1/gpx/101_101.gpx").arg(_baseDataPath.absolutePath())),"");
+        Ilwis::CatalogView cat(QUrl("file:///%1/101_101.gpx"));
+        cat.prepare();
 //        cat.prepare(QUrl(QString("file:///%1/pytest/feature/test.gpx").arg(_baseDataPath.absolutePath())),"");
         DOCOMPARE(cat.isValid(), true, "is catalog valid");
         std::vector<Ilwis::Resource> res = cat.items();

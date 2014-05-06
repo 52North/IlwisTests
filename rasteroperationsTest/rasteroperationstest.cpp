@@ -16,9 +16,9 @@
 #include "itemrange.h"
 #include "domainitem.h"
 #include "itemdomain.h"
-#include "numericitem.h"
+#include "interval.h"
 #include "numericdomain.h"
-#include "numericitemrange.h"
+#include "intervalrange.h"
 
 #include "testsuite.h"
 #include "testutils.h"
