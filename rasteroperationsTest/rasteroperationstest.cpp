@@ -16,9 +16,7 @@
 #include "itemrange.h"
 #include "domainitem.h"
 #include "itemdomain.h"
-#include "numericitem.h"
 #include "numericdomain.h"
-#include "numericitemrange.h"
 
 #include "testsuite.h"
 #include "testutils.h"

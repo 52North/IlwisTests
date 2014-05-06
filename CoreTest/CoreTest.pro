@@ -24,7 +24,12 @@ SOURCES += coretest.cpp \
     util/locationtest.cpp \
     util/juliantimetests.cpp \
     catalog/tst_resourcetest.cpp \
-    ilwisobjects/domain/domaintimetests.cpp
+    ilwisobjects/domain/domaintimetests.cpp \
+    ilwisobjects/domain/numericdomaintests.cpp \
+    ilwisobjects/domain/thematicdomaintests.cpp \
+    ilwisobjects/domain/identifierdomaintests.cpp \
+    ilwisobjects/domain/intervaldomaintests.cpp \
+    ilwisobjects/coverage/vertexiteratortests.cpp
 
 HEADERS += coretest.h\
         coretest_global.h \
@@ -34,7 +39,12 @@ HEADERS += coretest.h\
     util/locationtest.h \
     util/juliantimetests.h \
     catalog/tst_resourcetest.h \
-    ilwisobjects/domain/domaintimetests.h
+    ilwisobjects/domain/domaintimetests.h \
+    ilwisobjects/domain/numericdomaintests.h \
+    ilwisobjects/domain/thematicdomaintests.h \
+    ilwisobjects/domain/identifierdomaintests.h \
+    ilwisobjects/domain/intervaldomaintests.h \
+    ilwisobjects/coverage/vertexiteratortests.h
 
 OTHER_FILES +=
 
