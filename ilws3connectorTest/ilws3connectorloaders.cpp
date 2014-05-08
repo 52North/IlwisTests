@@ -48,6 +48,8 @@ void Ilws3connectorTest::loadCoverages() {
         Ilwis::IFeatureCoverage fc;
         DOTEST(fc.prepare(QString("file:///%1/soils_sadc.mpa").arg(_baseDataPath.absolutePath())),"loading polygon map");
 
+        DOTEST(fc.prepare(QString("file:///%1/countries.mpa").arg(_baseDataPath.absolutePath())),"loading polygon map");
+
         Ilwis::IFeatureCoverage fc2;
         DOTEST(fc2.prepare(QString("file:///%1/Contour.mps").arg(_baseDataPath.absolutePath())),"loading segment map");
 
@@ -58,8 +60,8 @@ void Ilws3connectorTest::loadCoverages() {
         DOTEST(obj.prepare(QString("file:///%1/average_monthly_temperature_october_11.mpr").arg(_baseDataPath.absolutePath())),"loading coverage as bare ilwis-object");
 
 
-        res = QString("file:///%1/mpd4.mpr").arg(_baseDataPath.absolutePath());
-        DOTEST(map1.prepare(res),"loading mpd4 raster");
+        res = QString("file:///%1/small3_grfnone.mpr").arg(_baseDataPath.absolutePath());
+        DOTEST(map1.prepare(res),"loading raster with georef none");
 
         res = QString("file:///%1/cc43.mpr").arg(_baseDataPath.absolutePath());
         DOTEST(map1.prepare(res), "loading raster with domain color");
