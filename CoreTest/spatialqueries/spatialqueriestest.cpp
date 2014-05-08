@@ -22,6 +22,8 @@
 #include "catalog.h"
 #include "spatialqueriestest.h"
 
+REGISTER_TEST(SpatialQueriesTest);
+
 SpatialQueriesTest::SpatialQueriesTest() : IlwisTestCase("SpatialQueriesTest","CoreTest")
 {
 }
