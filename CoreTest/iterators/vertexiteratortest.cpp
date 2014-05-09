@@ -146,6 +146,9 @@ void VertexIteratorTest::polygonTests()
     Ilwis::VertexIterator poly1("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
     Ilwis::VertexIterator poly2("POLYGON ((10 10, 30 20, 40 30, 10 20, 10 10))");
     Ilwis::VertexIterator poly3("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
+    Ilwis::VertexIterator poly4("MULTIPOLYGON(((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))");
+
+
 
     geos::geom::Coordinate coord1{*poly1};
     geos::geom::Coordinate coord2{*poly1};
@@ -179,10 +182,26 @@ void VertexIteratorTest::polygonTests()
 
     poly1+=4;
     DOTEST((poly1 >= poly2) == true, "Iter 1 has a bigger or equal index to Iter2");
+
+    int countSubGeom = 1; // start count at 1 because the start geom is already a sub geom;
+    int countHoles= 0;
+    while(poly4 != end(poly4)){
+        if ( poly4.nextSubGeometry()){
+            ++countSubGeom;
+            if ( poly4.isInteriorVertex())
+                ++countHoles;
+        }
+        ++poly4;
+    }
+    DOTEST((countSubGeom) == 3 && countHoles == 1, "2 polygons, one hole");
+
     } catch (Ilwis::ErrorObject& err){
         QString error = "Test threw exception : " + err.message();
         QFAIL(error.toLatin1());
     }
+
+
+
 }
 
 
