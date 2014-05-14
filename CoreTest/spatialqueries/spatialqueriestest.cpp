@@ -61,6 +61,6 @@ void SpatialQueriesTest::basic() {
      DOTEST( indexes.size() == 1,"select with coveredby as member of featurecoverage");
 
      indexes = fc->select("disjoint(\"polygon((35.905805 0.518481, 35.983239 -1.636774,37.828757 -1.817454,37.828757 0.518481,35.905805 0.518481))\")");
-     DOTEST( indexes.size() == 1,"select with disjoint as member of featurecoverage");
+     DOTEST( indexes.size() == 4,"select with disjoint as member of featurecoverage");
 
 }
