@@ -51,7 +51,7 @@ void PixelIteratorTest::rasterSelection() {
      Ilwis::IRasterCoverage map1(QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath()));
 
       QString pol("Polygon((495209 80832,927209 -999367, 1887209 -1282307,2184809 311232,495209 80832))");
-      geos::geom::Geometry *geom = Ilwis::GeometryHelper::fromWKT(pol,map1->coordinateSystem());
+      geos::geom::Geometry *geom = Ilwis::GeometryHelper::fromWKT(pol, map1->coordinateSystem());
       Ilwis::PixelIterator iterIn(map1,geom);
 
       Ilwis::IRasterCoverage map2;
