@@ -82,6 +82,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     featureResource.addProperty("envelope.ll", "52.0 7.5");
     featureResource.addProperty("envelope.ur", "55.5 8.3");
     featureResource.addProperty("coordinatesystem", "code=4326");
+    prepareCoverage(fcoverage.ptr(), featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
@@ -130,18 +131,18 @@ void WfsParserTest::prepareCoverage(FeatureCoverage *fcoverage, Resource resourc
 void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
 {
     WfsFeature featureResource( {"http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.0&REQUEST=GetFeature&typeName=greenland_elevation_contours"} );
-    FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
+    IFeatureCoverage fcoverage (featureResource);
     featureResource.addProperty("envelope.ll", "-88.0 55.0");
     featureResource.addProperty("envelope.ur", "6.7 86.9");
     featureResource.addProperty("coordinatesystem", "code=32661");
-    prepareCoverage(fcoverage, featureResource);
+    prepareCoverage(fcoverage.ptr(), featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/greenlevel_contours.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
-    parser.parseMetadata(fcoverage, context);
+    parser.parseMetadata(fcoverage.ptr(), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 3;
@@ -150,31 +151,31 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
 
     try {
         WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_greenlevel_contours.xml"));
-        WfsFeatureParser featureParser( &featureResponse, fcoverage);
+        WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage->featureCount(), (unsigned int)2, "Should parse 2 greenlevel_contours features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
-    delete fcoverage;
 }
 
 
 void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
 {
     WfsFeature featureResource( {"http://www2.ign.es/sioseinspire?VERSION=1.1.0&REQUEST=GetFeature&typeName=sioseinspire:lu_es_14"} );
-    FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
+    IFeatureCoverage fcoverage (featureResource);
     featureResource.addProperty("envelope.ll", "-2.0 45");
     featureResource.addProperty("envelope.ur", "2.0 55.7");
     featureResource.addProperty("coordinatesystem", "code=3857");
+    prepareCoverage(fcoverage.ptr(), featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/sioseinspire_lu_es_14.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
-    parser.parseMetadata(fcoverage, context);
+    parser.parseMetadata(fcoverage.ptr(), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 8;
@@ -183,14 +184,13 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
 
     try {
         WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_sioseinspire_lu_es_14.xml"));
-        WfsFeatureParser featureParser( &featureResponse, fcoverage);
+        WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage->featureCount(), (unsigned int)5, "Should parse 5 greenlevel_contours features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
-    delete fcoverage;
 }
 
 
