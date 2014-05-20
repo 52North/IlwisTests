@@ -7,10 +7,11 @@
 
 #include "wfs.h"
 
-using namespace Ilwis;
-using namespace Wfs;
+namespace Ilwis {
 
-class QUrl;
+class FeatureCoverage;
+
+namespace Wfs {
 
 class WfsParserTest : public IlwisTestCase
 {
@@ -22,6 +23,7 @@ public:
 private:
     NEW_TEST(WfsParserTest);
 
+    void prepareCoverage(FeatureCoverage *fcoverage, Resource resource);
 
 private Q_SLOTS:
     void parseCorrectNumberOfFeatureTypesFromCapabilities();
@@ -31,5 +33,7 @@ private Q_SLOTS:
     void shouldParseSioseINSPIRE_lu_es_14_FeatureCollection();
 
 };
+}
+}
 
 #endif // TST_WFSPARSERTEST_H

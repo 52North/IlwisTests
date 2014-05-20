@@ -33,6 +33,7 @@
 #include "catalogconnector.h"
 
 #include "wfs.h"
+#include "wfsutils.h"
 #include "wfsresponse.h"
 #include "wfsfeature.h"
 #include "wfscapabilitiesparser.h"
@@ -110,7 +111,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     //fcoverage->store(); // fails!
 }
 
-void prepareFCoverage(FeatureCoverage *fcoverage, Resource resource)
+void WfsParserTest::prepareCoverage(FeatureCoverage *fcoverage, Resource resource)
 {
     ICoordinateSystem crs;
     QString res = resource["coordinatesystem"].toString();
@@ -120,8 +121,8 @@ void prepareFCoverage(FeatureCoverage *fcoverage, Resource resource)
         ERROR1("Could not prepare crs with %1.", res);
     }
 
-    Coordinate ll = createCoordinateFromWgs84LatLon(resource["envelope.ll"].toString());
-    Coordinate ur = createCoordinateFromWgs84LatLon(resource["envelope.ur"].toString());
+    Coordinate ll = WfsUtils::createCoordinateFromWgs84LatLon(resource["envelope.ll"].toString());
+    Coordinate ur = WfsUtils::createCoordinateFromWgs84LatLon(resource["envelope.ur"].toString());
     Envelope envelope(ll, ur);
     fcoverage->envelope(envelope);
 }
@@ -133,14 +134,14 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
     featureResource.addProperty("envelope.ll", "-88.0 55.0");
     featureResource.addProperty("envelope.ur", "6.7 86.9");
     featureResource.addProperty("coordinatesystem", "code=32661");
-    prepareFCoverage(fcoverage, featureResource);
+    prepareCoverage(fcoverage, featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/greenlevel_contours.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
-    parser.parseMetadata(fcoverage, featureResource.url(true), context);
+    parser.parseMetadata(fcoverage, context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 3;
@@ -173,7 +174,7 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
 
     WfsParsingContext context;
     context.setResource(featureResource);
-    parser.parseMetadata(fcoverage, featureResource.url(true), context);
+    parser.parseMetadata(fcoverage, context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 8;
