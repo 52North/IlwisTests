@@ -5,6 +5,6 @@ SUBDIRS += \
     CoreTest \
     TestRunner \
     rasteroperationsTest \
-    ilws3connectorTest \
+    ilws3connectortest \
     gdaltest \
     WFSTest
