@@ -8,15 +8,16 @@ QT       += testlib
 
 QT       -= gui
 
-include(../global.pri)
-
 TARGET = gdaltest
 TEMPLATE = lib
 
+include(../global.pri)
+
 DEFINES += GDALTEST_LIBRARY
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+win32{
+    DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+}
 
 SOURCES += \
     gdalconnectortest.cpp \

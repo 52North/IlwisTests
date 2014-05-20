@@ -4,7 +4,7 @@ SUBDIRS += \
     TestSuite \
     CoreTest \
     TestRunner \
-    postgrestest \
-    ilws3connectortest \
     rasteroperationsTest \
+    ilws3connectorTest \
     gdaltest
+
