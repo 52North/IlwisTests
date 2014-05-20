@@ -78,12 +78,16 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
 {
     WfsFeature featureResource( {"http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100"} );
     IFeatureCoverage fcoverage (featureResource);
+    featureResource.addProperty("envelope.ll", "52.0 7.5");
+    featureResource.addProperty("envelope.ur", "55.5 8.3");
+    featureResource.addProperty("coordinatesystem", "code=4326");
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage.ptr(), featureResource.url(true), context);
+    context.setResource(featureResource);
+    parser.parseMetadata(fcoverage.ptr(), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 12;
@@ -106,16 +110,37 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     //fcoverage->store(); // fails!
 }
 
+void prepareFCoverage(FeatureCoverage *fcoverage, Resource resource)
+{
+    ICoordinateSystem crs;
+    QString res = resource["coordinatesystem"].toString();
+    if (crs.prepare(res, itCONVENTIONALCOORDSYSTEM)) {
+        fcoverage->coordinateSystem(crs);
+    } else {
+        ERROR1("Could not prepare crs with %1.", res);
+    }
+
+    Coordinate ll = createCoordinateFromWgs84LatLon(resource["envelope.ll"].toString());
+    Coordinate ur = createCoordinateFromWgs84LatLon(resource["envelope.ur"].toString());
+    Envelope envelope(ll, ur);
+    fcoverage->envelope(envelope);
+}
+
 void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
 {
     WfsFeature featureResource( {"http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.0&REQUEST=GetFeature&typeName=greenland_elevation_contours"} );
     FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
+    featureResource.addProperty("envelope.ll", "-88.0 55.0");
+    featureResource.addProperty("envelope.ur", "6.7 86.9");
+    featureResource.addProperty("coordinatesystem", "code=32661");
+    prepareFCoverage(fcoverage, featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/greenlevel_contours.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage, featureResource.url(true), context);
+    context.setResource(featureResource);
+    parser.parseMetadata(fcoverage, featureResource.url(true), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 3;
@@ -139,12 +164,16 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
 {
     WfsFeature featureResource( {"http://www2.ign.es/sioseinspire?VERSION=1.1.0&REQUEST=GetFeature&typeName=sioseinspire:lu_es_14"} );
     FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
+    featureResource.addProperty("envelope.ll", "-2.0 45");
+    featureResource.addProperty("envelope.ur", "2.0 55.7");
+    featureResource.addProperty("coordinatesystem", "code=3857");
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/sioseinspire_lu_es_14.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage, featureResource.url(true), context);
+    context.setResource(featureResource);
+    parser.parseMetadata(fcoverage, featureResource.url(true), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 8;
