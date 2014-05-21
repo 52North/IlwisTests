@@ -6,7 +6,7 @@
 
 QT       += testlib
 
-TARGET = rasteroperationsTest
+TARGET = ilw3connectortest
 TEMPLATE = lib
 
 include(../global.pri)
