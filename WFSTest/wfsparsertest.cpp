@@ -101,7 +101,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
         WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
-        DOCOMPARE(fcoverage->featureCount(), (unsigned int)5, "Should parse 5 quad100 features.");
+        DOCOMPARE(fcoverage->featureCount(), (unsigned int)64, "Should parse 6 quad100 features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
