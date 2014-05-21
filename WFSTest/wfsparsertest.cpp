@@ -77,13 +77,13 @@ void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 void WfsParserTest::shouldParseQuad100FeatureCollection()
 {
     WfsFeature featureResource( {"http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100"} );
-    FeatureCoverage *fcoverage = new FeatureCoverage(featureResource);
+    IFeatureCoverage fcoverage (featureResource);
 
     WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage, context);
+    parser.parseSchemaDescription(fcoverage.ptr(), featureResource.url(true), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 12;
@@ -92,7 +92,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
 
     try {
         WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_quad100.xml"));
-        WfsFeatureParser featureParser( &featureResponse, fcoverage);
+        WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage->featureCount(), (unsigned int)5, "Should parse 5 quad100 features.");
@@ -104,7 +104,6 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     QUrl outputFeature = QUrl::fromLocalFile(baseDataPath.absolutePath() + "/feature.shp");
     fcoverage->connectTo(outputFeature.toString(), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
     //fcoverage->store(); // fails!
-    delete fcoverage;
 }
 
 void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
@@ -116,7 +115,7 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage, context);
+    parser.parseSchemaDescription(fcoverage, featureResource.url(true), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 3;
@@ -145,7 +144,7 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
     WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
 
     WfsParsingContext context;
-    parser.parseSchemaDescription(fcoverage, context);
+    parser.parseSchemaDescription(fcoverage, featureResource.url(true), context);
     ITable table = fcoverage->attributeTable();
 
     quint32 expected = 8;

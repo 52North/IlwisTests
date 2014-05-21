@@ -70,6 +70,7 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
 
     QString outputFeature = TestSuite::instance()->outputDataPath().append("/feature.shp");
     coverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
+    coverage->store();
 }
 
 void WfsDemo::wfsCatalog_prepareFeatureCoverageViaUrl_validFeatureCoverage()

@@ -57,6 +57,10 @@ void Ilws3connectorTest::loadCoverages() {
         Ilwis::IIlwisObject obj;
         DOTEST(obj.prepare(QString("file:///%1/average_monthly_temperature_october_11.mpr").arg(_baseDataPath.absolutePath())),"loading coverage as bare ilwis-object");
 
+
+        res = QString("file:///%1/mpd4.mpr").arg(_baseDataPath.absolutePath());
+        DOTEST(map1.prepare(res),"loading mpd4 raster");
+
         res = QString("file:///%1/cc43.mpr").arg(_baseDataPath.absolutePath());
         DOTEST(map1.prepare(res), "loading raster with domain color");
 
@@ -132,7 +136,7 @@ void Ilws3connectorTest::loaderGeometryThings() {
 
 
         Ilwis::IGeoReference grf;
-        DOTEST(grf.prepare(QString("file:///%1/alm011nd.grf").arg(_baseDataPath.absolutePath())) == true,"loading regualr corners georef");
+        DOTEST(grf.prepare(QString("file:///%1/ethiopia_dem.grf").arg(_baseDataPath.absolutePath())) == true,"loading regualr corners georef");
 
         DOTEST(grf.prepare(QString("file:///%1/tmgeo.grf").arg(_baseDataPath.absolutePath())) == true,"loading regualr tiepoint georef");
 

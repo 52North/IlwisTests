@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-03-12T08:14:12
+# Project created by QtCreator 2014-02-25T14:47:07
 #
 #-------------------------------------------------
 
@@ -10,27 +10,24 @@ QT       -= gui
 
 include(../global.pri)
 
-TARGET = rasteroperationsTest
+TARGET = postgrestest
 TEMPLATE = lib
 
-DEFINES += RASTEROPERATIONSTEST_LIBRARY
+DEFINES += OPERATIONTEST_LIBRARY
 
 DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
 DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
-SOURCES += rasteroperationstest.cpp \
-    rastercalc.cpp \
-    classification.cpp
+SOURCES += \
+    rasteroperations.cpp
 
-HEADERS += rasteroperationstest.h\
-        rasteroperationstest_global.h \
-    rastercalc.h \
-    classification.h
 
+HEADERS += postgrestest_global.h \
+    postgrestest.h \
+    operationtest_global.h \
+    rasteroperations.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 
 INCLUDEPATH += $$PWD/../TestSuite
-
 DEPENDPATH += $$PWD/../TestSuite
-
