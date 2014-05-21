@@ -25,3 +25,4 @@ private slots:
 };
 
 #endif // THEMATICDOMAINTESTS_H
+

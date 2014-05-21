@@ -16,6 +16,7 @@
 #include "itemrange.h"
 #include "domainitem.h"
 #include "itemdomain.h"
+
 #include "interval.h"
 #include "numericdomain.h"
 #include "intervalrange.h"

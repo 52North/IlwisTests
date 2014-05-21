@@ -157,7 +157,7 @@ void GDALConnectorTest::featureStoreTests() {
 
 }
 
-void GDALConnectorTest::catalogLoadTests(){
+/*void GDALConnectorTest::catalogLoadTests(){
     try{
         qDebug() << "Loading Catalog. Test the output result in suitable client";
 
@@ -171,7 +171,7 @@ void GDALConnectorTest::catalogLoadTests(){
         QString error = "Test threw exception : " + err.message();
         QFAIL(error.toLatin1());
     }
-}
+}*/
 
 
 

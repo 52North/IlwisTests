@@ -5,16 +5,12 @@
 #-------------------------------------------------
 
 QT       += testlib
-
 QT       -= gui
-
-include(../global.pri)
 
 TARGET = TestSuite
 TEMPLATE = lib
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+include(../global.pri)
 
 DEFINES += TESTSUITE_LIBRARY
 
@@ -27,10 +23,10 @@ HEADERS += testsuite.h\
         testmacros.h \
         ilwistestclass.h
 
-LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/core/ -lilwiscore
+win32{
+    DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+}
 
-INCLUDEPATH +=  $$PWD/core \
-                $$PWD/../external/geos
+DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF
 
-OTHER_FILES +=
 
