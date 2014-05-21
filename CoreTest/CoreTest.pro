@@ -12,8 +12,10 @@ include(../global.pri)
 TARGET = CoreTest
 TEMPLATE = lib
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+win32{
+    DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+}
+
 
 DEFINES += CORETEST_LIBRARY
 

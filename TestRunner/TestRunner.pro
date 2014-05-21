@@ -14,13 +14,17 @@ CONFIG   -= app_bundle
 
 include(../global.pri)
 
-DESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+win32{
+    DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
+}
+
+DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF
 
 TEMPLATE = app
 
 SOURCES += main.cpp
 
-unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
+unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/ -lTestSuite
 
 INCLUDEPATH += $$PWD/../TestSuite
 DEPENDPATH += $$PWD/../TestSuite

@@ -8,15 +8,19 @@ QT       += testlib
 
 QT       -= gui
 
-include(../global.pri)
-
 TARGET = rasteroperationsTest
 TEMPLATE = lib
 
+include(../global.pri)
+
+
+
 DEFINES += RASTEROPERATIONSTEST_LIBRARY
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
-DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+win32{
+    DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
+}
+
 
 SOURCES += rasteroperationstest.cpp \
     rastercalc.cpp \

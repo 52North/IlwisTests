@@ -22,6 +22,8 @@
 #include "catalog.h"
 #include "spatialqueriestest.h"
 
+REGISTER_TEST(SpatialQueriesTest);
+
 SpatialQueriesTest::SpatialQueriesTest() : IlwisTestCase("SpatialQueriesTest","CoreTest")
 {
 }
@@ -47,6 +49,18 @@ void SpatialQueriesTest::basic() {
 
      Ilwis::IFeatureCoverage fc("kenya.mpa");
      indexes = fc->select("contains(\"multipoint(39.434229 -1.262508,34.560120 -0.212529)\")");
-     DOTEST( indexes.size() == 2,"select as member of featurecoverage");
+     DOTEST( indexes.size() == 2,"select with contain as member of featurecoverage");
+
+     indexes = fc->select("intersects(\"linestring(34.486176 1.628373, 36.447845 0.544293,40.655109 -3.753312)\")");
+     DOTEST( indexes.size() == 4,"select with intersect as member of featurecoverage");
+
+     indexes = fc->select("covers(\"polygon((35.905805 0.518481, 35.983239 -1.636774,37.828757 -1.817454,37.828757 0.518481,35.905805 0.518481))\")");
+     DOTEST( indexes.size() == 2,"select with covers as member of featurecoverage");
+
+     indexes = fc->select("coveredby(\"point(37.183473 3.177059)\")");
+     DOTEST( indexes.size() == 1,"select with coveredby as member of featurecoverage");
+
+     indexes = fc->select("disjoint(\"polygon((35.905805 0.518481, 35.983239 -1.636774,37.828757 -1.817454,37.828757 0.518481,35.905805 0.518481))\")");
+     DOTEST( indexes.size() == 4,"select with disjoint as member of featurecoverage");
 
 }

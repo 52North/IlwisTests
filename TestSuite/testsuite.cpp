@@ -34,16 +34,14 @@ void TestSuite::addModules() {
     QDirIterator dirWalker(folder, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
     while(dirWalker.hasNext()) {
         dirWalker.next();
-        QString file = dirWalker.filePath();
-        QLibrary lib;
-        lib.setFileName(file);
-        bool ok =lib.load();
-        QString errorS = lib.errorString();
-        if (!ok)
-            continue;
-        //QFunctionPointer ptr = lib.resolve("runTests")  ;
-        //if (!ptr)
-        //    return ;
+        QFileInfo file(dirWalker.filePath());
+        if ( file.suffix() == "so" || file.suffix().toLower() == "dll"){
+            QLibrary lib;
+            lib.setFileName(file.absoluteFilePath());
+            bool ok =lib.load();
+            if (!ok)
+             qDebug() << lib.errorString();
+        }
 
     }
 }

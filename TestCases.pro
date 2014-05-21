@@ -5,6 +5,7 @@ SUBDIRS += \
     CoreTest \
     TestRunner \
     postgrestest \
-    ilws3connectortest \
     rasteroperationsTest \
-    gdaltest
+    ilws3connectortest \
+    gdaltest \
+    WFSTest

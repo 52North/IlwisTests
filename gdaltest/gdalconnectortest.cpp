@@ -161,9 +161,8 @@ void GDALConnectorTest::featureStoreTests() {
     try{
         qDebug() << "Loading Catalog. Test the output result in suitable client";
 
-        Ilwis::CatalogView cat(QUrl("file:///%1/101_101.gpx"));
+        Ilwis::CatalogView cat(QUrl(QString("file:///%1/101_101.gpx").arg(_baseDataPath.absolutePath())));
         cat.prepare();
-//        cat.prepare(QUrl(QString("file:///%1/pytest/feature/test.gpx").arg(_baseDataPath.absolutePath())),"");
         DOCOMPARE(cat.isValid(), true, "is catalog valid");
         std::vector<Ilwis::Resource> res = cat.items();
         DOCOMPARE(res.size(), (unsigned int)10, "this gpx always has 10 object, 5 layers and 5 attribute tables");
