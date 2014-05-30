@@ -114,13 +114,13 @@ void GDALConnectorTest::featureLoadTests() {
     try {
 
         Ilwis::IFeatureCoverage fc;
-        QString res = QString("file:///%1/shape/woredas.shp").arg(_baseDataPath.absolutePath());
+        QString res = QString("file:///%1/woredas.shp").arg(_baseDataPath.absolutePath());
 
         DOTEST(fc.prepare(res) == true,"basic loading feature coverage, polygons");
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/rainfall.shp").arg(_baseDataPath.absolutePath())),"basic loading feature coverage, points");
+        DOTEST(fc.prepare(QString("file:///%1/rainfall.shp").arg(_baseDataPath.absolutePath())),"basic loading feature coverage, points");
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/drainage.shp").arg(_baseDataPath.absolutePath())), "basic loading feature coverage, lines");
+        DOTEST(fc.prepare(QString("file:///%1/drainage.shp").arg(_baseDataPath.absolutePath())), "basic loading feature coverage, lines");
 
     } catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();

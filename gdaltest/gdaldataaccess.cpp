@@ -34,7 +34,7 @@ void GdalDataAccess::initTestCase()
 
 void GdalDataAccess::tableAccess(){
 
-    QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/rainfall.shp");
+    QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/rainfall.shp");
     Ilwis::ITable tbl1;
     DOTEST(tbl1.prepare(file.toString()),"loading table from shape");
 
@@ -44,7 +44,7 @@ void GdalDataAccess::tableAccess(){
     DOTEST(tbl1->cell("JUNE",2).toInt() == 35, "column test 3");
     DOTEST(tbl1->cell("NOVEMBER",4).toInt() == 81, "column test 4");
 
-    file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/regions.shp");
+    file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/regions.shp");
     DOTEST(tbl1.prepare(file.toString()), "Loaded table regions.shp");
 
     DOTEST(tbl1->cell("REGIONNAME",3).toString() == "Dire Dawa", "column test 5");
@@ -56,11 +56,11 @@ void GdalDataAccess::accessingFeatureData() {
         Ilwis::IFeatureCoverage fc;
         qDebug() << "Features : accessing data ";
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/regions.shp").arg(_baseDataPath.absolutePath())), "Loading regions.shp");
+        DOTEST(fc.prepare(QString("file:///%1/regions.shp").arg(_baseDataPath.absolutePath())), "Loading regions.shp");
         QString env = fc->envelope().toString();
         DOTEST(env == "POLYGON(33.0065 3.40088,47.9605 14.9637)","FeatureCoverage: testing envelope (bbox)");
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/rainfall.shp").arg(_baseDataPath.absolutePath())),"loading point map");
+        DOTEST(fc.prepare(QString("file:///%1/rainfall.shp").arg(_baseDataPath.absolutePath())),"loading point map");
         Ilwis::FeatureIterator iter1(fc);
 
         Ilwis::UPFeatureI& f1 = *(iter1 + 1);
@@ -71,7 +71,7 @@ void GdalDataAccess::accessingFeatureData() {
         output = f2("JANUARY");
         DOCOMPARE(output.toInt(), 85 ,"accesing attribute numeric data of pointmap");
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/drainage.shp").arg(_baseDataPath.absolutePath())),"loading segment map");
+        DOTEST(fc.prepare(QString("file:///%1/drainage.shp").arg(_baseDataPath.absolutePath())),"loading segment map");
         Ilwis::FeatureIterator iter2(fc);
 
         Ilwis::UPFeatureI& f3 = *(iter2 + 104);
@@ -82,7 +82,7 @@ void GdalDataAccess::accessingFeatureData() {
         output = f4("C1");
         DOCOMPARE(output.toInt(), 1 ,"accesing attribute numeric data ofline coverage");
 
-        DOTEST(fc.prepare(QString("file:///%1/shape/geology.shp").arg(_baseDataPath.absolutePath())),"loading polygon map");
+        DOTEST(fc.prepare(QString("file:///%1/geology.shp").arg(_baseDataPath.absolutePath())),"loading polygon map");
         Ilwis::FeatureIterator iter3(fc);
 
         Ilwis::UPFeatureI& f5 = *(iter3 + 40);
