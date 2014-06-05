@@ -22,16 +22,6 @@ GdalDataAccess::GdalDataAccess() : IlwisTestCase("GdalDataAccess", "GdalConnecto
 {
 }
 
-void GdalDataAccess::initTestCase()
-{
-    _baseDataPath = TestSuite::instance()->inputDataPath();
-    if ( !_baseDataPath.exists())
-        throw SkipTest("no data path defined");
-    _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-    if ( !_baseDataOutputPath.exists())
-        throw SkipTest("no data output path defined");
-}
-
 void GdalDataAccess::tableAccess(){
 
     QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/rainfall.shp");
