@@ -16,15 +16,11 @@ public:
     Classification();
 
 private slots:
-    void initTestCase();
     void boxclassification();
 private:
 
  NEW_TEST(Classification);
 
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
 };
 
 #endif // CLASSIFICATION_H
