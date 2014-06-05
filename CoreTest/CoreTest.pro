@@ -48,8 +48,6 @@ HEADERS += coretest.h\
     ilwisobjects/domain/intervaldomaintests.h \
     ilwisobjects/coverage/vertexiteratortests.h
 
-OTHER_FILES +=
-
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 
 INCLUDEPATH += $$PWD/../TestSuite
