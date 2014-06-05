@@ -18,11 +18,7 @@ public:
     NEW_TEST(Rastercalc);
 
 private slots:
-    void initTestCase();
     void addition();
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
 };
 
 #endif // RASTERCALC_H

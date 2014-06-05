@@ -14,23 +14,6 @@ Rastercalc::Rastercalc() : IlwisTestCase("Calc", "RasterOperationsTest")
 {
 }
 
-void Rastercalc::initTestCase()
-{
-    try{
-        _baseDataPath = TestSuite::instance()->inputDataPath();
-        if ( !_baseDataPath.exists())
-            throw SkipTest("no data path defined");
-        _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-        if ( !_baseDataOutputPath.exists())
-            throw SkipTest("no data output path defined");
-        Ilwis::ICatalog cat(QUrl::fromLocalFile(_baseDataPath.absolutePath()).toString());
-        Ilwis::context()->setWorkingCatalog(cat);
-    } catch (const Ilwis::ErrorObject& err){
-        qDebug() << err.message();
-    }
-
-}
-
 void Rastercalc::addition() {
 
     Ilwis::IRasterCoverage map1;
