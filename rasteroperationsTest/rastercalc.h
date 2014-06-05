@@ -19,6 +19,8 @@ public:
 
 private slots:
     void addition();
+    void substract();
+
 };
 
 #endif // RASTERCALC_H
