@@ -20,6 +20,7 @@ public:
 private slots:
     void initTestCase();
     void addition();
+    void substract();
 private:
     QDir _baseDataPath;
     QDir _baseDataOutputPath;
