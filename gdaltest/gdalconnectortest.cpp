@@ -23,20 +23,11 @@ GDALConnectorTest::GDALConnectorTest() : IlwisTestCase("GdalConnectorTest", "Gda
 
 }
 
-void GDALConnectorTest::initTestCase()
-{
-    _baseDataPath = TestSuite::instance()->inputDataPath();
-    if ( !_baseDataPath.exists())
-        throw SkipTest("no data path defined");
-    _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-    if ( !_baseDataOutputPath.exists())
-        throw SkipTest("no data output path defined");
-}
-
 void GDALConnectorTest::tableLoadTests(){
 
     try{
-        QUrl file = QUrl::fromLocalFile(_baseDataPath.absolutePath() + "/shape/rainfall.shp");
+        QString localfld = _baseDataPath.absolutePath();
+        QUrl file = QUrl::fromLocalFile( localfld + "/rainfall.shp");
         Ilwis::ITable tbl1(file.toString());
         DOTEST(tbl1.isValid(),"Table rainfall.shp succesfully loaded");
         DOTEST(!tbl1->isInternalObject(),"Table rainfall.shp loaded from file");
@@ -59,11 +50,11 @@ void GDALConnectorTest::rasterLoadTests() {
     try{
         Ilwis::IRasterCoverage map1;
 
-        DOTEST(map1.prepare(QString("file:///%1/f41078a1.tif").arg(_baseDataPath.absolutePath())),"basic loading raster, geotiff");
+        DOTEST(map1.prepare(QString("file://%1/f41078a1.tif").arg(_baseDataPath.absolutePath())),"basic loading raster, geotiff");
 
-        DOTEST(map1.prepare(QString("file:///%1/kenya_2009ndvi_cor_22.img").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+        DOTEST(map1.prepare(QString("file://%1/kenya_2009ndvi_cor_22.img").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
 
-        DOTEST(map1.prepare(QString("file:///%1/GCL_INT.tif").arg(_baseDataPath.absolutePath())),"loading geotiff");
+        DOTEST(map1.prepare(QString("file://%1/GCL_INT.tif").arg(_baseDataPath.absolutePath())),"loading geotiff");
 
 
     } catch(const Ilwis::ErrorObject& err){
