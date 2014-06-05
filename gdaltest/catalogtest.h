@@ -16,13 +16,8 @@ public:
 
     NEW_TEST(CatalogTest)    ;
 
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
-
 private slots:
     void readCatalog();
-    void initTestCase();
 };
 
 #endif // CATALOGTEST_H
