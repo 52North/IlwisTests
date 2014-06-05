@@ -117,6 +117,7 @@ TestSuite *TestSuite::instance()
 
 QString TestSuite::inputDataPath() const
 {
+
     return _inputDatapath;
 }
 
