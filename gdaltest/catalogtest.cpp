@@ -24,16 +24,6 @@ CatalogTest::CatalogTest() : IlwisTestCase("GdalCatalogTest","GdalConnectorTest"
 {
 }
 
-void CatalogTest::initTestCase()
-{
-    _baseDataPath = TestSuite::instance()->inputDataPath();
-    if ( !_baseDataPath.exists())
-        throw SkipTest("no data path defined");
-    _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-    if ( !_baseDataOutputPath.exists())
-        throw SkipTest("no data output path defined");
-}
-
 void CatalogTest::readCatalog() {
     DOTEST(Ilwis::mastercatalog()->addContainer(QUrl(QString("file:///%1/gpx").arg(_baseDataPath.absolutePath()))),"adding catalog with gpx file");
 
