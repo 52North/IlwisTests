@@ -17,7 +17,7 @@ Rastercalc::Rastercalc() : IlwisTestCase("Calc", "RasterOperationsTest")
 void Rastercalc::addition() {
 
     Ilwis::IRasterCoverage map1;
-    DOTEST(map1.prepare(QString("file:///%1/U_1001A.NTF").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+    DOTEST(map1.prepare(makeInputPath("U_1001A.NTF")),"loading erdas imagine file");
 
       Ilwis::IRasterCoverage cov = map1 + 100.0;
     DOCOMPARE(cov->pix2value(Ilwis::Pixel(0,0)),225.0,"Checking pix(269,339) for expression raster <operator> number");
@@ -27,7 +27,7 @@ void Rastercalc::addition() {
 
 void Rastercalc::substract(){
     Ilwis::IRasterCoverage map1;
-    DOTEST(map1.prepare(QString("file:///%1/U_1001A.NTF").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+    DOTEST(map1.prepare(makeInputPath("U_1001A.NTF")),"loading erdas imagine file");
 
     Ilwis::IRasterCoverage cov = 100.0 - map1;
 

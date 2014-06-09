@@ -2,6 +2,7 @@
 #include "ilwis.h"
 #include "testsuite.h"
 #include "numericrange.h"
+#include "rangeiterator.h"
 
 REGISTER_TEST(NumericRangeTest);
 
@@ -60,4 +61,24 @@ void NumericRangeTest::operations() {
 
     DOTEST(rng2.ensure(2.67) == 2.5, "values are forced into the acceptable resolution");
 
+}
+
+void NumericRangeTest::rangeIterator() {
+    Ilwis::NumericRange rng(-200,500,10);
+    std::vector<double> elements;
+    for(auto number : rng){
+        elements.push_back(number);    ;
+    }
+    DOTEST(elements.size() == 71, "71 elements in the range");
+    Ilwis::NumericRangeIterator iter(&rng);
+    double v = *(iter + 10);
+    DOTEST(v==-100, "plus operation, element 10 is -100");
+    iter += 55;
+    v = *(iter -25);
+    DOTEST(v == 100,"minus operation, element 20 is 100");
+
+    Ilwis::NumericRange rng2(0,100);
+    Ilwis::NumericRangeIterator iter2(&rng2);
+    v = *(iter2 + 1000);
+    DOTEST(v == Ilwis::rUNDEF,"ranges with zero resolution cant be iterated, all results are rUNDEF");
 }

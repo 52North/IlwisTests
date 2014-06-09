@@ -50,11 +50,11 @@ void GDALConnectorTest::rasterLoadTests() {
     try{
         Ilwis::IRasterCoverage map1;
 
-        DOTEST(map1.prepare(QString("file://%1/f41078a1.tif").arg(_baseDataPath.absolutePath())),"basic loading raster, geotiff");
+        DOTEST(map1.prepare( makeInputPath("f41078a1.tif")),"basic loading raster, geotiff");
 
-        DOTEST(map1.prepare(QString("file://%1/kenya_2009ndvi_cor_22.img").arg(_baseDataPath.absolutePath())),"loading erdas imagine file");
+        DOTEST(map1.prepare(makeInputPath("kenya_2009ndvi_cor_22.img")),"loading erdas imagine file");
 
-        DOTEST(map1.prepare(QString("file://%1/GCL_INT.tif").arg(_baseDataPath.absolutePath())),"loading geotiff");
+        DOTEST(map1.prepare(makeInputPath("GCL_INT.tif")),"loading geotiff");
 
 
     } catch(const Ilwis::ErrorObject& err){
@@ -68,20 +68,20 @@ void GDALConnectorTest::rasterStoreTests() {
     try{
         Ilwis::IRasterCoverage map1;
         qDebug() << "Test the output result in suitable client";
-        QString res = QString("file:///%1/average_monthly_temperature_august_2.mpr").arg(_baseDataPath.absolutePath());
+        QString res = makeInputPath("average_monthly_temperature_august_2.mpr");
         map1.prepare(res);
 
         qDebug() << "storing to ilwis3 format; value map; output result is aaraster1.mpr";
 
-        res = QString("file:///%1/aaraster1.mpr").arg(_baseDataPath.absolutePath());
+        res = QString(makeInputPath("aaraster1.mpr"));
         map1->connectTo(res, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
         map1->createTime(Ilwis::Time::now());
         map1->store();
 
-        res = QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath());
+        res = QString(makeInputPath("n000302.mpr"));
         DOTEST(map1.prepare(res), "loading mpr");
         qDebug() << "loading ilwis3, toring as geotif; output os aaraster2.tif";
-        map1->connectTo(res = QString("file:///%1/aaraster2.tif").arg(_baseDataPath.absolutePath()), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
+        map1->connectTo(makeOutputPath("aaraster2.tif"), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
         map1->createTime(Ilwis::Time::now());
         map1->store();
 
@@ -105,13 +105,13 @@ void GDALConnectorTest::featureLoadTests() {
     try {
 
         Ilwis::IFeatureCoverage fc;
-        QString res = QString("file:///%1/woredas.shp").arg(_baseDataPath.absolutePath());
+        QString res = makeInputPath("woredas.shp");
 
         DOTEST(fc.prepare(res) == true,"basic loading feature coverage, polygons");
 
-        DOTEST(fc.prepare(QString("file:///%1/rainfall.shp").arg(_baseDataPath.absolutePath())),"basic loading feature coverage, points");
+        DOTEST(fc.prepare(makeInputPath("rainfall.shp")),"basic loading feature coverage, points");
 
-        DOTEST(fc.prepare(QString("file:///%1/drainage.shp").arg(_baseDataPath.absolutePath())), "basic loading feature coverage, lines");
+        DOTEST(fc.prepare(makeInputPath("drainage.shp")), "basic loading feature coverage, lines");
 
     } catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
@@ -125,19 +125,19 @@ void GDALConnectorTest::featureStoreTests() {
 
        Ilwis::IFeatureCoverage fc;
 
-       DOTEST(fc.prepare(QString("file:///%1/Rainfall.mpp").arg(_baseDataPath.absolutePath())), "loading point map");
+       DOTEST(fc.prepare(makeInputPath("Rainfall.mpp")), "loading point map");
        qDebug() << "storing as shape; output aapoints1.shp";
-       fc->connectTo(QString("file:///%1/aapoints1.shp").arg(_baseDataPath.absolutePath()),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+       fc->connectTo(makeOutputPath("aapoints1.shp"),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
        fc->store();
 
-       DOTEST(fc.prepare(QString("file:///%1/Drainage.mps").arg(_baseDataPath.absolutePath())),"loading segment map");
+       DOTEST(fc.prepare(makeInputPath("Drainage.mps")),"loading segment map");
        qDebug() << "storing as shape; output aalines1.shp";
-       fc->connectTo(QString("file:///%1/aalines1.shp").arg(_baseDataPath.absolutePath()),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+       fc->connectTo(makeOutputPath("aalines1.shp"),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
        fc->store();
 
-       DOTEST(fc.prepare(QString("file:///%1/soils_sadc.mpa").arg(_baseDataPath.absolutePath())),"loading polygon map");
+       DOTEST(fc.prepare(makeInputPath("soils_sadc.mpa")),"loading polygon map");
        qDebug() << "storing as shape; output aapolygons1.shp";
-       fc->connectTo(QString("file:///%1/aapolygons1.shp").arg(_baseDataPath.absolutePath()),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
+       fc->connectTo(makeOutputPath("aapolygons1.shp"),"ESRI Shapefile", "gdal", Ilwis::IlwisObject::cmOUTPUT);
        fc->store();
 
     }catch (const Ilwis::ErrorObject& err) {

@@ -17,11 +17,7 @@ public:
 private:
    NEW_TEST(TableTests);
 
-   QDir _baseDataPath;
-   QDir _baseDataOutputPath;
-
 private slots:
-   void initTestCase();
    void select();
 };
 

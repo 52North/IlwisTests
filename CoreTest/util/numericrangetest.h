@@ -20,6 +20,7 @@ private Q_SLOTS:
 
     void construction();
     void operations();
+    void rangeIterator();
 };
 
 #endif // NUMERICRANGETEST_H

@@ -26,21 +26,38 @@ QString IlwisTestCase::module() const
 
 void IlwisTestCase::initTestCase()
 {
-    QString path = TestSuite::instance()->inputDataPath();
+    QString folder = TestSuite::instance()->inputDataPath();
 
-    QDir folder( Ilwis::OSHelper::operatingSystem() == "windows" ? path : "/" + path);
-    if ( !folder.exists())
+    if ( !QFileInfo(folder).exists())
         throw SkipTest("no data path defined");
     _baseDataPath = QDir(folder);
     QString ss = _baseDataPath.absolutePath();
-    path  = TestSuite::instance()->outputDataPath();
+    folder  = TestSuite::instance()->outputDataPath();
 
-    folder = QDir( Ilwis::OSHelper::operatingSystem() == "windows" ? path : "/" + path);
-    if ( !folder.exists())
+    if ( !QFileInfo(folder).exists())
         throw SkipTest("no data output path defined");
-     _baseDataOutputPath = path;
+     _baseDataOutputPath = QDir(folder);
 
     Ilwis::ICatalog cat(QUrl::fromLocalFile(_baseDataPath.absolutePath()).toString());
     Ilwis::context()->setWorkingCatalog(cat);
 }
 
+QString IlwisTestCase::makeInputPath(const QString& filename){
+    QString path = _baseDataPath.absolutePath();
+#ifdef Q_OS_WIN
+    path = "/" + path;
+#endif
+    if ( filename != "")
+        return "file://" + path +"/" + filename;
+    return "file://" + path;
+}
+
+QString IlwisTestCase::makeOutputPath(const QString& filename){
+    QString path = _baseDataOutputPath.absolutePath();
+#ifdef Q_OS_WIN
+    path = "/" + path;
+#endif
+    if ( filename != "")
+        return "file://" + path +"/" + filename;
+    return "file://" + path;
+}

@@ -22,18 +22,8 @@ PixelIteratorTest::PixelIteratorTest(): IlwisTestCase("PixelIteratorTest", "Core
 {
 }
 
-void PixelIteratorTest::initTestCase()
-{
-    _baseDataPath = TestSuite::instance()->inputDataPath();
-    if ( !_baseDataPath.exists())
-        throw SkipTest("no data path defined");
-    _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-    if ( !_baseDataOutputPath.exists())
-        throw SkipTest("no data output path defined");
-}
-
 void PixelIteratorTest::ziterator() {
-     QString res = QString("file:///%1/small.mpl").arg(_baseDataPath.absolutePath());
+     QString res = makeInputPath("small.mpl");
      Ilwis::IRasterCoverage raster(res);
 
      Ilwis::PixelIterator iter(raster);
@@ -48,7 +38,7 @@ void PixelIteratorTest::ziterator() {
 }
 
 void PixelIteratorTest::rasterSelection() {
-     Ilwis::IRasterCoverage map1(QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath()));
+     Ilwis::IRasterCoverage map1(makeInputPath("n000302.mpr"));
 
       QString pol("Polygon((495209 80832,927209 -999367, 1887209 -1282307,2184809 311232,495209 80832))");
       geos::geom::Geometry *geom = Ilwis::GeometryHelper::fromWKT(pol, map1->coordinateSystem());
@@ -69,7 +59,7 @@ void PixelIteratorTest::rasterSelection() {
           ++iterOut;
           ++iterIn;
       }
-      QString output = QString("file:///%1/aa12.mpr").arg(_baseDataOutputPath.absolutePath());
+      QString output = makeInputPath("aa12.mpr");
       map2->connectTo(output,"map","ilwis3", Ilwis::IlwisObject::cmOUTPUT);
       map2->store();
 

@@ -19,6 +19,8 @@ public:
 protected:
     QDir _baseDataPath;
     QDir _baseDataOutputPath;
+    QString makeInputPath(const QString &filename);
+    QString makeOutputPath(const QString &filename);
 private:
     QString _name;
     QString _module;

@@ -17,12 +17,7 @@ public:
 
     NEW_TEST(PixelIteratorTest);
 
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
-
 private slots:
-    void initTestCase();
     void ziterator();
     void rasterSelection();
 };

@@ -26,34 +26,34 @@ Ilws3connectorTest::Ilws3connectorTest() : IlwisTestCase("Ilwis3ConnectorTest","
 void Ilws3connectorTest::loadCoverages() {
     try{
         Ilwis::IRasterCoverage map1;
-        QString res = QString("file:///%1/n000302.mpr").arg(_baseDataPath.absolutePath());
+        QString res = makeInputPath("n000302.mpr");
         DOTEST(map1.prepare(res) == true,"loading raster map");
 
         Ilwis::IRasterCoverage map2;
-        DOTEST(map2.prepare(QString("file:///%1/average_monthly_temperature.mpl").arg(_baseDataPath.absolutePath())),"loading maplist");
+        DOTEST(map2.prepare(makeInputPath("average_monthly_temperature.mpl")),"loading maplist");
 
         Ilwis::IRasterCoverage map3;
-        DOTEST(map3.prepare(QString("file:///%1/Landuse.mpr").arg(_baseDataPath.absolutePath())),"loading raster with thematic domain");
+        DOTEST(map3.prepare(makeInputPath("Landuse.mpr")),"loading raster with thematic domain");
 
         Ilwis::IFeatureCoverage fc;
-        DOTEST(fc.prepare(QString("file:///%1/soils_sadc.mpa").arg(_baseDataPath.absolutePath())),"loading polygon map");
+        DOTEST(fc.prepare(makeInputPath("soils_sadc.mpa")),"loading polygon map");
 
-        DOTEST(fc.prepare(QString("file:///%1/countries.mpa").arg(_baseDataPath.absolutePath())),"loading polygon map");
+        DOTEST(fc.prepare(makeInputPath("countries.mpa")),"loading polygon map");
 
         Ilwis::IFeatureCoverage fc2;
-        DOTEST(fc2.prepare(QString("file:///%1/Contour.mps").arg(_baseDataPath.absolutePath())),"loading segment map");
+        DOTEST(fc2.prepare(makeInputPath("Contour.mps")),"loading segment map");
 
         Ilwis::IFeatureCoverage fc3;
-        DOTEST(fc3.prepare(QString("file:///%1/rainfall.mpp").arg(_baseDataPath.absolutePath())),"loading point map");
+        DOTEST(fc3.prepare(makeInputPath("rainfall.mpp")),"loading point map");
 
         Ilwis::IIlwisObject obj;
-        DOTEST(obj.prepare(QString("file:///%1/average_monthly_temperature_october_11.mpr").arg(_baseDataPath.absolutePath())),"loading coverage as bare ilwis-object");
+        DOTEST(obj.prepare(makeInputPath("average_monthly_temperature_october_11.mpr")),"loading coverage as bare ilwis-object");
 
 
-        res = QString("file:///%1/small3_grfnone.mpr").arg(_baseDataPath.absolutePath());
+        res = makeInputPath("small3_grfnone.mpr");
         DOTEST(map1.prepare(res),"loading raster with georef none");
 
-        res = QString("file:///%1/cc43.mpr").arg(_baseDataPath.absolutePath());
+        res = makeInputPath("cc43.mpr");
         DOTEST(map1.prepare(res), "loading raster with domain color");
 
 
@@ -67,10 +67,10 @@ void Ilws3connectorTest::domainLoadingConstructing()
 {
     try{
         Ilwis::IDomain dom1;
-        DOTEST(dom1.prepare(QString("file:///%1/landuse.dom").arg(_baseDataPath.absolutePath())),"loading thematic domain");
+        DOTEST(dom1.prepare(makeInputPath("landuse.dom")),"loading thematic domain");
 
         Ilwis::IDomain dom2;
-        DOTEST(dom2.prepare(QString("file:///%1/landuse.dom").arg(_baseDataPath.absolutePath())),"loading thematic domain");
+        DOTEST(dom2.prepare(makeInputPath("landuse.dom")),"loading thematic domain");
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
@@ -83,9 +83,9 @@ void Ilws3connectorTest::tables()
     try {
         Ilwis::ITable tbl;
 
-        DOTEST(tbl.prepare(QString("file:///%1/rainfall.tbt").arg(_baseDataPath.absolutePath())),"loading table, only numerical columns");
+        DOTEST(tbl.prepare(makeInputPath("rainfall.tbt")),"loading table, only numerical columns");
 
-        DOTEST(tbl.prepare(QString("file:///%1/kenya.tbt").arg(_baseDataPath.absolutePath())),"loading table, columns of various domains");
+        DOTEST(tbl.prepare(makeInputPath("kenya.tbt")),"loading table, columns of various domains");
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
@@ -97,11 +97,11 @@ void Ilws3connectorTest::tables()
 void Ilws3connectorTest::loaderCsy() {
     try {
         Ilwis::ICoordinateSystem csy;
-        DOTEST(csy.prepare(QString("file:///%1/cochabam.csy").arg(_baseDataPath.absolutePath())),"loading regular projected csy");
+        DOTEST(csy.prepare(makeInputPath("cochabam.csy")),"loading regular projected csy");
 
-        DOTEST(csy.prepare(QString("file:///%1/average_monthly_temperature_december_3.mpr").arg(_baseDataPath.absolutePath())),"loading csy from raster");
+        DOTEST(csy.prepare(makeInputPath("average_monthly_temperature_december_3.mpr")),"loading csy from raster");
 
-        DOTEST(csy.prepare(QString("file:///%1/ethiopia_dem.csy").arg(_baseDataPath.absolutePath())),"loading regular latlon csy");
+        DOTEST(csy.prepare(makeInputPath("ethiopia_dem.csy")),"loading regular latlon csy");
 
         DOTEST(csy.prepare("code=epsg:5464"), "loading projected csy from epsg");
 
@@ -118,19 +118,19 @@ void Ilws3connectorTest::loaderGeometryThings() {
     try{
 
         Ilwis::ITable tbl1;
-        DOTEST(tbl1.prepare(QString("file:///%1/soils_sadc.tbt").arg(_baseDataPath.absolutePath())),"loading table");
+        DOTEST(tbl1.prepare(makeInputPath("soils_sadc.tbt")),"loading table");
 
         Ilwis::IEllipsoid ell;
         DOTEST(ell.prepare("code=wkt:GRS 1980") == true,"loading ellipsoid from wkt");
 
         Ilwis::IProjection prj;
-        DOTEST(prj.prepare(QString("file:///%1/cochabam.csy").arg(_baseDataPath.absolutePath())),"loading projection from csy");
+        DOTEST(prj.prepare(makeInputPath("cochabam.csy")),"loading projection from csy");
 
 
         Ilwis::IGeoReference grf;
-        DOTEST(grf.prepare(QString("file:///%1/ethiopia_dem.grf").arg(_baseDataPath.absolutePath())) == true,"loading regualr corners georef");
+        DOTEST(grf.prepare(makeInputPath("ethiopia_dem.grf")) == true,"loading regualr corners georef");
 
-        DOTEST(grf.prepare(QString("file:///%1/tmgeo.grf").arg(_baseDataPath.absolutePath())) == true,"loading regualr tiepoint georef");
+        DOTEST(grf.prepare(makeInputPath("tmgeo.grf")) == true,"loading regualr tiepoint georef");
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();
