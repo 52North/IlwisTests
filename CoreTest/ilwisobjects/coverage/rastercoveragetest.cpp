@@ -22,7 +22,7 @@
 
 REGISTER_TEST(RasterCoverageTest);
 
-RasterCoverageTest::RasterCoverageTest() : IlwisTestCase("RasterCovergeTest","CoreTest")
+RasterCoverageTest::RasterCoverageTest() : IlwisTestCase("RasterCoverageTest","CoreTest")
 {
 }
 
@@ -40,12 +40,13 @@ void RasterCoverageTest::bands(){
 
     Ilwis::ITimeDomain dom;
     dom.prepare();
-    dom->range(new Ilwis::TimeInterval("20090101", "20100101",{"30D"}));
+    dom->range(new Ilwis::TimeInterval("20090101", "20110101"));
     raster2->indexDomain(dom);
 
 
-    raster2->band("20090131",iter);
-    raster2->band("20090302",iter2);
+    QVariant tvar = qVariantFromValue(Ilwis::Time("20090131"));
+    raster2->band(tvar,iter);
+    raster2->band("20090602",iter2);
 
     DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,0)) == origvalue1,"same value as original1");
     DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,1)) == origvalue2,"same value as original2");
