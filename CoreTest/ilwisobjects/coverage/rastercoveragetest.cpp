@@ -28,6 +28,10 @@ RasterCoverageTest::RasterCoverageTest() : IlwisTestCase("RasterCoverageTest","C
 
 
 void RasterCoverageTest::bands(){
+
+    Ilwis::IGeoReference grf("code=georef:type=corners,csy=vgt4ndvi.csy,envelope=11.019147 6.004464 33 40.914982 -34.938590,gridsize=840 1148,name=gorilla");
+    DOTEST(grf.isValid(),"making georef by code");
+
     Ilwis::IRasterCoverage raster(makeInputPath("average_monthly_temperature.mpl"));
     DOTEST(raster.isValid(),"map list loaded");
     double origvalue1 = raster->pix2value(Ilwis::Pixel(500,500,3));
