@@ -49,3 +49,29 @@ void CatalogTest::readCatalog() {
 
 
 }
+
+void CatalogTest::wcsCatalog() {
+    //Ilwis::ICatalog cat("http://ogi.state.ok.us/geoserver/wcs?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WCS");
+   // DOTEST(cat.isValid(),"Succesfully created wcs catalog");
+}
+
+void CatalogTest::hdf5Catalog() {
+    Ilwis::ICatalog cat(makeInputPath("INTER_OPER_R___TAVGD___L3__20100101T000000_20100102T000000_0003.nc"));
+    DOTEST(cat.isValid(),"Succesfully created hdf5 catalog");
+
+    Ilwis::context()->setWorkingCatalog(cat);
+    Ilwis::IRasterCoverage raster("lat");
+
+    DOTEST(raster.isValid(),"created raster band lat succesfully");
+
+    DOTESTAPP(raster->pix2value(Ilwis::Pixel(99,101)), 51.6271, 0.001, "reading values from band lat");
+
+    Ilwis::ICatalog cat2(makeInputPath(""));
+    Ilwis::context()->setWorkingCatalog(cat2);
+
+    raster.prepare("INTER_OPER_R___TAVGD___L3__20100101T000000_20100102T000000_0003.nc/lon");
+
+    DOTEST(raster.isValid(),"created raster band with relative path to lon succesfully");
+
+    DOTESTAPP(raster->pix2value(Ilwis::Pixel(99,101)), 4.7095, 0.001, "reading values from band lon");
+}
