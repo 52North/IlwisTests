@@ -22,13 +22,15 @@ win32{
 SOURCES += \
     gdalconnectortest.cpp \
     catalogtest.cpp \
-    gdaldataaccess.cpp
+    gdaldataaccess.cpp \
+    wcstest.cpp
 
 HEADERS +=\
         gdaltest_global.h \
     gdalconnectortest.h \
     catalogtest.h \
-    gdaldataaccess.h
+    gdaldataaccess.h \
+    wcstest.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 

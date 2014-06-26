@@ -7,5 +7,5 @@ SUBDIRS += \
     postgrestest \
     rasteroperationsTest \
     ilws3connectortest \
-    gdaltest
-
+    gdaltest \
+    featureoperations

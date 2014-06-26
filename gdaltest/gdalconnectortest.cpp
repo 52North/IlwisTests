@@ -49,12 +49,15 @@ void GDALConnectorTest::tableStoreTests(){
 void GDALConnectorTest::rasterLoadTests() {
     try{
         Ilwis::IRasterCoverage map1;
+        DOTEST(map1.prepare( makeInputPath("a_200006_bv.img")),"basic loading idl file");
 
         DOTEST(map1.prepare( makeInputPath("f41078a1.tif")),"basic loading raster, geotiff");
 
         DOTEST(map1.prepare(makeInputPath("kenya_2009ndvi_cor_22.img")),"loading erdas imagine file");
 
         DOTEST(map1.prepare(makeInputPath("GCL_INT.tif")),"loading geotiff");
+
+        DOTEST(map1.prepare(makeInputPath("colordem.tif")),"loading geotiff with colors");
 
 
     } catch(const Ilwis::ErrorObject& err){
