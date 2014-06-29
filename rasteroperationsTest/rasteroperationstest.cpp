@@ -35,28 +35,46 @@ RasterOperationsTest::RasterOperationsTest(): IlwisTestCase("RasterOperationsTes
 {
 }
 
-void RasterOperationsTest::initTestCase()
-{
-    QDir input = TestSuite::instance()->inputDataPath();
-    ICatalog cat(QUrl::fromLocalFile(input.absolutePath()).toString());
-    context()->setWorkingCatalog(cat);
+//void RasterOperationsTest::testLinearStretchWithValueLimits()
+//{
+//    try {
+//        qDebug() << "stretch raster";
+//        QString expr = QString("stretch_out=linearstretch(%1, 70, 120)").arg(IMAGE_TO_STRETCH);
 
-    IRasterCoverage mpl;
-    DOTEST2(mpl.prepare(IMAGE_TO_STRETCH), QString("could not prepare '%1'").arg(IMAGE_TO_STRETCH));
-}
+//        Operation op(expr);
+//        DOTEST2(op->execute(&_ctx,_symtbl), "stretching with value limits failed.");
+//    }
+//    catch(ErrorObject& err) {
+//        qDebug() << err.message();
+//        QVERIFY(false);
+//    }
+//}
 
-void RasterOperationsTest::cleanupTestCase()
-{
-}
+//void RasterOperationsTest::testLinearStretchWithPercentLimits() {
+//    try {
+//        qDebug() << "stretch raster";
+//        QString expr = QString("stretch_out=linearstretch(%1, 10)").arg(IMAGE_TO_STRETCH);
 
-void RasterOperationsTest::testLinearStretchWithValueLimits()
-{
+//        Operation op(expr);
+//        DOTEST2(op->execute(&_ctx,_symtbl), "stretching with percent limits failed.");
+//    }
+//    catch(ErrorObject& err) {
+//        qDebug() << err.message();
+//        QVERIFY(false);
+//    }
+//}
+
+void RasterOperationsTest::testMirrorRotate() {
     try {
-        qDebug() << "stretch raster";
-        QString expr = QString("stretch_out=linearstretch(%1, 70, 120)").arg(IMAGE_TO_STRETCH);
+        qDebug() << "mirror raster";
+        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,mirrhor)");
+        Ilwis::ExecutionContext ctx;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx), "mirror rotate mirrvert failed.");
 
-        Operation op(expr);
-        DOTEST2(op->execute(&_ctx,_symtbl), "stretching with value limits failed.");
+        Ilwis::IRasterCoverage raster("ilwis://internalcatalog/aamirvert");
+        raster->connectTo(QString("file:///%1/aamirvert.mpr").arg(_baseDataPath.absolutePath()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
     }
     catch(ErrorObject& err) {
         qDebug() << err.message();
@@ -64,20 +82,5 @@ void RasterOperationsTest::testLinearStretchWithValueLimits()
     }
 }
 
-void RasterOperationsTest::testLinearStretchWithPercentLimits() {
-    try {
-        qDebug() << "stretch raster";
-        QString expr = QString("stretch_out=linearstretch(%1, 10)").arg(IMAGE_TO_STRETCH);
 
-        Operation op(expr);
-        DOTEST2(op->execute(&_ctx,_symtbl), "stretching with percent limits failed.");
-    }
-    catch(ErrorObject& err) {
-        qDebug() << err.message();
-        QVERIFY(false);
-    }
-}
-
-
-#include "moc_rasteroperationstest.cpp"
 
