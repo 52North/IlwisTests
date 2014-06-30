@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTest>
+#include <QDir>
 #include "testsuite_global.h"
 #include "testmacros.h"
 
@@ -14,14 +15,23 @@ public:
     QString name() const;
     QString qualifiedName() const;
     QString module() const;
+
+protected:
+    QDir _baseDataPath;
+    QDir _baseDataOutputPath;
+    QString makeInputPath(const QString &filename);
+    QString makeOutputPath(const QString &filename);
 private:
     QString _name;
     QString _module;
+
     
 signals:
     
 public slots:
     
+private slots:
+    void initTestCase();
 };
 
 #endif // ILWISTESTCLASS_H

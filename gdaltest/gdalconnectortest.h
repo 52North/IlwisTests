@@ -16,13 +16,10 @@ public:
     GDALConnectorTest();
 private:
     NEW_TEST(GDALConnectorTest);
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
 
 
 
 private slots:
-    void initTestCase();
 
     void tableLoadTests();
     void tableStoreTests();

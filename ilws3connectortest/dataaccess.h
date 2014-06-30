@@ -15,14 +15,9 @@ class DataAccess : public IlwisTestCase
 public:
     DataAccess();
 
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
-
     NEW_TEST(DataAccess);
 private slots:
 
-    void initTestCase();
     void rasters();
     void features();
     void table();

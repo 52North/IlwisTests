@@ -17,13 +17,9 @@ public:
     Ilws3connectorTest();
 
     NEW_TEST(Ilws3connectorTest);
-private:
-    QDir _baseDataPath;
-    QDir _baseDataOutputPath;
 
 private slots:
     void loaderGeometryThings();
-    void initTestCase();
     void loaderCsy();
     void loadCoverages();
     void domainLoadingConstructing();

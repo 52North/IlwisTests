@@ -1,14 +1,14 @@
 #ifndef RASTEROPERATIONSTEST_H
 #define RASTEROPERATIONSTEST_H
 
+#include <QString>
 #include <QTest>
-#include "ilwistestclass.h"
+#include <QDir>
+#include "kernel.h"
 #include "testmacros.h"
-
-#include "commandhandler.h"
+#include "ilwistestclass.h"
 #include "symboltable.h"
 
-namespace Ilwis {
 
 class RasterOperationsTest : public IlwisTestCase
 {
@@ -16,23 +16,20 @@ class RasterOperationsTest : public IlwisTestCase
 
 public:
     RasterOperationsTest();
-    RasterOperationsTest(QString* testDataLocation);
 
 private:
     NEW_TEST(RasterOperationsTest);
 
-    SymbolTable _symtbl;
-    ExecutionContext _ctx;
+   // SymbolTable _symtbl;
+  //  ExecutionContext _ctx;
 
 
-private Q_SLOTS:
-    void initTestCase();
-    void testLinearStretchWithValueLimits();
-    void testLinearStretchWithPercentLimits();
-    void cleanupTestCase();
+private slots:
+  //  void testLinearStretchWithValueLimits();
+  //  void testLinearStretchWithPercentLimits();
 
+    void testMirrorRotate();
 };
 
-}
 
 #endif // RASTEROPERATIONSTEST_H

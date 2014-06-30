@@ -24,20 +24,9 @@ CatalogTest::CatalogTest() : IlwisTestCase("GdalCatalogTest","GdalConnectorTest"
 {
 }
 
-void CatalogTest::initTestCase()
-{
-    _baseDataPath = TestSuite::instance()->inputDataPath();
-    if ( !_baseDataPath.exists())
-        throw SkipTest("no data path defined");
-    _baseDataOutputPath = TestSuite::instance()->outputDataPath();
-    if ( !_baseDataOutputPath.exists())
-        throw SkipTest("no data output path defined");
-}
-
 void CatalogTest::readCatalog() {
-    DOTEST(Ilwis::mastercatalog()->addContainer(QUrl(QString("file:///%1/gpx").arg(_baseDataPath.absolutePath()))),"adding catalog with gpx file");
 
-    Ilwis::ICatalog cat(QString("file:///%1/101_101.gpx").arg(_baseDataPath.absolutePath()));
+    Ilwis::ICatalog cat(makeInputPath("101_101.gpx"));
     DOTEST(cat.isValid(),"is valid gpx catalog");
     std::vector<Ilwis::Resource> items = cat->items();
     DOCOMPARE(items.size(), (unsigned int)10, " 10 objects in the catalog, 5 layers, 5 attribute tables");
@@ -51,7 +40,7 @@ void CatalogTest::readCatalog() {
     QString wkt = Ilwis::GeometryHelper::toWKT(feature->geometry().get());
     DOTEST(wkt == "POINT (4.3558570000000003 52.0103980000000021)","loading geometry from point layer");
 
-    Ilwis::ICatalog cat2(QString("file:///%1").arg(_baseDataPath.absolutePath()));
+    Ilwis::ICatalog cat2(makeInputPath(""));
     Ilwis::context()->setWorkingCatalog(cat2);
 
     Ilwis::IFeatureCoverage fc2("101_101.gpx/track_points");
@@ -59,4 +48,30 @@ void CatalogTest::readCatalog() {
 
 
 
+}
+
+void CatalogTest::wcsCatalog() {
+    //Ilwis::ICatalog cat("http://ogi.state.ok.us/geoserver/wcs?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WCS");
+   // DOTEST(cat.isValid(),"Succesfully created wcs catalog");
+}
+
+void CatalogTest::hdf5Catalog() {
+    Ilwis::ICatalog cat(makeInputPath("INTER_OPER_R___TAVGD___L3__20100101T000000_20100102T000000_0003.nc"));
+    DOTEST(cat.isValid(),"Succesfully created hdf5 catalog");
+
+    Ilwis::context()->setWorkingCatalog(cat);
+    Ilwis::IRasterCoverage raster("lat");
+
+    DOTEST(raster.isValid(),"created raster band lat succesfully");
+
+    DOTESTAPP(raster->pix2value(Ilwis::Pixel(99,101)), 51.6271, 0.001, "reading values from band lat");
+
+    Ilwis::ICatalog cat2(makeInputPath(""));
+    Ilwis::context()->setWorkingCatalog(cat2);
+
+    raster.prepare("INTER_OPER_R___TAVGD___L3__20100101T000000_20100102T000000_0003.nc/lon");
+
+    DOTEST(raster.isValid(),"created raster band with relative path to lon succesfully");
+
+    DOTESTAPP(raster->pix2value(Ilwis::Pixel(99,101)), 4.7095, 0.001, "reading values from band lon");
 }

@@ -31,7 +31,11 @@ SOURCES += coretest.cpp \
     ilwisobjects/domain/thematicdomaintests.cpp \
     ilwisobjects/domain/identifierdomaintests.cpp \
     ilwisobjects/domain/intervaldomaintests.cpp \
-    ilwisobjects/coverage/vertexiteratortests.cpp
+    ilwisobjects/table/tabletests.cpp \
+    iterators/vertexiteratortest.cpp \
+    iterators/pixeliteratortest.cpp \
+    ilwisobjects/coverage/rastercoveragetest.cpp \
+    ilwisobjects/coverage/featurecoveragetest.cpp
 
 HEADERS += coretest.h\
         coretest_global.h \
@@ -46,9 +50,12 @@ HEADERS += coretest.h\
     ilwisobjects/domain/thematicdomaintests.h \
     ilwisobjects/domain/identifierdomaintests.h \
     ilwisobjects/domain/intervaldomaintests.h \
-    ilwisobjects/coverage/vertexiteratortests.h
-
-OTHER_FILES +=
+    ilwisobjects/coverage/vertexiteratortests.h \
+    ilwisobjects/table/tabletests.h \
+    iterators/vertexiteratortest.h \
+    iterators/pixeliteratortest.h \
+    ilwisobjects/coverage/rastercoveragetest.h \
+    ilwisobjects/coverage/featurecoveragetest.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 

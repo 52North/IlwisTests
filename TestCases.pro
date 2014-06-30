@@ -8,4 +8,4 @@ SUBDIRS += \
     rasteroperationsTest \
     ilws3connectortest \
     gdaltest \
-    WFSTest
+    featureoperations

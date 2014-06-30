@@ -23,10 +23,11 @@ HEADERS += testsuite.h\
         testmacros.h \
         ilwistestclass.h
 
+DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF
+
 win32{
     DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin
 }
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF
 
 
