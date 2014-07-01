@@ -29,6 +29,7 @@ private slots:
   //  void testLinearStretchWithPercentLimits();
 
     void testMirrorRotate();
+    void testResample();
 };
 
 

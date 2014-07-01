@@ -64,6 +64,17 @@ RasterOperationsTest::RasterOperationsTest(): IlwisTestCase("RasterOperationsTes
 //    }
 //}
 
+void RasterOperationsTest::testResample() {
+    QString expr = QString("aaresample1=resample(small.mpl,aeqsmall.grf,nearestneighbour)");
+    Ilwis::ExecutionContext ctx;
+    DOTEST(Ilwis::commandhandler()->execute(expr,&ctx), "resample blas.");
+
+    Ilwis::IRasterCoverage raster("ilwis://internalcatalog/aaresample1");
+    raster->connectTo(QString("file:///%1/aaresample1.mpr").arg(_baseDataPath.absolutePath()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+    raster->createTime(Ilwis::Time::now());
+    raster->store();
+}
+
 void RasterOperationsTest::testMirrorRotate() {
     try {
         qDebug() << "mirror raster";
