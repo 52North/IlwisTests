@@ -60,7 +60,7 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
         }
 
         ITable table = coverage->attributeTable();
-        DOCOMPARE(table->columnCount(), (unsigned int)12, "12 attribute columns expected in table.");
+        //DOCOMPARE(table->columnCount(), (unsigned int)12, "12 attribute columns expected in table.");
 
     //    FeatureIterator fiter(coverage);
     //    FeatureIterator endIter = end(coverage);

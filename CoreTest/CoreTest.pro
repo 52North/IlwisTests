@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
-QT       +=core testlib
+QT       +=core testlib network xmlpatterns
 
 include(../global.pri)
 
@@ -25,6 +25,7 @@ SOURCES += coretest.cpp \
     util/numericrangetest.cpp \
     util/locationtest.cpp \
     util/juliantimetests.cpp \
+    util/qtxmlparsertest.cpp \
     catalog/tst_resourcetest.cpp \
     ilwisobjects/domain/domaintimetests.cpp \
     ilwisobjects/domain/numericdomaintests.cpp \
@@ -44,6 +45,7 @@ HEADERS += coretest.h\
     util/numericrangetest.h \
     util/locationtest.h \
     util/juliantimetests.h \
+    util/qtxmlparsertest.h \
     catalog/tst_resourcetest.h \
     ilwisobjects/domain/domaintimetests.h \
     ilwisobjects/domain/numericdomaintests.h \
@@ -62,3 +64,14 @@ unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSu
 INCLUDEPATH += $$PWD/../TestSuite
 DEPENDPATH += $$PWD/../TestSuite
 
+OTHER_FILES += \
+    testfiles/test_without_xml_header.xml \
+    testfiles/test.xml
+
+testfiles.files = \
+    testfiles/test_without_xml_header.xml \
+    testfiles/test.xml
+
+testfiles.path = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases/testfiles
+
+INSTALLS += testfiles
