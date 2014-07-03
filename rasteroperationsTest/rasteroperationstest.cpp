@@ -25,7 +25,6 @@
 #include "testutils.h"
 #include "rasteroperationstest.h"
 
-using namespace Ilwis;
 
 #define IMAGE_TO_STRETCH "tmb3.mpr"
 
@@ -78,7 +77,7 @@ void RasterOperationsTest::testResample() {
 void RasterOperationsTest::testMirrorRotate() {
     try {
         qDebug() << "mirror raster";
-        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,mirrhor)");
+        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,rotate180)");
         Ilwis::ExecutionContext ctx;
         DOTEST(Ilwis::commandhandler()->execute(expr,&ctx), "mirror rotate mirrvert failed.");
 
@@ -87,7 +86,7 @@ void RasterOperationsTest::testMirrorRotate() {
         raster->createTime(Ilwis::Time::now());
         raster->store();
     }
-    catch(ErrorObject& err) {
+    catch(Ilwis::ErrorObject& err) {
         qDebug() << err.message();
         QVERIFY(false);
     }
