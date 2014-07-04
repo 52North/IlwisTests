@@ -46,7 +46,7 @@ void GdalDataAccess::accessingFeatureData() {
 
         DOTEST(fc.prepare(makeInputPath("regions.shp")), "Loading regions.shp");
         QString env = fc->envelope().toString();
-        DOTEST(env == "POLYGON(33.0065 3.40088,47.9605 14.9637)","FeatureCoverage: testing envelope (bbox)");
+        DOTEST(env == "33.0065 3.40088 47.9605 14.9637","FeatureCoverage: testing envelope (bbox)");
 
         DOTEST(fc.prepare(makeInputPath("rainfall.shp")),"loading point map");
         Ilwis::FeatureIterator iter1(fc);
