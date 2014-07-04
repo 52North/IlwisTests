@@ -22,14 +22,16 @@ win32{
 }
 
 
-SOURCES += rasteroperationstest.cpp \
+SOURCES += \
     rastercalc.cpp \
-    classification.cpp
+    classification.cpp \
+    rasteroperations.cpp
 
-HEADERS += rasteroperationstest.h\
+HEADERS +=\
         rasteroperationstest_global.h \
     rastercalc.h \
-    classification.h
+    classification.h \
+    rasteroperations.h
 
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
