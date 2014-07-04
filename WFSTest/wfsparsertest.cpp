@@ -73,6 +73,11 @@ void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
     QUrlQuery actualQuery2 = features.at(1).urlQuery();
     DOTEST2(actualQuery2.queryItemValue("request") == "GetFeature", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
     DOTEST2(actualQuery2.queryItemValue("typeName") == "ogi:quad100_centroids", QString("Query is incorrect '%1'").arg(actualQuery2.toString()));
+
+    QString actualSrs = features.at(0)["coordinatesystem"].toString();
+    DOCOMPARE(actualSrs, QString("code=epsg:4326"), "Should have correct SRS.");
+    DOTEST2(features.at(0)["envelope.ll"] != sUNDEF, "Envelope misses lower-left coordinate");
+    DOTEST2(features.at(0)["envelope.ur"] != sUNDEF, "Envelope misses upper-right coordinate");
 }
 
 void WfsParserTest::shouldParseQuad100FeatureCollection()
@@ -101,7 +106,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
         WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
-        DOCOMPARE(fcoverage->featureCount(), (unsigned int)64, "Should parse 6 quad100 features.");
+        DOCOMPARE(fcoverage->featureCount(), (unsigned int)64, "Should parse 64 quad100 features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
