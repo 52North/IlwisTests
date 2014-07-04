@@ -18,6 +18,7 @@ public:
     RasterOperations();
 private slots:
     void testMirrorRotate();
+    void testResample();
 };
 
 #endif // RASTEROPERATIONS_H
