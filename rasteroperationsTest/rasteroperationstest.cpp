@@ -25,7 +25,6 @@
 #include "testutils.h"
 #include "rasteroperationstest.h"
 
-using namespace Ilwis;
 
 #define IMAGE_TO_STRETCH "tmb3.mpr"
 
@@ -64,10 +63,21 @@ RasterOperationsTest::RasterOperationsTest(): IlwisTestCase("RasterOperationsTes
 //    }
 //}
 
+void RasterOperationsTest::testResample() {
+    QString expr = QString("aaresample1=resample(small.mpl,aeqsmall.grf,nearestneighbour)");
+    Ilwis::ExecutionContext ctx;
+    DOTEST(Ilwis::commandhandler()->execute(expr,&ctx), "resample blas.");
+
+    Ilwis::IRasterCoverage raster("ilwis://internalcatalog/aaresample1");
+    raster->connectTo(QString("file:///%1/aaresample1.mpr").arg(_baseDataPath.absolutePath()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+    raster->createTime(Ilwis::Time::now());
+    raster->store();
+}
+
 void RasterOperationsTest::testMirrorRotate() {
     try {
         qDebug() << "mirror raster";
-        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,mirrhor)");
+        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,rotate180)");
         Ilwis::ExecutionContext ctx;
         DOTEST(Ilwis::commandhandler()->execute(expr,&ctx), "mirror rotate mirrvert failed.");
 
@@ -76,7 +86,7 @@ void RasterOperationsTest::testMirrorRotate() {
         raster->createTime(Ilwis::Time::now());
         raster->store();
     }
-    catch(ErrorObject& err) {
+    catch(Ilwis::ErrorObject& err) {
         qDebug() << err.message();
         QVERIFY(false);
     }

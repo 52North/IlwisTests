@@ -7,7 +7,6 @@
 #include "kernel.h"
 #include "testmacros.h"
 #include "ilwistestclass.h"
-#include "symboltable.h"
 
 
 class RasterOperationsTest : public IlwisTestCase
@@ -29,6 +28,7 @@ private slots:
   //  void testLinearStretchWithPercentLimits();
 
     void testMirrorRotate();
+    void testResample();
 };
 
 
