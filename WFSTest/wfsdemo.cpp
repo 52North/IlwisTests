@@ -51,6 +51,7 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
 {
     try {
         ICatalog cat("http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
+        //ICatalog cat("http://nsidc.org/cgi-bin/atlas_north?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
 
         std::vector<Resource> items = cat->items();
         Resource feature(items.front());
@@ -70,15 +71,14 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
     //        std::cout << GeometryHelper::toWKT(geometry);
     //    }
 
-        QDir outputDir(TestSuite::instance()->outputDataPath());
-        QString outputFeature = outputDir.filePath("feature.shp");
-        coverage->connectTo(outputFeature, "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
+        coverage->connectTo(makeOutputPath("ogi.shp"), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
         coverage->store();
     } catch (std::exception& e) {
         QFAIL(QString("exception occured: %1").arg(e.what()).toLatin1().constData());
     }
 
 }
+
 
 void WfsDemo::wfsCatalog_prepareFeatureCoverageViaUrl_validFeatureCoverage()
 {
