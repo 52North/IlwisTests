@@ -52,7 +52,6 @@ HEADERS += coretest.h\
     ilwisobjects/domain/thematicdomaintests.h \
     ilwisobjects/domain/identifierdomaintests.h \
     ilwisobjects/domain/intervaldomaintests.h \
-    ilwisobjects/coverage/vertexiteratortests.h \
     ilwisobjects/table/tabletests.h \
     iterators/vertexiteratortest.h \
     iterators/pixeliteratortest.h \
