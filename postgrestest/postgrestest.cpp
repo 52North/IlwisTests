@@ -70,18 +70,23 @@ void PostgresTest::initCatalogItemsFromDatabase()
 
     std::for_each(items.begin(), items.end(),[](Resource &resource) {
 
-        Resource tableResource(resource.url(), itTABLE);
+        DOTEST2(resource.hasProperty("pg.user"), "pg resource does not contain db user");
+        DOTEST2(resource.hasProperty("pg.password"), "pg resource does not contain db password");
+        DOTEST2(resource.hasProperty("pg.schema"), "pg resource does not contain db schema");
 
         ITable table;
-        if ( !table.prepare(tableResource)) {
+        //Resource tableResource(resource.url(), itTABLE);
+        if ( !table.prepare(resource)) {
             QFAIL("Could not prepare table.");
         }
 
-        Resource featureResource(resource.url(), itFEATURE);
-        IFeatureCoverage feature;
-        if ( !feature.prepare(featureResource)) {
-            QFAIL("Could not prepare feature.");
-        }
+        DOTEST2(resource.url().toString().endsWith(table->name()), "");
+
+//        IFeatureCoverage feature;
+//        Resource featureResource(resource.url(), itFEATURE);
+//        if ( !feature.prepare(featureResource)) {
+//            QFAIL("Could not prepare feature.");
+//        }
     });
 
     //Resource resource(items.front());
