@@ -34,16 +34,23 @@ void PostgresTest::listNumberOfDriversAvailable() {
     qDebug() << lst.size();
 }
 
-void PostgresTest::initWithDatabaseConnectionString()
+void PostgresTest::initCatalogConnectionString()
 {
-    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
-    Resource dbResource(connectionString, itTABLE);
-    prepareDatabaseConnection(dbResource);
-    dbResource.prepare();
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us-rails");
+    Resource tableResource(connectionString, itTABLE);
+    prepareDatabaseConnection(tableResource);
+    tableResource.prepare();
 
     ITable table;
-    if ( !table.prepare(dbResource)) {
+    if ( !table.prepare(tableResource)) {
         QFAIL("Could not prepare table.");
+    }
+
+    IFeatureCoverage coverage;
+    Resource coverageResource(connectionString, itCOVERAGE);
+    prepareDatabaseConnection(coverageResource);
+    if ( !coverage.prepare(coverageResource)) {
+        QFAIL("Could not prepare coverage.");
     }
 }
 
@@ -55,41 +62,40 @@ void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
     dbResource.prepare();
 }
 
-void PostgresTest::initCatalogItemsFromDatabase()
+void PostgresTest::initDatabaseItems()
 {
-    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
-    Resource dbCatalog(connectionString, itCATALOG);
-    prepareDatabaseConnection(dbCatalog);
-    dbCatalog.prepare();
+    try {
+        QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
+        Resource dbCatalog(connectionString, itCATALOG);
+        prepareDatabaseConnection(dbCatalog);
+        dbCatalog.prepare();
 
-    ICatalog cat(dbCatalog);
-    std::vector<Resource> items = cat->items();
-    if (items.size() == 0) {
-        QFAIL("no catalog items found! Check if test db is initiated properly.");
-    }
-
-    std::for_each(items.begin(), items.end(),[](Resource &resource) {
-
-        DOTEST2(resource.hasProperty("pg.user"), "pg resource does not contain db user");
-        DOTEST2(resource.hasProperty("pg.password"), "pg resource does not contain db password");
-        DOTEST2(resource.hasProperty("pg.schema"), "pg resource does not contain db schema");
-
-        ITable table;
-        //Resource tableResource(resource.url(), itTABLE);
-        if ( !table.prepare(resource)) {
-            QFAIL("Could not prepare table.");
+        ICatalog cat(dbCatalog);
+        std::vector<Resource> items = cat->items();
+        if (items.size() == 0) {
+            QFAIL("no catalog items found! Check if test db is initiated properly.");
         }
 
-        DOTEST2(resource.url().toString().endsWith(table->name()), "");
+        std::for_each(items.begin(), items.end(),[](Resource &resource) {
 
-//        IFeatureCoverage feature;
-//        Resource featureResource(resource.url(), itFEATURE);
-//        if ( !feature.prepare(featureResource)) {
-//            QFAIL("Could not prepare feature.");
-//        }
-    });
+            DOTEST2(resource.hasProperty("pg.user"), "pg resource does not contain db user");
+            DOTEST2(resource.hasProperty("pg.password"), "pg resource does not contain db password");
+            DOTEST2(resource.hasProperty("pg.schema"), "pg resource does not contain db schema");
 
-    //Resource resource(items.front());
+            ITable table;
+            //Resource tableResource(resource.url(), itTABLE);
+            if ( !table.prepare(resource)) {
+                QFAIL("Could not prepare table.");
+            }
+
+            DOTEST2(resource.url().toString().endsWith(table->name()), QString("Table resource does not end with '%1'").arg(table->name()));
+
+        });
+
+    } catch (std::exception& e) {
+        QFAIL(QString(e.what()).toLatin1().constData());
+    }
+
 
 
 }
