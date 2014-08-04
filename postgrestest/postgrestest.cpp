@@ -37,11 +37,12 @@ void PostgresTest::listNumberOfDriversAvailable() {
 void PostgresTest::initDatabaseItemsWithoutCatalog()
 {
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us-rails");
-    Resource tableResource(connectionString, itTABLE);
-    prepareDatabaseConnection(tableResource);
-    tableResource.prepare();
 
     ITable table;
+    Resource tableResource(connectionString, itTABLE);
+    prepareDatabaseConnection(tableResource);
+    //tableResource.prepare();
+
     if ( !table.prepare(tableResource)) {
         QFAIL("Could not prepare table.");
     }
