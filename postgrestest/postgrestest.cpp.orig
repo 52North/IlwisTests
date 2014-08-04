@@ -34,7 +34,7 @@ void PostgresTest::listNumberOfDriversAvailable() {
     qDebug() << lst.size();
 }
 
-void PostgresTest::initDatabaseItemsWithoutCatalog()
+void PostgresTest::initCatalogConnectionString()
 {
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us-rails");
     Resource tableResource(connectionString, itTABLE);
@@ -62,7 +62,7 @@ void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
     dbResource.prepare();
 }
 
-void PostgresTest::initDatabaseItemsFromCatalog()
+void PostgresTest::initDatabaseItems()
 {
     try {
         QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
@@ -87,18 +87,29 @@ void PostgresTest::initDatabaseItemsFromCatalog()
             if ( !table.prepare(resource)) {
                 QFAIL("Could not prepare table.");
             }
+<<<<<<< HEAD
 
             DOTEST2(resource.url().toString().endsWith(table->name()), QString("Table resource does not end with '%1'").arg(table->name()));
 
         });
+=======
+
+            DOTEST2(resource.url().toString().endsWith(table->name()), QString("Table resource does not end with '%1'").arg(table->name()));
+
+    //        IFeatureCoverage feature;
+    //        Resource featureResource(resource.url(), itFEATURE);
+    //        if ( !feature.prepare(featureResource)) {
+    //            QFAIL("Could not prepare feature.");
+    //        }
+        });
+
+        //Resource resource(items.front());
+>>>>>>> fc6bd48a279e4baeb057ab251a3763eef3b5f77b
 
     } catch (std::exception& e) {
         QFAIL(QString(e.what()).toLatin1().constData());
     }
 
-    } catch (std::exception& e) {
-        QFAIL(QString(e.what()).toLatin1().constData());
-    }
 
 
 }
