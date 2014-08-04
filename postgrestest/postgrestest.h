@@ -23,12 +23,12 @@ private:
     NEW_TEST(PostgresTest);
 
     void listNumberOfDriversAvailable();
-    void initWithDatabaseConnectionString();
+    void initCatalogConnectionString();
 
     void prepareDatabaseConnection(Resource&dbResource);
 
 private slots:
-    void initCatalogItemsFromDatabase();
+    void initDatabaseItems();
 };
 
 }
