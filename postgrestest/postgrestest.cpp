@@ -96,10 +96,6 @@ void PostgresTest::initDatabaseItemsFromCatalog()
         QFAIL(QString(e.what()).toLatin1().constData());
     }
 
-    } catch (std::exception& e) {
-        QFAIL(QString(e.what()).toLatin1().constData());
-    }
-
 
 }
 
