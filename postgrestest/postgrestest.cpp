@@ -39,7 +39,7 @@ void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
 
 void PostgresTest::initDatabaseItemsWithoutCatalog()
 {
-    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us-rails");
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
 
     ITable table;
     Resource tableResource(connectionString, itTABLE);
@@ -54,6 +54,9 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
     if ( !coverage.prepare(coverageResource)) {
         QFAIL("Could not prepare coverage.");
     }
+
+    QString actual = coverage->coordinateSystem()->code();
+    DOTEST2(actual == "epsg:4269", QString("SRS was NOT expected to be '%1'").arg(actual));
 }
 
 void PostgresTest::loadDataFromFeatureTable()
@@ -78,7 +81,8 @@ void PostgresTest::loadDataFromPlainTable()
 
     DOCOMPARE(table->columnCount(), (unsigned int)5, "check number of columns in 'persons' table.");
 
-    DOTEST(table->cell(0,0).toString() == "Simpson", "column test 1");
+    QString actual = table->cell("lastname",0).toString();
+    DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
 }
 
 void PostgresTest::initDatabaseItemsFromCatalog()
