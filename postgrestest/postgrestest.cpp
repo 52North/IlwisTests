@@ -29,9 +29,12 @@ PostgresTest::PostgresTest() : IlwisTestCase("PostgresConnectorTest", "PostgresC
 {
 }
 
-void PostgresTest::listNumberOfDriversAvailable() {
-    QStringList lst = QSqlDatabase::drivers();
-    qDebug() << lst.size();
+void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
+{
+    dbResource.addProperty("pg.password", "postgres");
+    dbResource.addProperty("pg.user", "postgres");
+    dbResource.addProperty("pg.schema", "public");
+    dbResource.prepare();
 }
 
 void PostgresTest::initDatabaseItemsWithoutCatalog()
@@ -41,8 +44,6 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
     ITable table;
     Resource tableResource(connectionString, itTABLE);
     prepareDatabaseConnection(tableResource);
-    //tableResource.prepare();
-
     if ( !table.prepare(tableResource)) {
         QFAIL("Could not prepare table.");
     }
@@ -55,12 +56,29 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
     }
 }
 
-void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
+void PostgresTest::loadDataFromFeatureTable()
 {
-    dbResource.addProperty("pg.password", "postgres");
-    dbResource.addProperty("pg.user", "postgres");
-    dbResource.addProperty("pg.schema", "public");
-    dbResource.prepare();
+    QFAIL("not implemented test case.");
+}
+
+void PostgresTest::loadDataFromPlainTable()
+{
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/persons");
+
+    ITable table;
+    Resource tableResource(connectionString, itTABLE);
+    prepareDatabaseConnection(tableResource);
+    if ( !table.prepare(tableResource)) {
+        QFAIL("Could not prepare table.");
+    }
+
+    if ( !table.isValid()) {
+        QFAIL("prepared table is not valid.");
+    }
+
+    DOCOMPARE(table->columnCount(), (unsigned int)5, "check number of columns in 'persons' table.");
+
+    DOTEST(table->cell(0,0).toString() == "Simpson", "column test 1");
 }
 
 void PostgresTest::initDatabaseItemsFromCatalog()

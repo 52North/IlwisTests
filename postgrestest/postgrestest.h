@@ -22,13 +22,13 @@ public:
 private:
     NEW_TEST(PostgresTest);
 
-    void listNumberOfDriversAvailable();
-
     void prepareDatabaseConnection(Resource&dbResource);
 
 private slots:
     void initDatabaseItemsFromCatalog();
     void initDatabaseItemsWithoutCatalog();
+    void loadDataFromFeatureTable();
+    void loadDataFromPlainTable();
 };
 
 }
