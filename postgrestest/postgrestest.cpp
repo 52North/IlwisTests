@@ -17,6 +17,7 @@
 #include "coordinatesystem.h"
 #include "coverage.h"
 #include "featurecoverage.h"
+#include "featureiterator.h"
 
 #include "postgrestest.h"
 
@@ -83,6 +84,58 @@ void PostgresTest::loadDataFromPlainTable()
 
     QString actual = table->cell("lastname",0).toString();
     DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
+}
+
+void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
+{
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
+
+    IFeatureCoverage fcoverage;
+    Resource coverageResource(connectionString, itCOVERAGE);
+    prepareDatabaseConnection(coverageResource);
+    if ( !fcoverage.prepare(coverageResource)) {
+        QFAIL("Could not prepare feature coverage.");
+    }
+
+    if ( !fcoverage.isValid()) {
+        QFAIL("prepared feature coverage is not valid.");
+    }
+
+    DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)5, "check number of columns in 'tl_2010_us_rails' table.");
+    DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)185971, "check number of polygons in 'tl_2010_us_rails' table.");
+
+    //QString actual = fcoverage->cell("lastname",0).toString();
+    //DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
+}
+
+void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
+{
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_state10");
+
+    IFeatureCoverage fcoverage;
+    Resource coverageResource(connectionString, itCOVERAGE);
+    prepareDatabaseConnection(coverageResource);
+    if ( !fcoverage.prepare(coverageResource)) {
+        QFAIL("Could not prepare feature coverage.");
+    }
+
+    if ( !fcoverage.isValid()) {
+        QFAIL("prepared feature coverage is not valid.");
+    }
+
+    DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
+    DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
+
+    // TODO load feature data to coverage
+
+
+    FeatureIterator iter(fcoverage);
+    while (iter != iter.end()) {
+
+        std::cout << (*iter)->featureid();
+
+    }
+
 }
 
 void PostgresTest::initDatabaseItemsFromCatalog()

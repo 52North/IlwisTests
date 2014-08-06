@@ -29,6 +29,8 @@ private slots:
     void initDatabaseItemsFromCatalog();
     void initDatabaseItemsWithoutCatalog();
     void loadDataFromPlainTable();
+    void loadDataFromFeatureWithMultipleGeometriesTable();
+    void loadDataFromFeatureWithSingleGeometryTable();
 };
 
 }
