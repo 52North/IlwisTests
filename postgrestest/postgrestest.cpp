@@ -56,6 +56,8 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
         QFAIL("Could not prepare coverage.");
     }
 
+    DOTEST2(coverage.isValid(), "Coverage is not valid.");
+    DOTEST2(coverage->coordinateSystem().isValid(), "CRS is not valid.");
     QString actual = coverage->coordinateSystem()->code();
     DOTEST2(actual == "epsg:4269", QString("SRS was NOT expected to be '%1'").arg(actual));
 }
@@ -102,10 +104,16 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     }
 
     DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)5, "check number of columns in 'tl_2010_us_rails' table.");
-    DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)185971, "check number of polygons in 'tl_2010_us_rails' table.");
+    DOCOMPARE(fcoverage->featureCount(itLINE), (unsigned int)185971, "check number of polygons in 'tl_2010_us_rails' table.");
 
-    //QString actual = fcoverage->cell("lastname",0).toString();
-    //DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
+
+    FeatureIterator iter(fcoverage);
+    while (iter != iter.end()) {
+
+        // TODO test features content via iterator
+        // (*iter)->featureid();
+
+    }
 }
 
 void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
@@ -126,13 +134,11 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
     DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
 
-    // TODO load feature data to coverage
-
-
     FeatureIterator iter(fcoverage);
     while (iter != iter.end()) {
 
-        std::cout << (*iter)->featureid();
+        // TODO test features content via iterator
+        // (*iter)->featureid();
 
     }
 
