@@ -50,7 +50,7 @@ void PostgresDemo::storeRailsAsShapeFile()
         Resource rails(connectionString,itCOVERAGE);
         rails.addProperty("pg.password", "postgres");
         rails.addProperty("pg.user", "postgres");
-        rails.addProperty("pg.schema", "public");
+        //rails.addProperty("pg.schema", "public"); // public is default
 
         IFeatureCoverage fcoverage;
         if ( !fcoverage.prepare(rails)) {
@@ -72,7 +72,7 @@ void PostgresDemo::storeStatesAsShapeFile()
         Resource rails(connectionString,itCOVERAGE);
         rails.addProperty("pg.password", "postgres");
         rails.addProperty("pg.user", "postgres");
-        rails.addProperty("pg.schema", "public");
+        //rails.addProperty("pg.schema", "public"); // public is default
 
         IFeatureCoverage fcoverage;
         if ( !fcoverage.prepare(rails)) {
