@@ -24,6 +24,8 @@ private:
 
     void prepareDatabaseConnection(Resource&dbResource);
 
+     // TODO does not work .. bug? maybe container exception
+    void initDatabaseItemByNameFromCatalog();
 
 private slots:
     void initDatabaseItemsFromCatalog();

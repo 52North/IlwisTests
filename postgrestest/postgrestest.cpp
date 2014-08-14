@@ -4,6 +4,7 @@
 #include "symboltable.h"
 #include "testsuite.h"
 #include "kernel.h"
+#include "ilwiscontext.h"
 #include "resource.h"
 #include "ilwisdata.h"
 #include "catalog.h"
@@ -34,13 +35,13 @@ void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
 {
     dbResource.addProperty("pg.password", "postgres");
     dbResource.addProperty("pg.user", "postgres");
-    dbResource.addProperty("pg.schema", "public");
+    //dbResource.addProperty("pg.schema", "public");
     dbResource.prepare();
 }
 
 void PostgresTest::initDatabaseItemsWithoutCatalog()
 {
-    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/public/tl_2010_us_rails");
 
     ITable table;
     Resource tableResource(connectionString, itFLATTABLE);
@@ -154,7 +155,6 @@ void PostgresTest::initDatabaseItemsFromCatalog()
         QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
         Resource dbCatalog(connectionString, itCATALOG);
         prepareDatabaseConnection(dbCatalog);
-        dbCatalog.prepare();
 
         ICatalog cat(dbCatalog);
         std::vector<Resource> items = cat->items();
@@ -185,4 +185,34 @@ void PostgresTest::initDatabaseItemsFromCatalog()
 
 }
 
+void PostgresTest::initDatabaseItemByNameFromCatalog()
+{
+    try {
+        QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
+        Resource dbCatalog(connectionString, itCATALOG);
+        prepareDatabaseConnection(dbCatalog);
+
+        ICatalog cat;
+        if ( !cat.prepare(dbCatalog)) {
+            QFAIL("Could not prepare catalog!");
+        }
+
+        context()->setWorkingCatalog(cat);
+
+        ITable table;
+        QString item = cat->resolve("tl_2010_us_state10");
+        if ( !table.prepare(item,itFLATTABLE)) {
+            QFAIL("Could not prepare table.");
+        }
+
+        DOCOMPARE(table->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
+
+        QString actual = table->cell("name10",0).toString();
+        DOTEST2(actual == "Wyoming", QString("name10 was NOT expected to be '%1'").arg(actual));
+
+
+    } catch (std::exception& e) {
+        QFAIL(QString(e.what()).toLatin1().constData());
+    }
+}
 
