@@ -23,14 +23,14 @@ private:
     NEW_TEST(PostgresTest);
 
     void prepareDatabaseConnection(Resource&dbResource);
-    void loadDataFromFeatureTable();
+
 
 private slots:
     void initDatabaseItemsFromCatalog();
     void initDatabaseItemsWithoutCatalog();
-    void loadDataFromPlainTable();
     void loadDataFromFeatureWithMultipleGeometriesTable();
     void loadDataFromFeatureWithSingleGeometryTable();
+    void loadDataFromPlainTable();
 };
 
 }

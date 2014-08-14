@@ -79,25 +79,3 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
 
 }
 
-
-void WfsDemo::wfsCatalog_prepareFeatureCoverageViaUrl_validFeatureCoverage()
-{
-//    QUrl wfsUrl(WFS_TEST_SERVER_1);
-//    Resource wfsInstance(wfsUrl, itFEATURE);
-//    ConnectorInterface *connector = WfsCatalogConnector::create(wfsInstance, false);
-//    if ( !connector->loadItems()) {
-//        QFAIL("Could not load catalog items and register them to the kernel.");
-//    }
-
-//    QUrl okmunibnd("http://ogi.state.ok.us/geoserver/wfs?request=GetFeature&service=WFS&typeName=ogi:okmunibnd");
-//    Resource feature(okmunibnd, itFEATURE);
-//    feature.prepare();
-//    if ( !feature.isValid()) {
-//        QFAIL("Prepared an invalid feature.");
-//    }
-//    IFeatureCoverage coverage;
-//    if ( !coverage.prepare(feature)) {
-//        QFAIL("Could not prepare coverage.");
-//    }
-
-}

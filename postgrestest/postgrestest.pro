@@ -18,11 +18,13 @@ DEFINES += POSTGRESTEST_LIBRARY
 DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
 DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
-SOURCES += postgrestest.cpp
+SOURCES += postgrestest.cpp \
+    postgresdemo.cpp
 
 
 HEADERS += postgrestest_global.h \
-    postgrestest.h
+    postgrestest.h \
+    postgresdemo.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 

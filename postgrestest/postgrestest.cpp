@@ -26,7 +26,7 @@ using namespace Postgresql;
 
 REGISTER_TEST(PostgresTest);
 
-PostgresTest::PostgresTest() : IlwisTestCase("PostgresConnectorTest", "PostgresConnectorTest")
+PostgresTest::PostgresTest() : IlwisTestCase("PostgresqlConnectorTest", "PostgresqlConnectorTest")
 {
 }
 
@@ -43,7 +43,7 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
 
     ITable table;
-    Resource tableResource(connectionString, itTABLE);
+    Resource tableResource(connectionString, itFLATTABLE);
     prepareDatabaseConnection(tableResource);
     if ( !table.prepare(tableResource)) {
         QFAIL("Could not prepare table.");
@@ -62,17 +62,12 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
     DOTEST2(actual == "epsg:4269", QString("SRS was NOT expected to be '%1'").arg(actual));
 }
 
-void PostgresTest::loadDataFromFeatureTable()
-{
-    QFAIL("not implemented test case.");
-}
-
 void PostgresTest::loadDataFromPlainTable()
 {
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/persons");
 
     ITable table;
-    Resource tableResource(connectionString, itTABLE);
+    Resource tableResource(connectionString, itFLATTABLE);
     prepareDatabaseConnection(tableResource);
     if ( !table.prepare(tableResource)) {
         QFAIL("Could not prepare table.");
@@ -103,17 +98,21 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
         QFAIL("prepared feature coverage is not valid.");
     }
 
-    DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)5, "check number of columns in 'tl_2010_us_rails' table.");
+    ITable table = fcoverage->attributeTable();
+    DOCOMPARE(table->columnCount(), (unsigned int)5, "check number of columns in 'tl_2010_us_rails' table.");
     DOCOMPARE(fcoverage->featureCount(itLINE), (unsigned int)185971, "check number of polygons in 'tl_2010_us_rails' table.");
 
+    QString actual = table->cell("fullname",3).toString();
+    DOTEST2(actual == "Illinois Central RR", QString("fullname was NOT expected to be '%1'").arg(actual));
 
     FeatureIterator iter(fcoverage);
-    while (iter != iter.end()) {
+//    while (iter != iter.end()) {
 
-        // TODO test features content via iterator
-        // (*iter)->featureid();
+//        // TODO test features content via iterator
+//        // (*iter)->featureid();
+//        ++iter;
 
-    }
+//    }
 }
 
 void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
@@ -131,16 +130,21 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
         QFAIL("prepared feature coverage is not valid.");
     }
 
-    DOCOMPARE(fcoverage->attributeTable().ptr()->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
+    ITable table = fcoverage->attributeTable();
+    DOCOMPARE(table->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
 
+
+    QString actual = table->cell("name10",0).toString();
+    DOTEST2(actual == "Wyoming", QString("name10 was NOT expected to be '%1'").arg(actual));
+
     FeatureIterator iter(fcoverage);
-    while (iter != iter.end()) {
+//    while (iter != iter.end()) {
 
-        // TODO test features content via iterator
-        // (*iter)->featureid();
+//        // (*iter)->featureid();
+//        ++iter;
 
-    }
+//    }
 
 }
 
@@ -165,7 +169,7 @@ void PostgresTest::initDatabaseItemsFromCatalog()
             DOTEST2(resource.hasProperty("pg.schema"), "pg resource does not contain db schema");
 
             ITable table;
-            //Resource tableResource(resource.url(), itTABLE);
+            //Resource tableResource(resource.url(), itFLATTABLE);
             if ( !table.prepare(resource)) {
                 QFAIL("Could not prepare table.");
             }
