@@ -22,7 +22,6 @@ DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 SOURCES += \
     wfsmoduletest.cpp \
     webfeatureservicetest.cpp \
-    qtxmlparsertest.cpp \
     wfsresponsetest.cpp \
     wfsparsertest.cpp \
     wfsdemo.cpp \
@@ -32,7 +31,6 @@ HEADERS +=\
     wfstest_global.h \
     wfsmoduletest.h \
     webfeatureservicetest.h \
-    qtxmlparsertest.h \
     wfstestconstants.h \
     wfsresponsetest.h \
     wfsparsertest.h \
@@ -50,8 +48,6 @@ DEPENDPATH += $$PWD/../TestSuite \
 OTHER_FILES += \
     testfiles/wfs_exceptionreport.xml \
     testfiles/wfs_capabilities.xml \
-    testfiles/test_without_xml_header.xml \
-    testfiles/test.xml \
     testfiles/quad100.xsd \
     testfiles/greenlevel_contours.xsd \
     testfiles/featurecollection_quad100.xml \
@@ -65,8 +61,6 @@ testdll.files = \
 testfiles.files = \
     testfiles/wfs_exceptionreport.xml \
     testfiles/wfs_capabilities.xml \
-    testfiles/test_without_xml_header.xml \
-    testfiles/test.xml \
     testfiles/quad100.xsd \
     testfiles/greenlevel_contours.xsd \
     testfiles/featurecollection_quad100.xml \

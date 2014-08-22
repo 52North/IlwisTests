@@ -11,15 +11,12 @@
 #include <QMapIterator>
 
 #include "qtxmlparsertest.h"
-#include "wfsfeature.h"
 #include "xmlstreamparser.h"
 
 #include "testutils.h"
 #include "testsuite.h"
 
 using namespace Ilwis;
-using namespace Wfs;
-
 
 REGISTER_TEST(QtXmlParserTest);
 

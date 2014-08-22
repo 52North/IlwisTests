@@ -48,6 +48,8 @@ void GDALConnectorTest::tableStoreTests(){
 
 void GDALConnectorTest::rasterLoadTests() {
     try{
+        Ilwis::IRasterCoverage map2("file:///d:/rasteretrs1989/g100_06_clipped.tif");
+
         Ilwis::IRasterCoverage map1;
         DOTEST(map1.prepare( makeInputPath("a_200006_bv.img")),"basic loading idl file");
 

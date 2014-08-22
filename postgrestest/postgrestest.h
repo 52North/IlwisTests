@@ -21,6 +21,7 @@ private:
 private slots:
 
     void construction();
+    void testBigSelection();
 };
 
 #endif // POSTGRESSTEST_H
