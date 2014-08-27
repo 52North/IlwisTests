@@ -8,6 +8,12 @@
 #include "commandhandler.h"
 #include "symboltable.h"
 
+/**
+ * The sandbox tester is only meant for local experimenting. None of the tests will be part of the formal
+ * tests of ilwis. All test here maybe changed, deleted by anyone. It is part of the test framework though
+ * so it will work in that context
+ *
+ */
 class SandBox : public IlwisTestCase
 {
     Q_OBJECT
