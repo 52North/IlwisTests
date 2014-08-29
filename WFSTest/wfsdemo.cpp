@@ -50,26 +50,18 @@ WfsDemo::WfsDemo():
 void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered()
 {
     try {
-        ICatalog cat("http://ogi.state.ok.us/geoserver/wfs?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
-        //ICatalog cat("http://nsidc.org/cgi-bin/atlas_north?acceptVersions=1.1.0&REQUEST=GetCapabilities&SERVICE=WFS");
+        ICatalog cat;
+        QUrl connectionString("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
+        Resource wfsResource(connectionString, itCATALOG);
+        cat.prepare(wfsResource);
 
         std::vector<Resource> items = cat->items();
         Resource feature(items.front());
+        feature.addProperty("forceXY", false);
         IFeatureCoverage coverage;
         if ( !coverage.prepare(feature)) {
             QFAIL("Could not prepare coverage.");
         }
-
-        ITable table = coverage->attributeTable();
-        //DOCOMPARE(table->columnCount(), (unsigned int)12, "12 attribute columns expected in table.");
-
-    //    FeatureIterator fiter(coverage);
-    //    FeatureIterator endIter = end(coverage);
-    //    for(; fiter != endIter; ++fiter) {
-    //        UPFeatureI& feature = *fiter;
-    //        const geos::geom::Geometry* geometry = feature->geometry().get();
-    //        std::cout << GeometryHelper::toWKT(geometry);
-    //    }
 
         coverage->connectTo(makeOutputPath("ogi.shp"), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
         coverage->store();
@@ -78,4 +70,3 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
     }
 
 }
-
