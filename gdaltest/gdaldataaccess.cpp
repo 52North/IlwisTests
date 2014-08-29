@@ -88,11 +88,16 @@ void GdalDataAccess::accessingRasterData() {
     try {
         qDebug() << "Gridcoverage: access value through GDAL";
 
+       // Ilwis::IRasterCoverage raster2(makeInputPath("g250_06.tif"));
+       // DOCOMPARE(raster2->pix2value(Ilwis::Pixel(10549,9483)), 25.0,"accessing numerical value raster map");
+
         Ilwis::IRasterCoverage raster(makeInputPath("f41078a1.tif"));
         DOCOMPARE(raster->pix2value(Ilwis::Pixel(3278,2669)), 4.0,"accessing numerical value raster map");
 
         raster.prepare(makeInputPath("GCL_INT.tif"));
         DOCOMPARE(raster->pix2value(Ilwis::Pixel(239,297,23)), 48.0, "accessing numerical value in stack of raster (layer 24)");
+
+
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();

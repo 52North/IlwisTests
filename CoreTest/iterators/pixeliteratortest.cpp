@@ -49,7 +49,7 @@ void PixelIteratorTest::rasterSelection() {
 
       map2->coordinateSystem(map1->coordinateSystem());
       map2->georeference(map1->georeference());
-      map2->datadef() = map1->datadef();
+      map2->datadefRef() = map1->datadef();
 
       Ilwis::PixelIterator iterOut(map2, geom);
 
@@ -78,7 +78,7 @@ void PixelIteratorTest::rasterSelection() {
 
       map3->coordinateSystem(map4->coordinateSystem());
       map3->georeference(map4->georeference());
-      map3->datadef() = map4->datadef();
+      map3->datadefRef() = map4->datadef();
 
       iterOut = Ilwis::PixelIterator (map3, geom);
 

@@ -57,7 +57,7 @@ void DataAccess::features() {
 
     Ilwis::FeatureIterator iter(features);
     Ilwis::UPFeatureI& f = *(iter + 4);
-    DOCOMPARE(f("january").toInt(), 93,"accessing value of 4th feature, january attribute column");
+    DOCOMPARE(f("january").toInt(), 94,"accessing value of 4th feature, january attribute column");
 
     features.prepare(makeInputPath("Contour.mps"));
     Ilwis::FeatureIterator iter2(features);
@@ -76,7 +76,7 @@ void DataAccess::table() {
 
     tbl.prepare(makeInputPath("rainfall.tbt"));
     std::vector<QVariant> values = tbl->column("february");
-    DOCOMPARE(values[2].toInt(), 165, "Accessing numerical column");
+    DOCOMPARE(values[2].toInt(), 166, "Accessing numerical column");
 
     tbl.prepare(makeInputPath("geom.tbt"));
 

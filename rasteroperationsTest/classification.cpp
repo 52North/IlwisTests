@@ -24,7 +24,8 @@ void Classification::boxclassification() {
 
         QString expr = QString("aabox=boxclassification(eth.mpl, tempclasses.dom,ethsms.mpr,0.01)");
         Ilwis::ExecutionContext ctx;
-        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx),"executing box classifier)");
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms),"executing box classifier)");
         Ilwis::IRasterCoverage raster("ilwis://internalcatalog/aabox");
         raster->connectTo(QString("file:///%1/aabox.mpr").arg(_baseDataPath.absolutePath()), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
         raster->createTime(Ilwis::Time::now());
