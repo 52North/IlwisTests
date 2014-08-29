@@ -24,7 +24,7 @@ private:
 
     void prepareDatabaseConnection(Resource&dbResource);
 
-     // TODO does not work .. bug? maybe container exception
+    // TODO discuss resolving root for remote catalog container
     void initDatabaseItemByNameFromCatalog();
 
 private slots:
@@ -33,6 +33,7 @@ private slots:
     void loadDataFromFeatureWithMultipleGeometriesTable();
     void loadDataFromFeatureWithSingleGeometryTable();
     void loadDataFromPlainTable();
+
 };
 
 }
