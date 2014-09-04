@@ -97,7 +97,7 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     parser.parseMetadata(fcoverage.ptr(), context);
     ITable table = fcoverage->attributeTable();
 
-    quint32 expected = 12;
+    quint32 expected = 11;
     quint32 actual = table->columnCount();
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
@@ -145,7 +145,7 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
     parser.parseMetadata( &fcoverage, context);
     ITable table = fcoverage.attributeTable();
 
-    quint32 expected = 3;
+    quint32 expected = 2;
     quint32 actual = table->columnCount();
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
@@ -178,7 +178,7 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
     parser.parseMetadata( &fcoverage, context);
     ITable table = fcoverage.attributeTable();
 
-    quint32 expected = 8;
+    quint32 expected = 7;
     quint32 actual = table->columnCount();
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
