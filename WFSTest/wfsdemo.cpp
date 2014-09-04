@@ -51,9 +51,7 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
 {
     try {
         ICatalog cat;
-        QUrl connectionString("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
-        Resource wfsResource(connectionString, itCATALOG);
-        cat.prepare(wfsResource);
+        cat.prepare("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
 
         std::vector<Resource> items = cat->items();
         Resource feature(items.front());
