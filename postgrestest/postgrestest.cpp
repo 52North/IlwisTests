@@ -91,7 +91,7 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
     }
 
     ITable table = fcoverage->attributeTable();
-    DOCOMPARE(table->columnCount(), (unsigned int)5, "check number of columns in 'tl_2010_us_rails' table.");
+    DOCOMPARE(table->columnCount(), (unsigned int)4, "check number of columns in 'tl_2010_us_rails' table.");
     DOCOMPARE(fcoverage->featureCount(itLINE), (unsigned int)100, "check number of lines in 'tl_2010_us_rails' table.");
 
     QString actual = table->cell("fullname",3).toString();
@@ -129,7 +129,7 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     }
 
     ITable table = fcoverage->attributeTable();
-    DOCOMPARE(table->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
+    DOCOMPARE(table->columnCount(), (unsigned int)15, "check number of columns in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
 
 
@@ -204,7 +204,7 @@ void PostgresTest::initDatabaseItemByNameFromCatalog()
             QFAIL("Could not prepare table.");
         }
 
-        DOCOMPARE(table->columnCount(), (unsigned int)16, "check number of columns in 'tl_2010_us_state10' table.");
+        DOCOMPARE(table->columnCount(), (unsigned int)15, "check number of columns in 'tl_2010_us_state10' table.");
 
         QString actual = table->cell("name10",0).toString();
         DOTEST2(actual == "Wyoming", QString("name10 was NOT expected to be '%1'").arg(actual));
