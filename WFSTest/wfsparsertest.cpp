@@ -58,9 +58,9 @@ WfsParserTest::WfsParserTest():
 
 void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
-    QUrl url("http://localhost/wfs?request=GetCapabilities&service=WFS");
+    Resource wfsResource("http://localhost/wfs?request=GetCapabilities&service=WFS", itCATALOG);
     WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
-    WfsCapabilitiesParser parser( &testResponse, url);
+    WfsCapabilitiesParser parser( &testResponse, wfsResource);
 
     std::vector<Resource> features;
     parser.parseFeatures(features);
