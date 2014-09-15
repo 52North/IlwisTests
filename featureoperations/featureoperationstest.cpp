@@ -45,6 +45,18 @@ void FeatureOperations::pointrastercross() {
     crossedpoints->store();
 }
 
+void FeatureOperations::transform(){
+    QString expr = QString("aatransformed=transformcoordinates(Kenya.mpa, utm37.csy)");
+    Ilwis::ExecutionContext ctx;
+    Ilwis::SymbolTable symTable;
+    DOTEST(Ilwis::commandhandler()->execute(expr,&ctx, symTable),"executed transformcoordinates)");
+    Ilwis::IFeatureCoverage transformed("ilwis://internalcatalog/aacrosspoints");
+    transformed->connectTo(QString("file:///%1/aatransformed.mpa").arg(_baseDataPath.absolutePath()), "vectormap","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+    transformed->createTime(Ilwis::Time::now());
+    transformed->store();
+
+}
+
 
 
 

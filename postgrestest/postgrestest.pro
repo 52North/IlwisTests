@@ -6,8 +6,6 @@
 
 QT       += testlib
 
-QT       -= gui
-
 include(../global.pri)
 
 TARGET = postgrestest
@@ -15,7 +13,6 @@ TEMPLATE = lib
 
 DEFINES += POSTGRESTEST_LIBRARY
 
-DESTDIR = $$PWD/../../libraries/$$PLATFORM$$CONF/$$TARGET
 DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 
 SOURCES += postgrestest.cpp \
