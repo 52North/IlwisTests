@@ -9,9 +9,8 @@
 #include "columndefinition.h"
 #include "table.h"
 #include "raster.h"
-#include "attributerecord.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "catalog.h"
 #include "ilwiscontext.h"
 #include "catalogtest.h"
@@ -36,7 +35,7 @@ void CatalogTest::readCatalog() {
     DOTEST(fc.isValid(),"loading points from gpx file");
 
     Ilwis::FeatureIterator iter(fc);
-    Ilwis::UPFeatureI& feature = *iter;
+    Ilwis::SPFeatureI feature = *iter;
     QString wkt = Ilwis::GeometryHelper::toWKT(feature->geometry().get());
     DOTEST(wkt == "POINT (4.3558570000000003 52.0103980000000021)","loading geometry from point layer");
 
@@ -51,8 +50,9 @@ void CatalogTest::readCatalog() {
 }
 
 void CatalogTest::wcsCatalog() {
-    //Ilwis::ICatalog cat("http://ogi.state.ok.us/geoserver/wcs?VERSION=1.1.0&REQUEST=GetCapabilities&SERVICE=WCS");
-   // DOTEST(cat.isValid(),"Succesfully created wcs catalog");
+   //Ilwis::ICatalog cat("http://ogi.state.ok.us/geoserver/wcs?version=1.1.0&request=GetCapabilities&service=WCS");
+   Ilwis::ICatalog cat("http://sdf.ndbc.noaa.gov/thredds/wcs/hfradar_usegc_1km?request=GetCapabilities&version=1.0.0&service=WCS");
+   DOTEST(cat.isValid(),"Succesfully created wcs catalog");
 }
 
 void CatalogTest::hdf5Catalog() {

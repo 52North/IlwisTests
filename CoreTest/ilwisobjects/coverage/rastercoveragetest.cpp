@@ -1,18 +1,8 @@
-#include "kernel.h"
+#include "raster.h"
 #include "testsuite.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
 #include "table.h"
-#include "raster.h"
-#include "coverage.h"
 #include "ellipsoid.h"
-#include "projection.h"
-#include "coordinatesystem.h"
-#include "raster.h"
 #include "pixeliterator.h"
-#include "attributerecord.h"
 #include "geometryhelper.h"
 #include "numericdomain.h"
 #include "juliantime.h"
@@ -45,15 +35,15 @@ void RasterCoverageTest::bands(){
     Ilwis::ITimeDomain dom;
     dom.prepare();
     dom->range(new Ilwis::TimeInterval("20090101", "20110101"));
-    raster2->indexDomain(dom);
+    std::vector<QString> times = {"20090101","20090131","20090602","20090703", "20100109","20110101"};
+    raster2->stackDefinitionRef().setSubDefinition(dom, times);
 
 
-    QVariant tvar = qVariantFromValue(Ilwis::Time("20090131"));
-    raster2->band(tvar,iter);
+    raster2->band("20090131",iter);
     raster2->band("20090602",iter2);
 
-    DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,0)) == origvalue1,"same value as original1");
-    DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,1)) == origvalue2,"same value as original2");
+    DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,1)) == origvalue1,"same value as original1");
+    DOTEST(raster2->pix2value(Ilwis::Pixel(500,500,2)) == origvalue2,"same value as original2");
 
 
 

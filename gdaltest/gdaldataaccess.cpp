@@ -1,15 +1,8 @@
-#include "ilwis.h"
-#include "testsuite.h"
-#include "kernel.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
-#include "table.h"
 #include "raster.h"
-#include "attributerecord.h"
-#include "feature.h"
+#include "testsuite.h"
+#include "table.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "featureiterator.h"
 #include "catalog.h"
 #include "pixeliterator.h"
@@ -51,29 +44,29 @@ void GdalDataAccess::accessingFeatureData() {
         DOTEST(fc.prepare(makeInputPath("rainfall.shp")),"loading point map");
         Ilwis::FeatureIterator iter1(fc);
 
-        Ilwis::UPFeatureI& f1 = *(iter1 + 1);
+        Ilwis::SPFeatureI f1 = *(iter1 + 1);
         QVariant output = f1->cell("RAINFALL");
         DOTEST(output.toString() =="taquina","accesing attribute string data of pointmap");
 
-        Ilwis::UPFeatureI& f2 = *(iter1 + 4);
+        Ilwis::SPFeatureI f2 = *(iter1 + 4);
         output = f2("JANUARY");
         DOCOMPARE(output.toInt(), 85 ,"accesing attribute numeric data of pointmap");
 
         DOTEST(fc.prepare(makeInputPath("drainage.shp")),"loading segment map");
         Ilwis::FeatureIterator iter2(fc);
 
-        Ilwis::UPFeatureI& f3 = *(iter2 + 104);
+        Ilwis::SPFeatureI f3 = *(iter2 + 104);
         output = f3->cell("DRAINAGE");
         DOTEST(output.toString() == "lake","accesing attribute string data of line coverage");
 
-        Ilwis::UPFeatureI& f4 = *(iter2 + 21);
+        Ilwis::SPFeatureI f4 = *(iter2 + 21);
         output = f4("C1");
         DOCOMPARE(output.toInt(), 1 ,"accesing attribute numeric data ofline coverage");
 
         DOTEST(fc.prepare(makeInputPath("geology.shp")),"loading polygon map");
         Ilwis::FeatureIterator iter3(fc);
 
-        Ilwis::UPFeatureI& f5 = *(iter3 + 40);
+        Ilwis::SPFeatureI f5 = *(iter3 + 40);
         output = f5->cell("GEOLOGY");
         DOTEST(output.toString() == "Shales","accesing attribute string data of polygon coverage");
 

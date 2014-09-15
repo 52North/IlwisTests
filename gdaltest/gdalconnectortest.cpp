@@ -1,16 +1,9 @@
-#include "ilwis.h"
+#include "raster.h"
 #include "testsuite.h"
 #include "gdalconnectortest.h"
-#include "kernel.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
 #include "table.h"
-#include "raster.h"
-#include "attributerecord.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "featureiterator.h"
 #include "catalog.h"
 #include "catalogview.h"
@@ -48,10 +41,10 @@ void GDALConnectorTest::tableStoreTests(){
 
 void GDALConnectorTest::rasterLoadTests() {
     try{
-        Ilwis::IRasterCoverage map2("file:///d:/rasteretrs1989/g100_06_clipped.tif");
+       // Ilwis::IRasterCoverage map2("file:///d:/rasteretrs1989/g100_06_clipped.tif");
 
         Ilwis::IRasterCoverage map1;
-        DOTEST(map1.prepare( makeInputPath("a_200006_bv.img")),"basic loading idl file");
+        //DOTEST(map1.prepare( makeInputPath("a_200006_bv.img")),"basic loading idl file");
 
         DOTEST(map1.prepare( makeInputPath("f41078a1.tif")),"basic loading raster, geotiff");
 
@@ -87,6 +80,12 @@ void GDALConnectorTest::rasterStoreTests() {
         DOTEST(map1.prepare(res), "loading mpr");
         qDebug() << "loading ilwis3, toring as geotif; output os aaraster2.tif";
         map1->connectTo(makeOutputPath("aaraster2.tif"), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
+        map1->createTime(Ilwis::Time::now());
+        map1->store();
+
+        res = QString(makeInputPath("small.mpl"));
+        map1.prepare(res);
+        map1->connectTo(makeOutputPath("aasmall2.tif"), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
         map1->createTime(Ilwis::Time::now());
         map1->store();
 

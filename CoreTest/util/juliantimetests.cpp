@@ -71,10 +71,10 @@ void JulianTimeTests::operations(){
 }
 
 void JulianTimeTests::timeInterval() {
-    Ilwis::Time t1("2013-04-18T09:45:03");
+    Ilwis::Time t1("2013-04-18T09:10:40");
     Ilwis::Time t2("2013-04-20T12:09:03");
     Ilwis::Time t3("2013-04-19T09:10:40");
-    Ilwis::TimeInterval ti("20130418T094503", "20130420T120903", Ilwis::Duration("4h"));
+    Ilwis::TimeInterval ti("20130418T091040", "20130420T120903", Ilwis::Duration("4h"));
     IlwisTypes tp = ti.valueType();
     DOTEST(tp == itDATETIME, "Correct value type");
     DOTEST(ti.begin() == t1, "Starts correct");

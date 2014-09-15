@@ -1,19 +1,12 @@
 #include "ilwis.h"
 #include "../TestSuite/testsuite.h"
-#include "kernel.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
-#include "table.h"
 #include "raster.h"
-#include "coverage.h"
+#include "domain.h"
+#include "table.h"
 #include "ellipsoid.h"
 #include "projection.h"
-#include "coordinatesystem.h"
-#include "attributerecord.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "ilws3connectorloaders.h"
 
 
@@ -50,8 +43,8 @@ void Ilws3connectorTest::loadCoverages() {
         DOTEST(obj.prepare(makeInputPath("average_monthly_temperature_october_11.mpr")),"loading coverage as bare ilwis-object");
 
 
-        res = makeInputPath("small3_grfnone.mpr");
-        DOTEST(map1.prepare(res),"loading raster with georef none");
+       // res = makeInputPath("small3_grfnone.mpr");
+       // DOTEST(map1.prepare(res),"loading raster with georef none");
 
         res = makeInputPath("cc43.mpr");
         DOTEST(map1.prepare(res), "loading raster with domain color");

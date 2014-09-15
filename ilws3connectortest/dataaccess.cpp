@@ -1,20 +1,12 @@
 #include <QColor>
 #include "ilwis.h"
 #include "../TestSuite/testsuite.h"
-#include "kernel.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
-#include "table.h"
 #include "raster.h"
-#include "coverage.h"
+#include "table.h"
 #include "ellipsoid.h"
 #include "projection.h"
-#include "coordinatesystem.h"
-#include "attributerecord.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "featureiterator.h"
 //#include "ilws3connectorloaders.h"
 #include "dataaccess.h"
@@ -56,18 +48,19 @@ void DataAccess::features() {
     features.prepare(makeInputPath("rainfall.mpp"));
 
     Ilwis::FeatureIterator iter(features);
-    Ilwis::UPFeatureI& f = *(iter + 4);
-    DOCOMPARE(f("january").toInt(), 94,"accessing value of 4th feature, january attribute column");
+    Ilwis::SPFeatureI f = *(iter + 4);
+    DOCOMPARE(f("january").toInt(), 93,"accessing value of 4th feature, january attribute column");
 
     features.prepare(makeInputPath("Contour.mps"));
     Ilwis::FeatureIterator iter2(features);
-    Ilwis::UPFeatureI& f2 = *(iter2 + 10);
+    Ilwis::SPFeatureI f2 = *(iter2 + 10);
     DOCOMPARE(f2(FEATUREVALUECOLUMN).toInt(), 2600, "accessing map value of the 10th segment");
 
     features.prepare(makeInputPath("soils_sadc.mpa"));
     Ilwis::FeatureIterator iter3(features);
-    Ilwis::UPFeatureI& f3 = *(iter3 + 4);
-    DOTEST(f3("FAOSOIL",false).toString() == "Rd18-3ab", "accessing attribute value of the 4th polygon");
+    Ilwis::SPFeatureI f3 = *(iter3 + 4);
+    auto result = f3->cell(QString("FAOSOIL"),false);
+    DOTEST(result.toString() == "Rd18-3ab", "accessing attribute value of the 4th polygon");
 
 }
 
@@ -76,7 +69,7 @@ void DataAccess::table() {
 
     tbl.prepare(makeInputPath("rainfall.tbt"));
     std::vector<QVariant> values = tbl->column("february");
-    DOCOMPARE(values[2].toInt(), 166, "Accessing numerical column");
+    DOCOMPARE(values[2].toInt(), 165, "Accessing numerical column");
 
     tbl.prepare(makeInputPath("geom.tbt"));
 
