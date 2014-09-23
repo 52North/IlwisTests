@@ -18,6 +18,7 @@ public:
     NEW_TEST(FeatureCoverageTest);
 
 private slots:
+    void testVariants();
 };
 
 #endif // FEATURECOVERAGETEST_H
