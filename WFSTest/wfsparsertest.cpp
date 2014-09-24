@@ -13,20 +13,20 @@
 #include "ilwiscontext.h"
 #include "ilwisdata.h"
 #include "domain.h"
-#include "datadefinition.h"
 #include "numericdomain.h"
 #include "numericrange.h"
+#include "datadefinition.h"
 #include "columndefinition.h"
+#include "attributedefinition.h"
 #include "table.h"
 #include "domainitem.h"
 #include "itemdomain.h"
 #include "textdomain.h"
 #include "identifieritem.h"
 #include "identifierrange.h"
-#include "attributerecord.h"
 #include "coverage.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "connectorinterface.h"
 #include "ilwisobjectconnector.h"
 #include "catalogexplorer.h"
@@ -59,8 +59,8 @@ WfsParserTest::WfsParserTest():
 void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 {
     Resource wfsResource("http://localhost/wfs?request=GetCapabilities&service=WFS", itCATALOG);
-    WfsResponse testResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml"));
-    WfsCapabilitiesParser parser( &testResponse, wfsResource);
+    SPWfsResponse testResponse(new WfsResponse(Utils::openFile("testcases/testfiles/wfs_capabilities.xml")));
+    WfsCapabilitiesParser parser(testResponse, wfsResource);
 
     std::vector<Resource> features;
     parser.parseFeatures(features);
@@ -89,8 +89,8 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     featureResource.addProperty("coordinatesystem", "code=epsg:4326");
     prepareCoverage(fcoverage.ptr(), featureResource);
 
-    WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/quad100.xsd"));
-    WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
+    SPWfsResponse featureDescriptionResponse(new WfsResponse(Utils::openFile("testcases/testfiles/quad100.xsd")));
+    WfsFeatureDescriptionParser parser(featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
@@ -102,8 +102,8 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
     try {
-        WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_quad100.xml"));
-        WfsFeatureParser featureParser( &featureResponse, fcoverage.ptr());
+        SPWfsResponse featureResponse(new WfsResponse(Utils::openFile("testcases/testfiles/featurecollection_quad100.xml")));
+        WfsFeatureParser featureParser(featureResponse, fcoverage.ptr());
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage->featureCount(), (unsigned int)64, "Should parse 64 quad100 features.");
@@ -137,8 +137,8 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
     featureResource.addProperty("coordinatesystem", "code=epsg:32661");
     prepareCoverage( &fcoverage, featureResource);
 
-    WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/greenlevel_contours.xsd"));
-    WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
+    SPWfsResponse featureDescriptionResponse(new WfsResponse(Utils::openFile("testcases/testfiles/greenlevel_contours.xsd")));
+    WfsFeatureDescriptionParser parser(featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
@@ -150,8 +150,8 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
     try {
-        WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_greenlevel_contours.xml"));
-        WfsFeatureParser featureParser( &featureResponse, &fcoverage);
+        SPWfsResponse featureResponse(new WfsResponse(Utils::openFile("testcases/testfiles/featurecollection_greenlevel_contours.xml")));
+        WfsFeatureParser featureParser(featureResponse, &fcoverage);
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage.featureCount(), (unsigned int)2, "Should parse 2 greenlevel_contours features.");
@@ -170,8 +170,8 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
     featureResource.addProperty("coordinatesystem", "code=epsg:3857");
     prepareCoverage( &fcoverage, featureResource);
 
-    WfsResponse featureDescriptionResponse(Utils::openFile("testcases/testfiles/sioseinspire_lu_es_14.xsd"));
-    WfsFeatureDescriptionParser parser( &featureDescriptionResponse);
+    SPWfsResponse featureDescriptionResponse(new WfsResponse(Utils::openFile("testcases/testfiles/sioseinspire_lu_es_14.xsd")));
+    WfsFeatureDescriptionParser parser(featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
@@ -183,8 +183,8 @@ void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
     DOCOMPARE(actual, expected, "Compare parsed amount of metadata columns.");
 
     try {
-        WfsResponse featureResponse(Utils::openFile("testcases/testfiles/featurecollection_sioseinspire_lu_es_14.xml"));
-        WfsFeatureParser featureParser( &featureResponse, &fcoverage);
+        SPWfsResponse featureResponse(new WfsResponse(Utils::openFile("testcases/testfiles/featurecollection_sioseinspire_lu_es_14.xml")));
+        WfsFeatureParser featureParser(featureResponse, &fcoverage);
         featureParser.context(context);
         featureParser.parseFeatureMembers();
         DOCOMPARE(fcoverage.featureCount(), (unsigned int)5, "Should parse 5 greenlevel_contours features.");
