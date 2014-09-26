@@ -82,20 +82,20 @@ void WfsParserTest::parseCorrectNumberOfFeatureTypesFromCapabilities()
 
 void WfsParserTest::shouldParseQuad100FeatureCollection()
 {
-    WfsFeature featureResource( {"http://ogi.state.ok.us/geoserver/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100"} );
-    IFeatureCoverage fcoverage (featureResource);
+    WfsFeature featureResource( {"http://localhost/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=ogi%3Aquad100"} );
+    FeatureCoverage fcoverage (featureResource);
     featureResource.addProperty("envelope.ll", "52.0 7.5");
     featureResource.addProperty("envelope.ur", "55.5 8.3");
     featureResource.addProperty("coordinatesystem", "code=epsg:4326");
-    prepareCoverage(fcoverage.ptr(), featureResource);
+    prepareCoverage( &fcoverage, featureResource);
 
     SPWfsResponse featureDescriptionResponse(new WfsResponse(Utils::openFile("testcases/testfiles/quad100.xsd")));
     WfsFeatureDescriptionParser parser(featureDescriptionResponse);
 
     WfsParsingContext context;
     context.setResource(featureResource);
-    parser.parseMetadata(fcoverage.ptr(), context);
-    ITable table = fcoverage->attributeTable();
+    parser.parseMetadata( &fcoverage, context);
+    ITable table = fcoverage.attributeTable();
 
     quint32 expected = 11;
     quint32 actual = table->columnCount();
@@ -103,10 +103,10 @@ void WfsParserTest::shouldParseQuad100FeatureCollection()
 
     try {
         SPWfsResponse featureResponse(new WfsResponse(Utils::openFile("testcases/testfiles/featurecollection_quad100.xml")));
-        WfsFeatureParser featureParser(featureResponse, fcoverage.ptr());
+        WfsFeatureParser featureParser(featureResponse, &fcoverage);
         featureParser.context(context);
         featureParser.parseFeatureMembers();
-        DOCOMPARE(fcoverage->featureCount(), (unsigned int)64, "Should parse 64 quad100 features.");
+        DOCOMPARE(fcoverage.featureCount(), (unsigned int)64, "Should parse 64 quad100 features.");
     } catch(std::exception &e) {
         std::cout << "Could not parse feature collection: " << e.what() << std::endl;
     }
@@ -130,7 +130,7 @@ void WfsParserTest::prepareCoverage(FeatureCoverage *fcoverage, Resource resourc
 
 void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
 {
-    WfsFeature featureResource( {"http://nsidc.org/cgi-bin/atlas_north?VERSION=1.1.0&REQUEST=GetFeature&typeName=greenland_elevation_contours"} );
+    WfsFeature featureResource( {"http://localhost/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=greenland_elevation_contours"} );
     FeatureCoverage fcoverage (featureResource);
     featureResource.addProperty("envelope.ll", "-88.0 55.0");
     featureResource.addProperty("envelope.ur", "6.7 86.9");
@@ -163,7 +163,7 @@ void WfsParserTest::shouldParseGreenlandElevationContoursFeatureCollection()
 
 void WfsParserTest::shouldParseSioseINSPIRE_lu_es_14_FeatureCollection()
 {
-    WfsFeature featureResource( {"http://www2.ign.es/sioseinspire?VERSION=1.1.0&REQUEST=GetFeature&typeName=sioseinspire:lu_es_14"} );
+    WfsFeature featureResource( {"http://localhost/wfs?VERSION=1.1.0&REQUEST=GetFeature&typeName=sioseinspire:lu_es_14"} );
     FeatureCoverage fcoverage (featureResource);
     featureResource.addProperty("envelope.ll", "-2.0 45");
     featureResource.addProperty("envelope.ur", "2.0 55.7");
