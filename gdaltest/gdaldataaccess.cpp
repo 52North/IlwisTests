@@ -1,15 +1,8 @@
-#include "ilwis.h"
-#include "testsuite.h"
-#include "kernel.h"
-#include "ilwisdata.h"
-#include "domain.h"
-#include "datadefinition.h"
-#include "columndefinition.h"
-#include "table.h"
 #include "raster.h"
-#include "attributerecord.h"
-#include "feature.h"
+#include "testsuite.h"
+#include "table.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "featureiterator.h"
 #include "catalog.h"
 #include "pixeliterator.h"
@@ -46,34 +39,34 @@ void GdalDataAccess::accessingFeatureData() {
 
         DOTEST(fc.prepare(makeInputPath("regions.shp")), "Loading regions.shp");
         QString env = fc->envelope().toString();
-        DOTEST(env == "POLYGON(33.0065 3.40088,47.9605 14.9637)","FeatureCoverage: testing envelope (bbox)");
+        DOTEST(env == "33.0065 3.40088 47.9605 14.9637","FeatureCoverage: testing envelope (bbox)");
 
         DOTEST(fc.prepare(makeInputPath("rainfall.shp")),"loading point map");
         Ilwis::FeatureIterator iter1(fc);
 
-        Ilwis::UPFeatureI& f1 = *(iter1 + 1);
+        Ilwis::SPFeatureI f1 = *(iter1 + 1);
         QVariant output = f1->cell("RAINFALL");
         DOTEST(output.toString() =="taquina","accesing attribute string data of pointmap");
 
-        Ilwis::UPFeatureI& f2 = *(iter1 + 4);
+        Ilwis::SPFeatureI f2 = *(iter1 + 4);
         output = f2("JANUARY");
         DOCOMPARE(output.toInt(), 85 ,"accesing attribute numeric data of pointmap");
 
         DOTEST(fc.prepare(makeInputPath("drainage.shp")),"loading segment map");
         Ilwis::FeatureIterator iter2(fc);
 
-        Ilwis::UPFeatureI& f3 = *(iter2 + 104);
+        Ilwis::SPFeatureI f3 = *(iter2 + 104);
         output = f3->cell("DRAINAGE");
         DOTEST(output.toString() == "lake","accesing attribute string data of line coverage");
 
-        Ilwis::UPFeatureI& f4 = *(iter2 + 21);
+        Ilwis::SPFeatureI f4 = *(iter2 + 21);
         output = f4("C1");
         DOCOMPARE(output.toInt(), 1 ,"accesing attribute numeric data ofline coverage");
 
         DOTEST(fc.prepare(makeInputPath("geology.shp")),"loading polygon map");
         Ilwis::FeatureIterator iter3(fc);
 
-        Ilwis::UPFeatureI& f5 = *(iter3 + 40);
+        Ilwis::SPFeatureI f5 = *(iter3 + 40);
         output = f5->cell("GEOLOGY");
         DOTEST(output.toString() == "Shales","accesing attribute string data of polygon coverage");
 
@@ -88,11 +81,16 @@ void GdalDataAccess::accessingRasterData() {
     try {
         qDebug() << "Gridcoverage: access value through GDAL";
 
+       // Ilwis::IRasterCoverage raster2(makeInputPath("g250_06.tif"));
+       // DOCOMPARE(raster2->pix2value(Ilwis::Pixel(10549,9483)), 25.0,"accessing numerical value raster map");
+
         Ilwis::IRasterCoverage raster(makeInputPath("f41078a1.tif"));
         DOCOMPARE(raster->pix2value(Ilwis::Pixel(3278,2669)), 4.0,"accessing numerical value raster map");
 
         raster.prepare(makeInputPath("GCL_INT.tif"));
         DOCOMPARE(raster->pix2value(Ilwis::Pixel(239,297,23)), 48.0, "accessing numerical value in stack of raster (layer 24)");
+
+
 
     }catch (const Ilwis::ErrorObject& err) {
         QString error = "Test threw exception : " + err.message();

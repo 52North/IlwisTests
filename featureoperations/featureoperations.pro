@@ -8,30 +8,23 @@ QT       += testlib
 
 QT       -= gui
 
-TARGET = rasteroperationsTest
+TARGET = featureoperationsTest
 TEMPLATE = lib
 
 include(../global.pri)
 
 
 
-DEFINES += RASTEROPERATIONSTEST_LIBRARY
+DEFINES += FEATUREOPERATIONSTEST_LIBRARY
 
 win32{
     DLLDESTDIR = $$PWD/../../output/$$PLATFORM$$CONF/bin/testcases
 }
 
 
-SOURCES += \
-    rastercalc.cpp \
-    classification.cpp \
-    rasteroperations.cpp
+SOURCES += featureoperationstest.cpp
 
-HEADERS +=\
-        rasteroperationstest_global.h \
-    rastercalc.h \
-    classification.h \
-    rasteroperations.h
+HEADERS += featureoperationstest.h
 
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite

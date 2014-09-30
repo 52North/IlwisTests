@@ -18,6 +18,8 @@ public:
 
 private slots:
     void readCatalog();
+    void wcsCatalog();
+    void hdf5Catalog();
 };
 
 #endif // CATALOGTEST_H

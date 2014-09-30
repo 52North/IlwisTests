@@ -9,6 +9,10 @@
 #include "ilwistestclass.h"
 #include "postgrestest_global.h"
 
+namespace Ilwis {
+namespace Postgresql {
+
+
 class PostgresTest : public IlwisTestCase
 {
    Q_OBJECT
@@ -18,9 +22,20 @@ public:
 private:
     NEW_TEST(PostgresTest);
 
-private slots:
+    void prepareDatabaseConnection(Resource&dbResource);
 
-    void construction();
+    // TODO discuss resolving root for remote catalog container
+    void initDatabaseItemByNameFromCatalog();
+
+private slots:
+    void initDatabaseItemsFromCatalog();
+    void initDatabaseItemsWithoutCatalog();
+    void loadDataFromFeatureWithMultipleGeometriesTable();
+    void loadDataFromFeatureWithSingleGeometryTable();
+    void loadDataFromPlainTable();
+
 };
 
+}
+}
 #endif // POSTGRESSTEST_H

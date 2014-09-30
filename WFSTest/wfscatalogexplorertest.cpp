@@ -33,12 +33,9 @@ WfsCatalogExplorerTest::WfsCatalogExplorerTest():
 }
 
 void WfsCatalogExplorerTest::initTestCase() {
-
-    QString url(WFS_TEST_SERVER_1);
-
     ICatalog cat;
-    if (!cat.prepare(url, itCATALOG))
-        throw SkipTest(QString("Could not prepare WFS '%1'").arg(url).toStdString());
+    if (!cat.prepare(WFS_TEST_SERVER_1))
+        throw SkipTest(QString("Could not prepare WFS '%1'").arg(WFS_TEST_SERVER_1).toStdString());
     context()->setWorkingCatalog(cat);
 }
 

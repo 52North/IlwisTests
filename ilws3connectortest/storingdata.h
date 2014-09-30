@@ -20,6 +20,7 @@ public:
 
 private slots:
 
+    void storeGdalFormats();
 };
 
 #endif // STORINGDATA_H

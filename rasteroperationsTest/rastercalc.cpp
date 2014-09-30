@@ -33,6 +33,9 @@ void Rastercalc::substract(){
 
     DOCOMPARE(cov->pix2value(Ilwis::Pixel(0,0)),-25.0,"Checking pix(269,339) for expression number <operator> raster");
 
+    map1.prepare("small.mpl");
+    Ilwis::IRasterCoverage cov4 = map1 + 100;
+
     map1.prepare("n000302_sub_kenya.mpr");
     Ilwis::IRasterCoverage map2("kenya_2009ndvi_cor_22.mpr");
 
@@ -43,4 +46,7 @@ void Rastercalc::substract(){
     Ilwis::IRasterCoverage cov3 = sqrt(cov2);
 
     DOCOMPARE(cov3->pix2value(Ilwis::Pixel(50,50)),12.173,"Checking pix(50,50) for sqrt");
+
+
 }
+
