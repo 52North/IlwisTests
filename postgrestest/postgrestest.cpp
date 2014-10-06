@@ -119,7 +119,7 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     trackIdx.prepare();
 
     NamedIdentifierRange priorities;
-    priorities << "geom" << "center";
+    priorities << "center" << "geom";
     trackIdx->setRange(priorities);
     coverageResource.addProperty("trackIdx.domainId",trackIdx->id());
 
@@ -135,8 +135,15 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
 
 
     std::vector<quint32> result = table->select("name10==Wyoming");
-    QString actual = table->cell("name10", result.at(0)).toString();
-    DOTEST2(actual == "Wyoming", QString("name10 was NOT expected to be '%1'").arg(actual));
+    if (result.size() == 0) {
+        QFAIL("Table selection returned no result for 'Wyoming'.");
+    }
+
+    QString actual =table->cell("name10", result.at(0)).toString();
+    if (actual != "Wyoming") {
+        QString msg = QString("name10 was NOT expected to be '%1'").arg(actual);
+        QFAIL(msg.toLatin1().constData());
+    }
 
     FeatureIterator iter(fcoverage);
 //    while (iter != iter.end()) {
