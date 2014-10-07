@@ -97,6 +97,7 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
 
     QString actual = table->cell("fullname",3).toString();
     DOTEST2(actual == "Illinois Central RR", QString("fullname was NOT expected to be '%1'").arg(actual));
+    DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
 
     FeatureIterator iter(fcoverage);
 //    while (iter != iter.end()) {
@@ -132,7 +133,7 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     ITable table = fcoverage->attributeTable();
     DOCOMPARE(table->columnCount(), (unsigned int)15, "check number of columns in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
-
+    DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
 
     std::vector<quint32> result = table->select("name10==Wyoming");
     if (result.size() == 0) {
