@@ -1,6 +1,7 @@
 #include <QUrl>
 
 #include "ilwis.h"
+#include "ilwisobject.h"
 #include "symboltable.h"
 #include "testsuite.h"
 #include "kernel.h"
@@ -77,6 +78,33 @@ void PostgresTest::loadDataFromPlainTable()
 
     QString actual = table->cell("lastname",0).toString();
     DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
+}
+
+void PostgresTest::changeDataOfPlainTable()
+{
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/persons");
+    Resource tableResource(connectionString, itFLATTABLE);
+    prepareDatabaseConnection(tableResource);
+    ITable table(tableResource);
+
+    if ( !table.isValid()) {
+        QFAIL("prepared table is not valid.");
+    }
+
+    table->connectTo(connectionString,"table","postgresql",IlwisObject::ConnectorMode::cmOUTPUT, options);
+
+    QString actual = table->cell("lastname",1).toString();
+    DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
+
+    table->setCell("lastname",1, QString("Flanders"));
+    table->store();
+    actual = table->cell("lastname",1).toString();
+    DOTEST2(actual == "Flanders", QString("lastname was NOT expected to be '%1'").arg(actual));
+
+    // reset after change
+    quint32 changedRow = table->select("lastname == Flanders").at(0);
+    table->setCell("lastname",changedRow, QString("Simpson"));
+    table->store();
 }
 
 void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()

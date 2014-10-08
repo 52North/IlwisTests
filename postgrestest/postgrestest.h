@@ -27,12 +27,14 @@ private:
     // TODO discuss resolving root for remote catalog container
     void initDatabaseItemByNameFromCatalog();
 
-private slots:
     void initDatabaseItemsFromCatalog();
     void initDatabaseItemsWithoutCatalog();
     void loadDataFromFeatureWithMultipleGeometriesTable();
     void loadDataFromFeatureWithSingleGeometryTable();
     void loadDataFromPlainTable();
+
+private slots:
+    void changeDataOfPlainTable();
 
 };
 
