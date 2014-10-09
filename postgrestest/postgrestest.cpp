@@ -91,7 +91,7 @@ void PostgresTest::changeDataOfPlainTable()
         QFAIL("prepared table is not valid.");
     }
 
-    table->connectTo(connectionString,"table","postgresql",IlwisObject::ConnectorMode::cmOUTPUT, options);
+    table->connectTo(connectionString,"table","postgresql",IlwisObject::ConnectorMode::cmOUTPUT);
 
     QString actual = table->cell("lastname",1).toString();
     DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
@@ -150,7 +150,7 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     NamedIdentifierRange priorities;
     priorities << "center" << "geom";
     trackIdx->setRange(priorities);
-    coverageResource.addProperty("trackIdx.domainId",trackIdx->id());
+    coverageResource.addProperty("subfeature.domainId",trackIdx->id());
 
     IFeatureCoverage fcoverage(coverageResource);
 
