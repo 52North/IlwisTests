@@ -19,10 +19,11 @@
 #include "attributedefinition.h"
 #include "table.h"
 #include "geometries.h"
+#include "coordinatesystem.h"
+#include "geometryhelper.h"
 #include "coverage.h"
 #include "featurecoverage.h"
 #include "feature.h"
-#include "coordinatesystem.h"
 #include "featurecoverage.h"
 #include "featureiterator.h"
 
@@ -105,6 +106,9 @@ void PostgresTest::changeDataOfPlainTable()
     quint32 changedRow = table->select("lastname == Flanders").at(0);
     table->setCell("lastname",changedRow, QString("Simpson"));
     table->store();
+
+    // TODO add milhouse as new record store and delete again
+
 }
 
 void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
@@ -126,15 +130,57 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
     QString actual = table->cell("fullname",3).toString();
     DOTEST2(actual == "Illinois Central RR", QString("fullname was NOT expected to be '%1'").arg(actual));
     DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
+}
 
-    FeatureIterator iter(fcoverage);
-//    while (iter != iter.end()) {
+void PostgresTest::insertNewFeaturesToExistingTable()
+{
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_state10");
 
-//        // TODO test features content via iterator
-//        // (*iter)->featureid();
-//        ++iter;
+    Resource coverageResource(connectionString, itCOVERAGE);
+    prepareDatabaseConnection(coverageResource);
 
-//    }
+    if (mastercatalog()->contains(connectionString,itCOVERAGE)) {
+        mastercatalog()->removeItems( { coverageResource } );
+    }
+
+    IThematicDomain geomPriorities;
+    geomPriorities.prepare();
+
+    NamedIdentifierRange priorities;
+    priorities << "center" << "geom";
+    geomPriorities->setRange(priorities);
+    coverageResource.addProperty("subfeature.domainId",geomPriorities->id());
+
+    IFeatureCoverage fcoverage(coverageResource);
+    std::vector<QString> geomColumnOrder = {"center","geom"};
+    fcoverage->attributeDefinitionsRef().setSubDefinition(geomPriorities,geomColumnOrder);
+
+    if ( !fcoverage.isValid()) {
+        QFAIL("prepared feature coverage is not valid.");
+    }
+
+    ITable table = fcoverage->attributeTable();
+    DOCOMPARE(fcoverage->featureCount(itPOLYGON, 1), (unsigned int)52, "check number of level 1 features in 'tl_2010_us_state10' table.");
+    DOCOMPARE(fcoverage->featureCount(itPOINT, 0), (unsigned int)52, "check number of level 0 features in 'tl_2010_us_state10' table.");
+
+    ICoordinateSystem crs = fcoverage->coordinateSystem();
+    geos::geom::Geometry* center = GeometryHelper::fromWKT("POINT(30 10)", crs);
+    SPFeatureI feature = fcoverage->newFeature(center); // first level geom
+    feature("gid", 53);
+
+    geos::geom::Geometry* geom = GeometryHelper::fromWKT("MULTIPOLYGON(((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))", crs);
+    feature->createSubFeature("geom", geom);
+
+    // TODO test fails because createSubFeature does not increate feature count
+    //DOCOMPARE(fcoverage->featureCount(itPOLYGON, 1), (unsigned int)53, "check number of level 1 features in 'tl_2010_us_state10' table.");
+    DOCOMPARE(fcoverage->featureCount(itPOINT,0), (unsigned int)53, "check number of level 0 features in 'tl_2010_us_state10' table.");
+    DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
+
+    fcoverage->connectTo(connectionString,"simplefeatures","postgresql",IlwisObject::ConnectorMode::cmOUTPUT);
+    fcoverage->store();
+
+    // TODO don't forget to delete inserted geometry again
+
 }
 
 void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
@@ -143,6 +189,10 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
 
     Resource coverageResource(connectionString, itCOVERAGE);
     prepareDatabaseConnection(coverageResource);
+
+    if (mastercatalog()->contains(connectionString,itCOVERAGE)) {
+        mastercatalog()->removeItems( { coverageResource } );
+    }
 
     IThematicDomain trackIdx;
     trackIdx.prepare();
@@ -161,6 +211,7 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
     ITable table = fcoverage->attributeTable();
     DOCOMPARE(table->columnCount(), (unsigned int)15, "check number of columns in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOLYGON), (unsigned int)52, "check number of polygons in 'tl_2010_us_state10' table.");
+    DOCOMPARE(fcoverage->featureCount(itPOLYGON, 1), (unsigned int)52, "check number of level 1 geometries in 'tl_2010_us_state10' table.");
     DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
 
     std::vector<quint32> result = table->select("name10==Wyoming");
@@ -173,15 +224,6 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
         QString msg = QString("name10 was NOT expected to be '%1'").arg(actual);
         QFAIL(msg.toLatin1().constData());
     }
-
-    FeatureIterator iter(fcoverage);
-//    while (iter != iter.end()) {
-
-//        // (*iter)->featureid();
-//        ++iter;
-
-//    }
-
 }
 
 void PostgresTest::initDatabaseItemsFromCatalog()

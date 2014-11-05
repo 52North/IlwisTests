@@ -29,12 +29,14 @@ private:
 
     void initDatabaseItemsFromCatalog();
     void initDatabaseItemsWithoutCatalog();
-    void loadDataFromFeatureWithMultipleGeometriesTable();
     void loadDataFromFeatureWithSingleGeometryTable();
+    void loadDataFromFeatureWithMultipleGeometriesTable();
     void loadDataFromPlainTable();
+    void changeDataOfPlainTable();
+
 
 private slots:
-    void changeDataOfPlainTable();
+    void insertNewFeaturesToExistingTable();
 
 };
 
