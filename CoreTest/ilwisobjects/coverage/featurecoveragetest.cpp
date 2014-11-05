@@ -21,39 +21,59 @@ FeatureCoverageTest::FeatureCoverageTest() : IlwisTestCase("FeatureCoverageTest"
 
 void FeatureCoverageTest::testVariants() {
     Ilwis::IFeatureCoverage featureCoverage;
-    featureCoverage.prepare();
+       featureCoverage.prepare();
 
-    Ilwis::ICoordinateSystem csy("code=proj4:+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
+       Ilwis::ICoordinateSystem csy("code=proj4:+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
 
-    Ilwis::Envelope env(Ilwis::LatLon(50,-30), Ilwis::LatLon(-50, 60));
-    featureCoverage->coordinateSystem(csy);
-    featureCoverage->envelope(env);
+       Ilwis::Envelope env(Ilwis::LatLon(50,-30), Ilwis::LatLon(-50, 60));
+       featureCoverage->coordinateSystem(csy);
+       featureCoverage->envelope(env);
 
-    Ilwis::ITimeDomain dom;
-    dom.prepare();
-    dom->range(new Ilwis::TimeInterval("20090101", "20110101"));
-    std::vector<QString> times = {"20090101","20090131","20090602","20090703", "20100109","20110101"};
+       Ilwis::ITimeDomain dom;
+       dom.prepare();
+       dom->range(new Ilwis::TimeInterval("20090101", "20110101"));
+       std::vector<QString> times = {"20090101","20090131","20090602","20090703", "20100109","20110101"};
 
-    featureCoverage->attributeDefinitionsRef().addColumn("population", "value");
-    featureCoverage->attributeDefinitionsRef().setSubDefinition(dom,times);
+       featureCoverage->attributeDefinitionsRef().addColumn("population", "value");
+       featureCoverage->attributeDefinitionsRef().setSubDefinition(dom,times);
 
-    Ilwis::SPFeatureI feature1 = featureCoverage->newFeature(0);
+       Ilwis::SPFeatureI feature1 = featureCoverage->newFeature(0);
 
-    geos::geom::Geometry *geom = Ilwis::GeometryHelper::fromWKT("Linestring(40 20, 10 12, -20 -10)", featureCoverage->coordinateSystem().ptr());
-    feature1->geometry(geom);
-    feature1("population", 200);
+       geos::geom::Geometry *geom = Ilwis::GeometryHelper::fromWKT("Linestring(40 20, 10 12, -20 -10)", featureCoverage->coordinateSystem().ptr());
+       feature1->geometry(geom);
+       feature1("population", 200);
 
-    geom = Ilwis::GeometryHelper::fromWKT("Linestring(30 10, 10 15, -23 -12)",featureCoverage->coordinateSystem().ptr());
+       geom = Ilwis::GeometryHelper::fromWKT("Linestring(40 30, 10 12, -20 -10)", featureCoverage->coordinateSystem().ptr());
+       Ilwis::SPFeatureI feature2 = featureCoverage->newFeature(geom);
+       feature2("population", 300);
 
-    feature1->createSubFeature("20090101", geom);
+       geom = Ilwis::GeometryHelper::fromWKT("Linestring(40 30, 12 12, -20 -10)", featureCoverage->coordinateSystem().ptr());
+       Ilwis::SPFeatureI feature3 = featureCoverage->newFeature(geom);
+       feature3("population", 100);
 
-    auto *attrdef = new Ilwis::FeatureAttributeDefinition();
-    attrdef->addColumn("temperature", "value");
-    featureCoverage->attributeDefinitionsRef().featureAttributeDefinition(attrdef);
+       geom = Ilwis::GeometryHelper::fromWKT("Linestring(30 10, 10 15, -23 -12)",featureCoverage->coordinateSystem().ptr());
 
-    feature1["20090101"]("temperature", 26.5);
+       feature1->createSubFeature("20090101", geom);
 
-    double v = feature1["20090101"]("temperature").toDouble();
+       geom = Ilwis::GeometryHelper::fromWKT("Linestring(20 10, 10 15, -23 -12)",featureCoverage->coordinateSystem().ptr());
+
+       feature2->createSubFeature("20090101", geom);
+
+       auto *attrdef = new Ilwis::FeatureAttributeDefinition();
+       attrdef->addColumn("temperature", "value");
+       featureCoverage->attributeDefinitionsRef().featureAttributeDefinition(attrdef);
+
+       feature1["20090101"]("temperature", 26.5);
+       feature2["20090101"]("temperature", 19.5);
+
+
+
+       Ilwis::FeatureIterator iter(featureCoverage);
+
+       while(iter != iter.end()){
+           qDebug() << (*iter)["20090101"]("temperature").toDouble();
+           ++iter;
+       }
 
 
 
