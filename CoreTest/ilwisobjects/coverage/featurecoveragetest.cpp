@@ -50,6 +50,7 @@ void FeatureCoverageTest::testVariants() {
     geom = Ilwis::GeometryHelper::fromWKT("Linestring(30 10, 10 15, -23 -12)",featureCoverage->coordinateSystem().ptr());
 
     feature1->createSubFeature("20090101", geom);
+    feature1->createSubFeature("20090703", geom);
 
     auto *attrdef = new Ilwis::FeatureAttributeDefinition();
     attrdef->addColumn("temperature", "value");

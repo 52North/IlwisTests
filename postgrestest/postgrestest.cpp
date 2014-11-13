@@ -152,9 +152,6 @@ void PostgresTest::insertNewFeaturesToExistingTable()
     coverageResource.addProperty("subfeature.domainId",geomPriorities->id());
 
     IFeatureCoverage fcoverage(coverageResource);
-    std::vector<QString> geomColumnOrder = {"center","geom"};
-    fcoverage->attributeDefinitionsRef().setSubDefinition(geomPriorities,geomColumnOrder);
-
     if ( !fcoverage.isValid()) {
         QFAIL("prepared feature coverage is not valid.");
     }
@@ -165,7 +162,8 @@ void PostgresTest::insertNewFeaturesToExistingTable()
 
     ICoordinateSystem crs = fcoverage->coordinateSystem();
     geos::geom::Geometry* center = GeometryHelper::fromWKT("POINT(30 10)", crs);
-    SPFeatureI feature = fcoverage->newFeature(center); // first level geom
+    SPFeatureI feature = fcoverage->newFeature(0); // first level geom
+    feature->geometry(center);
     feature("gid", 53);
 
     geos::geom::Geometry* geom = GeometryHelper::fromWKT("MULTIPOLYGON(((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))", crs);
