@@ -45,14 +45,14 @@ PostgresDemo::PostgresDemo():
 void PostgresDemo::storeRailsAsShapeFile()
 {
     try {
+        IOOptions options;
+        options.addOption("pg.username", "postgres");
+        options.addOption("pg.password", "postgres");
         QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
-        Resource rails(connectionString,itCOVERAGE);
-        rails.addProperty("pg.password", "postgres");
-        rails.addProperty("pg.user", "postgres");
-        //rails.addProperty("pg.schema", "public"); // public is default
+        Resource rails(connectionString, itCOVERAGE);
 
         IFeatureCoverage fcoverage;
-        if ( !fcoverage.prepare(rails)) {
+        if ( !fcoverage.prepare(rails,options)) {
             QFAIL("Could not prepare coverage.");
         }
 
@@ -67,14 +67,14 @@ void PostgresDemo::storeRailsAsShapeFile()
 void PostgresDemo::storeStatesAsShapeFile()
 {
     try {
+        IOOptions options;
+        options.addOption("pg.username", "postgres");
+        options.addOption("pg.password", "postgres");
         QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_state10");
         Resource rails(connectionString,itCOVERAGE);
-        rails.addProperty("pg.password", "postgres");
-        rails.addProperty("pg.user", "postgres");
-        //rails.addProperty("pg.schema", "public"); // public is default
 
         IFeatureCoverage fcoverage;
-        if ( !fcoverage.prepare(rails)) {
+        if ( !fcoverage.prepare(rails, options)) {
             QFAIL("Could not prepare coverage.");
         }
 
