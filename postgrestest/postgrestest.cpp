@@ -37,7 +37,7 @@ void PostgresTest::prepareDatabaseConnection(IOOptions &options)
 {
     options.addOption("pg.password", "postgres")
             //.addOption("pg.schema", "public")
-            .addOption("pg.user", "postgres");
+            .addOption("pg.username", "postgres");
 }
 
 void PostgresTest::initDatabaseItemsWithoutCatalog()

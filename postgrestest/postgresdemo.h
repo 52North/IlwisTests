@@ -5,6 +5,8 @@
 #include "testmacros.h"
 #include "ilwistestclass.h"
 
+#include "postgrestest_global.h"
+
 class PostgresDemo: public IlwisTestCase
 {
     Q_OBJECT

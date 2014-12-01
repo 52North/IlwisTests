@@ -57,7 +57,7 @@ void PostgresDemo::storeRailsAsShapeFile()
         }
 
         fcoverage->connectTo(makeOutputPath("rails.shp"), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
-        fcoverage->store();
+        fcoverage->store(options);
     } catch (std::exception& e) {
         QFAIL(QString("exception occured: %1").arg(e.what()).toLatin1().constData());
     }
@@ -79,7 +79,7 @@ void PostgresDemo::storeStatesAsShapeFile()
         }
 
         fcoverage->connectTo(makeOutputPath("states.shp"), "ESRI Shapefile", "gdal", IlwisObject::cmOUTPUT);
-        fcoverage->store();
+        fcoverage->store(options);
     } catch (std::exception& e) {
         QFAIL(QString("exception occured: %1").arg(e.what()).toLatin1().constData());
     }
