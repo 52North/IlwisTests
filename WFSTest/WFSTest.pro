@@ -28,14 +28,14 @@ SOURCES += \
     wfscatalogexplorertest.cpp
 
 HEADERS +=\
-    wfstest_global.h \
     wfsmoduletest.h \
     webfeatureservicetest.h \
     wfstestconstants.h \
     wfsresponsetest.h \
     wfsparsertest.h \
     wfsdemo.h \
-    wfscatalogexplorertest.h
+    wfscatalogexplorertest.h \
+    wfstest_global.h
 
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/wfsconnector/ -lwfsconnector

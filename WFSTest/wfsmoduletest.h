@@ -6,6 +6,8 @@
 #include "testmacros.h"
 #include "testsuite.h"
 
+#include "wfstest_global.h"
+
 class WfsModuleTest: public IlwisTestCase
 {
 public:

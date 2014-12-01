@@ -53,11 +53,12 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
         ICatalog cat;
         cat.prepare("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
 
+        IOOptions options;
+        options.addOption("forceXY", false);
         std::vector<Resource> items = cat->items();
         Resource feature(items.front());
-        feature.addProperty("forceXY", false);
         IFeatureCoverage coverage;
-        if ( !coverage.prepare(feature)) {
+        if ( !coverage.prepare(feature, options)) {
             QFAIL("Could not prepare coverage.");
         }
 

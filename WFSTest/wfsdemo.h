@@ -7,7 +7,7 @@
 
 #include "wfstest_global.h"
 
-class WFSTESTSHARED_EXPORT WfsDemo: public IlwisTestCase
+class WfsDemo: public IlwisTestCase
 {
     Q_OBJECT
     
