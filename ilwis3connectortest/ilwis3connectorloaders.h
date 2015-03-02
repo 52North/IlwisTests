@@ -1,5 +1,5 @@
-#ifndef ILWS3CONNECTORTEST_H
-#define ILWS3CONNECTORTEST_H
+#ifndef ILWIS3CONNECTORTEST_H
+#define ILWIS3CONNECTORTEST_H
 
 #include <QString>
 #include <QTest>
@@ -7,16 +7,16 @@
 #include "kernel.h"
 #include "testmacros.h"
 #include "ilwistestclass.h"
-#include "ilws3connectortest_global.h"
+#include "ilwis3connectortest_global.h"
 
-class Ilws3connectorTest : public IlwisTestCase
+class Ilwis3connectorTest : public IlwisTestCase
 {
       Q_OBJECT
 
 public:
-    Ilws3connectorTest();
+    Ilwis3connectorTest();
 
-    NEW_TEST(Ilws3connectorTest);
+    NEW_TEST(Ilwis3connectorTest);
 
 private slots:
     void loaderGeometryThings();
@@ -26,4 +26,4 @@ private slots:
     void tables();
 };
 
-#endif // ILWS3CONNECTORTEST_H
+#endif // ILWIS3CONNECTORTEST_H

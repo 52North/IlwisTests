@@ -34,7 +34,7 @@ void RasterOperations::testResample() {
     Ilwis::IGeoReference grf("code=georef:type=corners,csy=epsg:21037,envelope=-3.02456e+06 -4.55547e+06 6.47259e+06 4.39692e+06,gridsize=1188 1120,name=grf1");
     QString expr = QString("aa5resbic=resample(n000302.mpr,grf1,bicubic)");
     DOTEST(grf.isValid(),"making georef by code");
-    QString expr = QString("aa5resbic=resample(average_monthly_temperature_january_5.mpr,plate102.grf,bicubic)");
+    //QString expr = QString("aa5resbic=resample(average_monthly_temperature_january_5.mpr,plate102.grf,bicubic)");
     //QString expr = QString("aa5resbic=resample(small3.mpr,aeqsmall.grf,bicubic)");
 
     Ilwis::ExecutionContext ctx;

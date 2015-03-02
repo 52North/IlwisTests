@@ -20,8 +20,8 @@
 #include "interval.h"
 #include "numericdomain.h"
 #include "intervalrange.h"
-#include "feature.h"
 #include "featurecoverage.h"
+#include "feature.h"
 
 #include "testsuite.h"
 #include "testutils.h"

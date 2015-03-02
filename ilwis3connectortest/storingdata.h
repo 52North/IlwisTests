@@ -7,7 +7,7 @@
 #include "kernel.h"
 #include "testmacros.h"
 #include "ilwistestclass.h"
-#include "ilws3connectortest_global.h"
+#include "ilwis3connectortest_global.h"
 
 class StoringData : public IlwisTestCase
 {
