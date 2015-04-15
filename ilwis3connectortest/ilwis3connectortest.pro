@@ -6,14 +6,14 @@
 
 QT       += testlib
 
-TARGET = ilw3connectortest
+TARGET = ilwis3connectortest
 TEMPLATE = lib
 
 include(../global.pri)
 
 
 
-DEFINES += ILWS3CONNECTORTEST_LIBRARY
+DEFINES += ILWIS3CONNECTORTEST_LIBRARY
 
 
 win32{
@@ -29,12 +29,12 @@ DEPENDPATH += $$PWD/../TestSuite
 
 HEADERS += \
     storingdata.h \
-    ilws3connectortest_global.h \
-    ilws3connectorloaders.h \
+    ilwis3connectortest_global.h \
+    ilwis3connectorloaders.h \
     dataaccess.h
 
 SOURCES += \
     storingdata.cpp \
-    ilws3connectorloaders.cpp \
+    ilwis3connectorloaders.cpp \
     dataaccess.cpp
 

@@ -2,8 +2,11 @@
 #define WEBFEATURESERVICETEST_H
 
 #include <QTest>
-#include "ilwistestclass.h"
+#include "kernel.h"
 #include "testmacros.h"
+#include "ilwistestclass.h"
+
+#include "wfstest_global.h"
 
 namespace Ilwis {
 namespace Wfs {

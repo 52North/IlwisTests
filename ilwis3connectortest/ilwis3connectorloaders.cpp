@@ -7,16 +7,16 @@
 #include "projection.h"
 #include "featurecoverage.h"
 #include "feature.h"
-#include "ilws3connectorloaders.h"
+#include "ilwis3connectorloaders.h"
 
 
-REGISTER_TEST(Ilws3connectorTest);
+REGISTER_TEST(Ilwis3connectorTest);
 
-Ilws3connectorTest::Ilws3connectorTest() : IlwisTestCase("Ilwis3ConnectorTest","Ilwis3ConnectorTest")
+Ilwis3connectorTest::Ilwis3connectorTest() : IlwisTestCase("Ilwis3ConnectorTest","Ilwis3ConnectorTest")
 {
 }
 
-void Ilws3connectorTest::loadCoverages() {
+void Ilwis3connectorTest::loadCoverages() {
     try{
         Ilwis::IRasterCoverage map1;
         QString res = makeInputPath("n000302.mpr");
@@ -56,7 +56,7 @@ void Ilws3connectorTest::loadCoverages() {
     }
 }
 
-void Ilws3connectorTest::domainLoadingConstructing()
+void Ilwis3connectorTest::domainLoadingConstructing()
 {
     try{
         Ilwis::IDomain dom1;
@@ -71,7 +71,7 @@ void Ilws3connectorTest::domainLoadingConstructing()
     }
 }
 
-void Ilws3connectorTest::tables()
+void Ilwis3connectorTest::tables()
 {
     try {
         Ilwis::ITable tbl;
@@ -87,7 +87,7 @@ void Ilws3connectorTest::tables()
 
 }
 
-void Ilws3connectorTest::loaderCsy() {
+void Ilwis3connectorTest::loaderCsy() {
     try {
         Ilwis::ICoordinateSystem csy;
         DOTEST(csy.prepare(makeInputPath("cochabam.csy")),"loading regular projected csy");
@@ -107,7 +107,7 @@ void Ilws3connectorTest::loaderCsy() {
 
 }
 
-void Ilws3connectorTest::loaderGeometryThings() {
+void Ilwis3connectorTest::loaderGeometryThings() {
     try{
 
         Ilwis::ITable tbl1;

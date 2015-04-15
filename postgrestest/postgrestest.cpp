@@ -9,11 +9,6 @@
 #include "resource.h"
 #include "ilwisdata.h"
 #include "catalog.h"
-#include "domain.h"
-#include "itemdomain.h"
-#include "thematicitem.h"
-#include "range.h"
-#include "identifierrange.h"
 #include "datadefinition.h"
 #include "columndefinition.h"
 #include "attributedefinition.h"
@@ -38,25 +33,23 @@ PostgresTest::PostgresTest() : IlwisTestCase("PostgresqlConnectorTest", "Postgre
 {
 }
 
-void PostgresTest::prepareDatabaseConnection(Resource &dbResource)
+void PostgresTest::prepareDatabaseConnection(IOOptions &options)
 {
-    dbResource.addProperty("pg.password", "postgres");
-    dbResource.addProperty("pg.user", "postgres");
-    //dbResource.addProperty("pg.schema", "public");
-    dbResource.prepare();
+    options.addOption("pg.password", "postgres")
+            //.addOption("pg.schema", "public")
+            .addOption("pg.username", "postgres");
 }
 
 void PostgresTest::initDatabaseItemsWithoutCatalog()
 {
-    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/public/tl_2010_us_rails");
-
+    IOOptions options;
+    prepareDatabaseConnection(options);
+    QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
     Resource tableResource(connectionString, itFLATTABLE);
-    prepareDatabaseConnection(tableResource);
-    ITable table(tableResource);
+    ITable table(tableResource, options);
 
     Resource coverageResource(connectionString, itCOVERAGE);
-    prepareDatabaseConnection(coverageResource);
-    IFeatureCoverage coverage(coverageResource);
+    IFeatureCoverage coverage(coverageResource, options);
 
     DOTEST2(coverage.isValid(), "Coverage is not valid.");
     DOTEST2(coverage->coordinateSystem().isValid(), "CRS is not valid.");
@@ -66,10 +59,11 @@ void PostgresTest::initDatabaseItemsWithoutCatalog()
 
 void PostgresTest::loadDataFromPlainTable()
 {
+    IOOptions options;
+    prepareDatabaseConnection(options);
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/persons");
     Resource tableResource(connectionString, itFLATTABLE);
-    prepareDatabaseConnection(tableResource);
-    ITable table(tableResource);
+    ITable table(tableResource, options);
 
     if ( !table.isValid()) {
         QFAIL("prepared table is not valid.");
@@ -83,10 +77,11 @@ void PostgresTest::loadDataFromPlainTable()
 
 void PostgresTest::changeDataOfPlainTable()
 {
+    IOOptions options;
+    prepareDatabaseConnection(options);
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/persons");
     Resource tableResource(connectionString, itFLATTABLE);
-    prepareDatabaseConnection(tableResource);
-    ITable table(tableResource);
+    ITable table(tableResource, options);
 
     if ( !table.isValid()) {
         QFAIL("prepared table is not valid.");
@@ -98,14 +93,14 @@ void PostgresTest::changeDataOfPlainTable()
     DOTEST2(actual == "Simpson", QString("lastname was NOT expected to be '%1'").arg(actual));
 
     table->setCell("lastname",1, QString("Flanders"));
-    table->store();
+    table->store(options);
     actual = table->cell("lastname",1).toString();
     DOTEST2(actual == "Flanders", QString("lastname was NOT expected to be '%1'").arg(actual));
 
     // reset after change
     quint32 changedRow = table->select("lastname == Flanders").at(0);
     table->setCell("lastname",changedRow, QString("Simpson"));
-    table->store();
+    table->store(options);
 
     // TODO add milhouse as new record store and delete again
 
@@ -113,11 +108,11 @@ void PostgresTest::changeDataOfPlainTable()
 
 void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
 {
+    IOOptions options;
+    prepareDatabaseConnection(options);
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_rails");
-
     Resource coverageResource(connectionString, itCOVERAGE);
-    prepareDatabaseConnection(coverageResource);
-    IFeatureCoverage fcoverage(coverageResource);
+    IFeatureCoverage fcoverage(coverageResource, options);
 
     if ( !fcoverage.isValid()) {
         QFAIL("prepared feature coverage is not valid.");
@@ -134,27 +129,14 @@ void PostgresTest::loadDataFromFeatureWithSingleGeometryTable()
 
 void PostgresTest::insertNewFeaturesToExistingTable()
 {
+    IOOptions options;
+    prepareDatabaseConnection(options);
+    options.addOption("pg.features.order","center,geom");
+
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_state10");
-
     Resource coverageResource(connectionString, itCOVERAGE);
-    prepareDatabaseConnection(coverageResource);
 
-    if (mastercatalog()->contains(connectionString,itCOVERAGE)) {
-        mastercatalog()->removeItems( { coverageResource } );
-    }
-
-    IThematicDomain geomPriorities;
-    geomPriorities.prepare();
-
-    NamedIdentifierRange priorities;
-    priorities << "center" << "geom";
-    geomPriorities->setRange(priorities);
-    coverageResource.addProperty("subfeature.domainId",geomPriorities->id());
-
-    IFeatureCoverage fcoverage(coverageResource);
-    std::vector<QString> geomColumnOrder = {"center","geom"};
-    fcoverage->attributeDefinitionsRef().setSubDefinition(geomPriorities,geomColumnOrder);
-
+    IFeatureCoverage fcoverage(coverageResource,options);
     if ( !fcoverage.isValid()) {
         QFAIL("prepared feature coverage is not valid.");
     }
@@ -162,10 +144,13 @@ void PostgresTest::insertNewFeaturesToExistingTable()
     ITable table = fcoverage->attributeTable();
     DOCOMPARE(fcoverage->featureCount(itPOLYGON, 1), (unsigned int)52, "check number of level 1 features in 'tl_2010_us_state10' table.");
     DOCOMPARE(fcoverage->featureCount(itPOINT, 0), (unsigned int)52, "check number of level 0 features in 'tl_2010_us_state10' table.");
+    std::vector<quint32> result = table->select("name10==North Carolina");
+    DOTEST2(result.size() != 0, "No Result when selecting existing entity");
 
     ICoordinateSystem crs = fcoverage->coordinateSystem();
     geos::geom::Geometry* center = GeometryHelper::fromWKT("POINT(30 10)", crs);
-    SPFeatureI feature = fcoverage->newFeature(center); // first level geom
+    SPFeatureI feature = fcoverage->newFeature(0); // first level geom
+    feature->geometry(center);
     feature("gid", 53);
 
     geos::geom::Geometry* geom = GeometryHelper::fromWKT("MULTIPOLYGON(((30 20, 45 40, 10 40, 30 20)),((15 5, 40 10, 10 20, 5 10, 15 5)))", crs);
@@ -177,7 +162,7 @@ void PostgresTest::insertNewFeaturesToExistingTable()
     DOTEST(table->columndefinition("gid").isReadOnly(), "'gid' column is readonly");
 
     fcoverage->connectTo(connectionString,"simplefeatures","postgresql",IlwisObject::ConnectorMode::cmOUTPUT);
-    fcoverage->store();
+    fcoverage->store(options);
 
     // TODO don't forget to delete inserted geometry again
 
@@ -185,25 +170,14 @@ void PostgresTest::insertNewFeaturesToExistingTable()
 
 void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
 {
+    IOOptions options;
+    prepareDatabaseConnection(options);
+    options.addOption("pg.features.order","center,geom");
+
     QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test/tl_2010_us_state10");
-
     Resource coverageResource(connectionString, itCOVERAGE);
-    prepareDatabaseConnection(coverageResource);
 
-    if (mastercatalog()->contains(connectionString,itCOVERAGE)) {
-        mastercatalog()->removeItems( { coverageResource } );
-    }
-
-    IThematicDomain trackIdx;
-    trackIdx.prepare();
-
-    NamedIdentifierRange priorities;
-    priorities << "center" << "geom";
-    trackIdx->setRange(priorities);
-    coverageResource.addProperty("subfeature.domainId",trackIdx->id());
-
-    IFeatureCoverage fcoverage(coverageResource);
-
+    IFeatureCoverage fcoverage(coverageResource, options);
     if ( !fcoverage.isValid()) {
         QFAIL("prepared feature coverage is not valid.");
     }
@@ -229,25 +203,21 @@ void PostgresTest::loadDataFromFeatureWithMultipleGeometriesTable()
 void PostgresTest::initDatabaseItemsFromCatalog()
 {
     try {
+        IOOptions options;
+        prepareDatabaseConnection(options);
         QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
         Resource dbCatalog(connectionString, itCATALOG);
-        prepareDatabaseConnection(dbCatalog);
-        ICatalog cat(dbCatalog);
+        ICatalog cat(dbCatalog, options);
 
         std::vector<Resource> items = cat->items();
         if (items.size() == 0) {
             QFAIL("no catalog items found! Check if test db is initiated properly.");
         }
 
-        std::for_each(items.begin(), items.end(),[](Resource &resource) {
-
-            DOTEST2(resource.hasProperty("pg.user"), "pg resource does not contain db user");
-            DOTEST2(resource.hasProperty("pg.password"), "pg resource does not contain db password");
-            DOTEST2(resource.hasProperty("pg.schema"), "pg resource does not contain db schema");
-
+        std::for_each(items.begin(), items.end(),[&options](Resource &resource) {
             ITable table;
             //Resource tableResource(resource.url(), itFLATTABLE);
-            if ( !table.prepare(resource)) {
+            if ( !table.prepare(resource,options)) {
                 QFAIL("Could not prepare table.");
             }
 
@@ -265,21 +235,17 @@ void PostgresTest::initDatabaseItemsFromCatalog()
 void PostgresTest::initDatabaseItemByNameFromCatalog()
 {
     try {
-        QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test");
+        IOOptions options;
+        prepareDatabaseConnection(options);
+        QUrl connectionString("postgresql://localhost:5432/ilwis-pg-test?pg.username=postgres&pg.password=postgres");
         Resource dbCatalog(connectionString, itCATALOG);
-        prepareDatabaseConnection(dbCatalog);
-        dbCatalog.addProperty("container.root", "postgresql://localhost:5432");
-        ICatalog cat(dbCatalog);
 
+        ICatalog cat(dbCatalog, options);
         context()->setWorkingCatalog(cat);
-
-        ITable table;
-
-        // TODO this will not resolve the root correctly and therefore
-        // won't find the item in the catalog (which is present there)
         QString item = cat->resolve("tl_2010_us_state10", itFLATTABLE);
 
-        if ( !table.prepare(item,itFLATTABLE)) {
+        ITable table;
+        if ( !table.prepare(item, itFLATTABLE, options)) {
             QFAIL("Could not prepare table.");
         }
 

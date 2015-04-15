@@ -5,6 +5,7 @@
 #include "testmacros.h"
 #include "ilwistestclass.h"
 
+#include "wfstest_global.h"
 #include "wfs.h"
 
 using namespace Ilwis;

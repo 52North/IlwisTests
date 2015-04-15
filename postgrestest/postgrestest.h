@@ -22,22 +22,17 @@ public:
 private:
     NEW_TEST(PostgresTest);
 
-    void prepareDatabaseConnection(Resource&dbResource);
-
-    // TODO discuss resolving root for remote catalog container
+    void prepareDatabaseConnection(IOOptions &options);
     void initDatabaseItemByNameFromCatalog();
 
-    void initDatabaseItemsFromCatalog();
-    void initDatabaseItemsWithoutCatalog();
-    void loadDataFromFeatureWithSingleGeometryTable();
-    void loadDataFromFeatureWithMultipleGeometriesTable();
+private slots:
     void loadDataFromPlainTable();
     void changeDataOfPlainTable();
-
-
-private slots:
+    void initDatabaseItemsFromCatalog();
+    void initDatabaseItemsWithoutCatalog();
+    void loadDataFromFeatureWithMultipleGeometriesTable();
+    void loadDataFromFeatureWithSingleGeometryTable();
     void insertNewFeaturesToExistingTable();
-
 };
 
 }

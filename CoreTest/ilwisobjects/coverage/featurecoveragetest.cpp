@@ -54,6 +54,8 @@ void FeatureCoverageTest::testVariants() {
        geom = Ilwis::GeometryHelper::fromWKT("Linestring(40 30, 12 12, -20 -10)", featureCoverage->coordinateSystem().ptr());
        Ilwis::SPFeatureI feature3 = featureCoverage->newFeature(geom);
        feature3("population", 100);
+    feature1->createSubFeature("20090101", geom);
+    feature1->createSubFeature("20090703", geom);
 
        geom = Ilwis::GeometryHelper::fromWKT("Linestring(30 10, 10 15, -23 -12)",featureCoverage->coordinateSystem().ptr());
 
@@ -70,14 +72,6 @@ void FeatureCoverageTest::testVariants() {
        feature1["20090101"]("temperature", 26.5);
        feature2["20090101"]("temperature", 19.5);
 
-
-
-//       Ilwis::FeatureIterator iter(featureCoverage);
-
-//       while(iter != iter.end()){
-//           qDebug() << (*iter)["20090101"]("temperature").toDouble();
-//           ++iter;
-//       }
 
     FeatureIterator featureIter(featureCoverage);
     featureIter.flow(FeatureIterator::fDEPTHFIRST);
