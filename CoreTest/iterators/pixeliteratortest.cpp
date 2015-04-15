@@ -34,7 +34,7 @@ void PixelIteratorTest::ziterator() {
         sum += *iter;
          ++iter;
      }
-     DOTEST(sum == 5924,"correct summation of pixel values, using z direction to iterate");
+     DOTEST(sum == 12444,"correct summation of pixel values, using z direction to iterate");
 }
 
 void PixelIteratorTest::rasterSelection() {

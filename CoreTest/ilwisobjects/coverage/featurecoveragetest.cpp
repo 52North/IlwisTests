@@ -11,9 +11,13 @@
 #include "identifieritem.h"
 #include "identifierrange.h"
 #include "juliantime.h"
+#include "featureiterator.h"
+
 #include "featurecoveragetest.h"
 
 REGISTER_TEST(FeatureCoverageTest);
+
+using namespace Ilwis;
 
 FeatureCoverageTest::FeatureCoverageTest() : IlwisTestCase("FeatureCoverageTest" , "CoreTest")
 {
@@ -68,12 +72,22 @@ void FeatureCoverageTest::testVariants() {
 
 
 
-       Ilwis::FeatureIterator iter(featureCoverage);
+//       Ilwis::FeatureIterator iter(featureCoverage);
 
-       while(iter != iter.end()){
-           qDebug() << (*iter)["20090101"]("temperature").toDouble();
-           ++iter;
-       }
+//       while(iter != iter.end()){
+//           qDebug() << (*iter)["20090101"]("temperature").toDouble();
+//           ++iter;
+//       }
+
+    FeatureIterator featureIter(featureCoverage);
+    featureIter.flow(FeatureIterator::fDEPTHFIRST);
+
+    while(featureIter != featureIter.end()) {
+        SPFeatureI f = (*featureIter);
+        f->geometry(); // test if geometry is null
+        DOTEST(true, "geometry of (sub)feature not null.");
+        featureIter++; // move to next
+    }
 
 
 

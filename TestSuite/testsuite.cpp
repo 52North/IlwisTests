@@ -56,7 +56,7 @@ IlwisTestCase *TestSuite::registerTest(IlwisTestCase *test)
 void TestSuite::run(const QStringList &modules, const QString& inputData, const QString& outputData)
 {
     try {
-    Ilwis::initIlwis();
+    Ilwis::initIlwis(Ilwis::rmTEST);
     _inputDatapath = inputData;
     _outputDataPath = outputData != "" ? outputData : inputData;
 

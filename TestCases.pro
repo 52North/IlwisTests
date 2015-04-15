@@ -3,10 +3,10 @@ TEMPLATE = subdirs
 SUBDIRS += \ 
     TestSuite \
     sandbox \
-  CoreTest \
+ CoreTest \
    TestRunner \
 #   postgrestest \
-#    rasteroperationsTest \
+# rasteroperationsTest
 #   ilws3connectortest \
 #   gdaltest
 #    featureoperations \

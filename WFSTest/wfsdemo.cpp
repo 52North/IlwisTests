@@ -17,16 +17,16 @@
 #include "domain.h"
 #include "datadefinition.h"
 #include "columndefinition.h"
+#include "attributedefinition.h"
 #include "table.h"
 #include "connectorinterface.h"
 #include "ilwisobjectconnector.h"
 #include "catalogexplorer.h"
 #include "catalogconnector.h"
-#include "attributerecord.h"
 #include "coordinatesystem.h"
-#include "feature.h"
 #include "coverage.h"
 #include "featurecoverage.h"
+#include "feature.h"
 #include "featureiterator.h"
 #include "feature.h"
 #include "geometryhelper.h"
@@ -51,9 +51,7 @@ void WfsDemo::wfsCatalog_prepareAndSetAsWorkingCatalog_hasWfsResourcesRegistered
 {
     try {
         ICatalog cat;
-        QUrl connectionString("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
-        Resource wfsResource(connectionString, itCATALOG);
-        cat.prepare(wfsResource);
+        cat.prepare("http://ogi.state.ok.us/geoserver/wfs?service=WFS");
 
         std::vector<Resource> items = cat->items();
         Resource feature(items.front());
