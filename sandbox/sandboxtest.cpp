@@ -1,51 +1,39 @@
 #include <QString>
-#include <QFileInfo>
-#include <QFile>
-#include <QUrl>
-#include <QDir>
 
 #include "kernel.h"
-#include "raster.h"
-#include "catalog.h"
 #include "symboltable.h"
 #include "ilwiscontext.h"
-#include "mastercatalog.h"
-
-#include "ilwisoperation.h"
-
-#include "itemrange.h"
-#include "domainitem.h"
-#include "itemdomain.h"
-
-#include "interval.h"
-#include "numericdomain.h"
-#include "intervalrange.h"
-#include "coverage.h"
-#include "featurecoverage.h"
-#include "feature.h"
+#include "commandhandler.h"
 #include "raster.h"
-#include "pixeliterator.h"
 
 #include "testsuite.h"
-#include "testutils.h"
 #include "sandboxtest.h"
 
 REGISTER_TEST(SandBox);
+
+using namespace Ilwis;
 
 SandBox::SandBox(): IlwisTestCase("SandBox", "SandBoxTest")
 {
 }
 
-void SandBox::sometest() {
-    Ilwis::IRasterCoverage raster("small.mpr");
-    Ilwis::PixelIterator iter(raster,Ilwis::BoundingBox(Ilwis::Pixel(1,1), Ilwis::Pixel(2,3)));
-    std::vector<quint8> data(raster->size().linearSize());
-    Ilwis::PixelIterator iterEnd(iter.end());
-    iter = --iterEnd;
-    while(iter.position().x != 0 || iter.position().y != 0) {
-        qDebug() << *iter;
-        --iter;
+void SandBox::sometest()
+{
+    try {
+        QString expr = QString("aamirvert=mirrorrotateraster(small.mpr,rotate180)");
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::commandhandler()->execute(expr,&ctx);
+
+        Ilwis::IRasterCoverage raster("ilwis://internalcatalog/aamirvert");
+        raster->connectTo(makeOutputPath("aamirvert.tif"), "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
+        raster->store();
     }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+
 }
 
 

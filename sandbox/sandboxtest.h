@@ -2,11 +2,11 @@
 #define SandBox_H
 
 #include <QTest>
+#include "kernel.h"
+#include "testsuite.h"
 #include "ilwistestclass.h"
 #include "testmacros.h"
 
-#include "commandhandler.h"
-#include "symboltable.h"
 
 /**
  * The sandbox tester is only meant for local experimenting. None of the tests will be part of the formal
