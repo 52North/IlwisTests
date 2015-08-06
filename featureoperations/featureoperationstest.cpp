@@ -50,7 +50,7 @@ void FeatureOperations::transform(){
     Ilwis::ExecutionContext ctx;
     Ilwis::SymbolTable symTable;
     DOTEST(Ilwis::commandhandler()->execute(expr,&ctx, symTable),"executed transformcoordinates)");
-    Ilwis::IFeatureCoverage transformed("ilwis://internalcatalog/aacrosspoints");
+    Ilwis::IFeatureCoverage transformed("ilwis://internalcatalog/aatransformed");
     transformed->connectTo(QString("file:///%1/aatransformed.mpa").arg(_baseDataPath.absolutePath()), "vectormap","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
     transformed->createTime(Ilwis::Time::now());
     transformed->store();
