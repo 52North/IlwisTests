@@ -27,9 +27,8 @@ private:
 
 
 
+    void graph_test();
 private Q_SLOTS:
-
-
     void sometest();
 };
 

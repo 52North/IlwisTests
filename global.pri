@@ -56,7 +56,10 @@ INCLUDEPATH +=  $$RELATIVE/IlwisCore/core \
                 $$RELATIVE/IlwisCore/core/ilwisobjects/table \
                 $$RELATIVE/IlwisCore/core/ilwisobjects/operation \
                 $$RELATIVE/IlwisCore/core/catalog \
+                $$RELATIVE/IlwisCore/core/ilwisobjects/workflow \
                 $$RELATIVE/IlwisCore/core/ilwisobjects/domain \
+                $$RELATIVE/IlwisCore/baseoperations/geometry \
+                $$RELATIVE/IlwisCore/rasteroperations \
                 $$BOOST
 
 
