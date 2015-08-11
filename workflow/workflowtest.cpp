@@ -60,19 +60,23 @@ void WorkflowTest::sometest()
         workflow->setProperty("longname", "First Workflow Operation");
         workflow->setProperty("keywords", {"keyword1, workflow"});
 
-        NodeProperties stringreplace;
-        stringreplace.url = QUrl("ilwis://operations/stringreplace");
-        OVertex op1Id = workflow->addOperation(stringreplace);
+        NodeProperties operation1;
+        //stringreplace.url = QUrl("ilwis://operations/stringreplace");
+        operation1.url = QUrl("ilwis://operations/mirrorrotateraster");
+        OVertex op1Id = workflow->addOperation(operation1);
 
-        NodeProperties stringsub;
-        stringsub.url = QUrl("ilwis://operations/stringsub");
-        OVertex op2Id = workflow->addOperation(stringsub);
+        NodeProperties operation2;
+        //stringsub.url = QUrl("ilwis://operations/stringsub");
+        operation2.url = QUrl("ilwis://operations/mirrorrotateraster");
+        OVertex op2Id = workflow->addOperation(operation2);
 
         EdgeProperties properties;
         OEdge flow1 = workflow->addOperationFlow(op1Id, op2Id, properties);
 
         workflow->debugPrintGraph();
 
+        IOperationMetaData rootMeta;
+        rootMeta = mastercatalog()->get({"ilwis://operations/stringreplace"}, itSINGLEOPERATION);
         qDebug() << workflow->createMetadata();
 
         //IOperationMetaData sReplaceMeta(stringreplace.operationUrl);
