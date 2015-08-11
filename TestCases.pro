@@ -3,12 +3,13 @@ TEMPLATE = subdirs
 SUBDIRS += \ 
    TestSuite \
    TestRunner \
-   sandbox \
+   #sandbox \
    #CoreTest \
    #postgrestest \
    #rasteroperationsTest \
    #ilwis3connectortest \
    #gdaltest \
    #featureoperations \
-   #WFSTest
+   #WFSTest \
+    workflow
 
