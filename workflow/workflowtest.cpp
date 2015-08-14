@@ -59,18 +59,18 @@ void WorkflowTest::sometest()
         OperationResource operation({"ilwis://operations/wf_test"}, itWORKFLOW);
         Ilwis::IWorkflow workflow(operation);
 
-        workflow->setProperty("longname", "First Workflow Operation");
-        workflow->setProperty("keywords", {"keyword1, workflow"});
+        workflow->source().addProperty("longname", "First Workflow Operation");
+        workflow->source().addProperty("keywords", {"keyword1, workflow"});
 
         NodeProperties operation1;
-        QUrl url1 = QUrl("ilwis://operations/stringreplace");
-        //QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
+        //QUrl url1 = QUrl("ilwis://operations/stringfind");
+        QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
         operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Id = workflow->addOperation(operation1);
 
         NodeProperties operation2;
-        QUrl url2 = QUrl("ilwis://operations/stringsub");
-        //QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
+        //QUrl url2 = QUrl("ilwis://operations/stringsub");
+        QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
         operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Id = workflow->addOperation(operation2);
 
@@ -80,18 +80,17 @@ void WorkflowTest::sometest()
         OEdge flow1 = workflow->addOperationFlow(op1Id, op2Id, properties);
 
         workflow->debugPrintGraph();
-
-        quint64 workflowId = workflow->createMetadata();
-        qDebug() << "workflow-metadata-id: " << workflowId;
+        workflow->createMetadata();
+        workflow->debugWorkflowMetadata();
 
         // output_find = stringfind(source,searchtext,[,begin])
         // stringsub(output_find,begin,[,end])
         //
-        // out_parameter_name1 = stringfind("foo42bar", "42");
-        // result = stringsub("foo42bar", out_parameter_name1, 3)
-        QString expectedSyntax = "wf_test(source,searchtext)";
+        // outindex = stringfind("foo42bar", "42");
+        // result = stringsub("foo42bar", outindex, 3)
+        QString expectedSyntax = "wf_test(source,searchtext,end=6)";
 
-        qDebug() << workflow->source()["syntax"];
+
 
         /*
         qDebug() << "do some workflow changes ...";
