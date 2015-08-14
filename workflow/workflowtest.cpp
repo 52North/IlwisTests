@@ -53,38 +53,56 @@ WorkflowTest::WorkflowTest(): IlwisTestCase("Workflow", "WorkflowTest")
 void WorkflowTest::sometest()
 {
     try {
+        //ESPIlwisObject o = mastercatalog()->get(mastercatalog()->url2id({"ilwis://operations/mirrorrotateraster"}, itSINGLEOPERATION));
+
         // to be set from API when creating an empty workflow
-        OperationResource operation({"ilwis://operations/sandbox_workflow"}, itWORKFLOW);
+        OperationResource operation({"ilwis://operations/wf_test"}, itWORKFLOW);
         Ilwis::IWorkflow workflow(operation);
 
         workflow->setProperty("longname", "First Workflow Operation");
         workflow->setProperty("keywords", {"keyword1, workflow"});
 
         NodeProperties operation1;
-        //stringreplace.url = QUrl("ilwis://operations/stringreplace");
-        operation1.url = QUrl("ilwis://operations/mirrorrotateraster");
+        QUrl url1 = QUrl("ilwis://operations/stringreplace");
+        //QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
+        operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Id = workflow->addOperation(operation1);
 
         NodeProperties operation2;
-        //stringsub.url = QUrl("ilwis://operations/stringsub");
-        operation2.url = QUrl("ilwis://operations/mirrorrotateraster");
+        QUrl url2 = QUrl("ilwis://operations/stringsub");
+        //QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
+        operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Id = workflow->addOperation(operation2);
 
         EdgeProperties properties;
+        properties.inputIndexNextStep = 1;
+        properties.outputIndexLastStep = 1;
         OEdge flow1 = workflow->addOperationFlow(op1Id, op2Id, properties);
 
         workflow->debugPrintGraph();
 
-        IOperationMetaData rootMeta;
-        rootMeta = mastercatalog()->get({"ilwis://operations/stringreplace"}, itSINGLEOPERATION);
-        qDebug() << workflow->createMetadata();
+        quint64 workflowId = workflow->createMetadata();
+        qDebug() << "workflow-metadata-id: " << workflowId;
 
-        //IOperationMetaData sReplaceMeta(stringreplace.operationUrl);
-        //OperationResource = sReplaceMeta->source();
+        // output_find = stringfind(source,searchtext,[,begin])
+        // stringsub(output_find,begin,[,end])
+        //
+        // out_parameter_name1 = stringfind("foo42bar", "42");
+        // result = stringsub("foo42bar", out_parameter_name1, 3)
+        QString expectedSyntax = "wf_test(source,searchtext)";
 
-        //IOperationMetaData sSubMeta(stringsub.operationUrl);
+        qDebug() << workflow->source()["syntax"];
 
+        /*
+        qDebug() << "do some workflow changes ...";
+        workflow->removeOperation(op1Id);
+        workflow->removeOperation(op2Id);
 
+        // TODO
+
+        quint64 sameWorkflowId = workflow->createMetadata();
+        QVERIFY2(workflowId == sameWorkflowId, "workflow ids are different!");
+        */
 
         /*
         Ilwis::IGeoReference grf("code=georef:type=corners,csy=epsg:21037,envelope=-3.02456e+06 -4.55547e+06 6.47259e+06 4.39692e+06,gridsize=1188 1120,name=grf1");

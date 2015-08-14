@@ -11,5 +11,5 @@ SUBDIRS += \
    #gdaltest \
    #featureoperations \
    #WFSTest \
-    workflow
+   workflow
 

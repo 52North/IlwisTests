@@ -64,11 +64,13 @@ void SandBox::sometest()
         workflow->setProperty("keywords", {"keyword1, workflow"});
 
         NodeProperties stringreplace;
-        stringreplace.url = QUrl("ilwis://operations/stringreplace");
+        QUrl url1 = QUrl("ilwis://operations/stringreplace");
+        stringreplace.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Id = workflow->addOperation(stringreplace);
 
         NodeProperties stringsub;
-        stringsub.url = QUrl("ilwis://operations/stringsub");
+        QUrl url2 = QUrl("ilwis://operations/stringsub");
+        stringsub.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Id = workflow->addOperation(stringsub);
 
         EdgeProperties properties;
