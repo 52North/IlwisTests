@@ -19,7 +19,8 @@ private:
     NEW_TEST(WorkflowTest);
 
 private Q_SLOTS:
-    void sometest();
+    void createWorkflowMetadata();
+    void executeSimpleWorkflow();
 };
 
 

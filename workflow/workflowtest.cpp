@@ -50,27 +50,25 @@ WorkflowTest::WorkflowTest(): IlwisTestCase("Workflow", "WorkflowTest")
 {
 }
 
-void WorkflowTest::sometest()
+void WorkflowTest::createWorkflowMetadata()
 {
     try {
-        //ESPIlwisObject o = mastercatalog()->get(mastercatalog()->url2id({"ilwis://operations/mirrorrotateraster"}, itSINGLEOPERATION));
-
         // to be set from API when creating an empty workflow
         OperationResource operation({"ilwis://operations/wf_test"}, itWORKFLOW);
         Ilwis::IWorkflow workflow(operation);
 
-        workflow->source().addProperty("longname", "First Workflow Operation");
-        workflow->source().addProperty("keywords", {"keyword1, workflow"});
+        workflow->connector()->setProperty("longname", "First Workflow Operation");
+        workflow->connector()->setProperty("keywords", {"keyword1, workflow"});
 
         NodeProperties operation1;
-        //QUrl url1 = QUrl("ilwis://operations/stringfind");
-        QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
+        QUrl url1 = QUrl("ilwis://operations/stringfind");
+        //QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
         operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Id = workflow->addOperation(operation1);
 
         NodeProperties operation2;
-        //QUrl url2 = QUrl("ilwis://operations/stringsub");
-        QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
+        QUrl url2 = QUrl("ilwis://operations/stringsub");
+        //QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
         operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Id = workflow->addOperation(operation2);
 
@@ -88,7 +86,7 @@ void WorkflowTest::sometest()
         //
         // outindex = stringfind("foo42bar", "42");
         // result = stringsub("foo42bar", outindex, 3)
-        QString expectedSyntax = "wf_test(source,searchtext,end=6)";
+        QString expectedSyntax = "wf_test(source,searchtext,end=6)"; // TODO named optionals
 
 
 
@@ -202,5 +200,10 @@ void WorkflowTest::sometest()
         qDebug() << err.message();
     }
 */
+}
+
+void WorkflowTest::executeSimpleWorkflow()
+{
+
 }
 
