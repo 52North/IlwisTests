@@ -5,6 +5,8 @@
 #include "ilwistestclass.h"
 #include "oshelper.h"
 
+using namespace Ilwis;
+
 IlwisTestCase::IlwisTestCase(const QString &name, const QString& module, QObject *parent) :
     QObject(parent), _name(name), _module(module){
 }
@@ -28,8 +30,10 @@ void IlwisTestCase::initTestCase()
 {
     QString folder = TestSuite::instance()->inputDataPath();
 
-    if ( !QFileInfo(folder).exists())
+    if ( !QFileInfo(folder).exists()) {
+        MESSAGE0("skip test as no data path defined.");
         throw SkipTest("no data path defined");
+    }
     _baseDataPath = QDir(folder);
     QString ss = _baseDataPath.absolutePath();
     folder  = TestSuite::instance()->outputDataPath();

@@ -53,12 +53,12 @@ WorkflowTest::WorkflowTest(): IlwisTestCase("Workflow", "WorkflowTest")
 void WorkflowTest::createWorkflowMetadata()
 {
     try {
-        // to be set from API when creating an empty workflow
         OperationResource operation({"ilwis://operations/wf_test"}, itWORKFLOW);
         Ilwis::IWorkflow workflow(operation);
 
-        workflow->connector()->setProperty("longname", "First Workflow Operation");
-        workflow->connector()->setProperty("keywords", {"keyword1, workflow"});
+        workflow->setLongName("Workflow Creation");
+        QVERIFY2(workflow->getLongName() == "Workflow Creation", "long name is not correct");
+        workflow->setKeywords({"keyword1, workflow"});
 
         NodeProperties operation1;
         QUrl url1 = QUrl("ilwis://operations/stringfind");
@@ -77,17 +77,26 @@ void WorkflowTest::createWorkflowMetadata()
         properties.outputIndexLastStep = 1;
         OEdge flow1 = workflow->addOperationFlow(op1Id, op2Id, properties);
 
-        workflow->debugPrintGraph();
         workflow->createMetadata();
-        workflow->debugWorkflowMetadata();
+        //workflow->debugPrintGraph();
+        //workflow->debugWorkflowMetadata();
 
-        // output_find = stringfind(source,searchtext,[,begin])
-        // stringsub(output_find,begin,[,end])
-        //
-        // outindex = stringfind("foo42bar", "42");
-        // result = stringsub("foo42bar", outindex, 3)
-        QString expectedSyntax = "wf_test(source,searchtext,end=6)"; // TODO named optionals
+        // wf_test( 44_pin_source,44_pin_searchtext [,44_pin_begin,45_pin_begin,45_pin_end] )
+        QStringList requireds;
+        QStringList optionals;
+        workflow->parametersFromSyntax(requireds, optionals);
+        QVERIFY2(requireds.size() == 2, "expected 2 required parameters!");
+        QVERIFY2(optionals.size() == 3, "expected 3 optional parameters!");
 
+        ExecutionContext ctx;
+        SymbolTable symbolTable;
+        QString executeString = "wf_test(foo42bar, 42)";
+        bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
+        if ( !ok) {
+            QFAIL("workflow execution failed.");
+        }
+
+        quint32 expectedIndex = 3;
 
 
         /*
@@ -200,10 +209,5 @@ void WorkflowTest::createWorkflowMetadata()
         qDebug() << err.message();
     }
 */
-}
-
-void WorkflowTest::executeSimpleWorkflow()
-{
-
 }
 

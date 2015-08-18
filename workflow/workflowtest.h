@@ -20,7 +20,6 @@ private:
 
 private Q_SLOTS:
     void createWorkflowMetadata();
-    void executeSimpleWorkflow();
 };
 
 
