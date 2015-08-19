@@ -64,40 +64,53 @@ void WorkflowTest::createWorkflowMetadata()
         QUrl url1 = QUrl("ilwis://operations/stringfind");
         //QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
         operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
-        OVertex op1Id = workflow->addOperation(operation1);
+        OVertex op1Vertex = workflow->addOperation(operation1);
 
         NodeProperties operation2;
         QUrl url2 = QUrl("ilwis://operations/stringsub");
         //QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
         operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
-        OVertex op2Id = workflow->addOperation(operation2);
+        OVertex op2Vertex = workflow->addOperation(operation2);
+
+        SPInputDataProperties op2InputProperty = workflow->addInputDataProperties(op2Vertex);
+        op2InputProperty->assignedParameterIndex = 0; // as input on stringsub
+
+        IOperationMetaData metadata1;
+        metadata1.prepare(mastercatalog()->id2Resource(operation1.id));
+        IOperationMetaData metadata2;
+        metadata2.prepare(mastercatalog()->id2Resource(operation2.id));
+
+
 
         EdgeProperties properties;
-        properties.inputIndexNextStep = 1;
-        properties.outputIndexLastStep = 1;
-        OEdge flow1 = workflow->addOperationFlow(op1Id, op2Id, properties);
+        properties.outputIndexLastOperation = 0; // result of stringfind (idx)
+        properties.inputIndexNextOperation = 1; // result as input on stringsub
+        workflow->addOperationFlow(op1Vertex, op2Vertex, properties);
 
         workflow->createMetadata();
-        //workflow->debugPrintGraph();
-        //workflow->debugWorkflowMetadata();
+        workflow->debugPrintGraph();
+        workflow->debugWorkflowMetadata();
 
-        // wf_test( 44_pin_source,44_pin_searchtext [,44_pin_begin,45_pin_begin,45_pin_end] )
+        // wf_test( 44_pin_source,44_pin_searchtext [,44_pin_begin,45_pin_end] )
         QStringList requireds;
         QStringList optionals;
         workflow->parametersFromSyntax(requireds, optionals);
         QVERIFY2(requireds.size() == 2, "expected 2 required parameters!");
-        QVERIFY2(optionals.size() == 3, "expected 3 optional parameters!");
+        QVERIFY2(optionals.size() == 2, "expected 2 optional parameters!");
 
         ExecutionContext ctx;
         SymbolTable symbolTable;
-        QString executeString = "wf_test(foo42bar, 42)";
+
+        QString source = "foo42bar";
+        op2InputProperty->value = source;
+        QString executeString = QString("out=wf_test(%1, 42)").arg(source);
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
             QFAIL("workflow execution failed.");
         }
 
-        quint32 expectedIndex = 3;
-
+        QString actual = symbolTable.getValue("out").toString();
+        QVERIFY2(actual == "42bar", "incorrect substring.");
 
         /*
         qDebug() << "do some workflow changes ...";
