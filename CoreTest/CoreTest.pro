@@ -19,7 +19,7 @@ win32{
 
 DEFINES += CORETEST_LIBRARY
 
-SOURCES += coretest.cpp \
+SOURCES += \
     util/coordinatetest.cpp \
     util/sizetest.cpp \
     util/numericrangetest.cpp \
@@ -38,8 +38,7 @@ SOURCES += coretest.cpp \
     ilwisobjects/coverage/rastercoveragetest.cpp \
     ilwisobjects/coverage/featurecoveragetest.cpp
 
-HEADERS += coretest.h\
-        coretest_global.h \
+HEADERS +=\
     util/coordinatetest.h \
     util/sizetest.h \
     util/numericrangetest.h \
