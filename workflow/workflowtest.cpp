@@ -122,9 +122,9 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         QVERIFY2(workflow->getKeywords().contains("ndvi"), "no 'ndvi' keyword found!");
 
         Ilwis::IRasterCoverage vis;
-        vis.prepare(makeInputPath("b2.tiff"));
+        vis.prepare(makeInputPath("b2.tif"));
         Ilwis::IRasterCoverage nir;
-        nir.prepare(makeInputPath("b3.tiff"));
+        nir.prepare(makeInputPath("b3.tif"));
 
 
         // ------------- create formal workflow description without data
@@ -187,14 +187,22 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
 
         ExecutionContext ctx;
         SymbolTable symbolTable;
-        // QString executeString = QString("out=ndvi()"); //as constant
+        // QString executeString = QString("ndvi_out=ndvi()"); //as constant
         QString executeString = QString("out=ndvi(%1,%2)").arg(nir->name()).arg(vis->name());
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
             QFAIL("workflow execution failed.");
         }
-        QString actual = symbolTable.getValue("out").toString();
-        //QVERIFY2(actual == "42bar", "incorrect substring.");
+        Symbol actual = symbolTable.getSymbol("ndvi_out");
+        QVERIFY2(actual.isValid(), "ndvi result is not valid.");
+        QVERIFY2(actual._type & itRASTER, "ndvi result is not a raster.");
+
+        Ilwis::IRasterCoverage raster("ilwis://internalcatalog/ndvi_out");
+        raster->connectTo(makeOutputPath("ndvi_out.mpr"), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+
     }
     catch(Ilwis::ErrorObject& err) {
         qDebug() << err.message();
