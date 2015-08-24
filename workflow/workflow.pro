@@ -29,7 +29,7 @@ HEADERS += \
     workflowtest.h
 
 
-unix|win32: LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
+LIBS += -L$$PWD/../../libraries/$$PLATFORM$$CONF/TestSuite/ -lTestSuite
 
 INCLUDEPATH += $$PWD/../TestSuite
 

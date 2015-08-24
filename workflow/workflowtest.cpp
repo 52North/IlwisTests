@@ -184,10 +184,9 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         workflow->debugPrintGraph();
         workflow->debugWorkflowMetadata();
 
-
         ExecutionContext ctx;
         SymbolTable symbolTable;
-        // QString executeString = QString("ndvi_out=ndvi()"); //as constant
+        //QString executeString = QString("ndvi_out=ndvi()"); //as constant
         QString executeString = QString("ndvi_out=ndvi(%1,%2)").arg(nir->name()).arg(vis->name());
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
@@ -198,9 +197,9 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         QVERIFY2(actual._type & itCOVERAGE, "ndvi result is not a raster.");
 
         Ilwis::IRasterCoverage raster("ilwis://internalcatalog/ndvi_out");
-        QString outFile = makeOutputPath("ndvi_out.mpr");
+        QString outFile = makeOutputPath("ndvi_out.tiff");
         qDebug() << "write ndvi result to " << outFile;
-        raster->connectTo(outFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->connectTo(outFile, "GTiff","gdal",Ilwis::IlwisObject::cmOUTPUT);
         raster->createTime(Ilwis::Time::now());
         raster->store();
 
