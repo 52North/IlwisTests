@@ -195,13 +195,14 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         }
         Symbol actual = symbolTable.getSymbol("ndvi_out");
         QVERIFY2(actual.isValid(), "ndvi result is not valid.");
-        QVERIFY2(actual._type & itRASTER, "ndvi result is not a raster.");
+        QVERIFY2(actual._type & itCOVERAGE, "ndvi result is not a raster.");
 
         Ilwis::IRasterCoverage raster("ilwis://internalcatalog/ndvi_out");
-        raster->connectTo(makeOutputPath("ndvi_out.mpr"), "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        QString outFile = makeOutputPath("ndvi_out.mpr");
+        qDebug() << "write ndvi result to " << outFile;
+        raster->connectTo(outFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
         raster->createTime(Ilwis::Time::now());
         raster->store();
-
 
     }
     catch(Ilwis::ErrorObject& err) {
