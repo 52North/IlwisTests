@@ -188,7 +188,7 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         ExecutionContext ctx;
         SymbolTable symbolTable;
         // QString executeString = QString("ndvi_out=ndvi()"); //as constant
-        QString executeString = QString("out=ndvi(%1,%2)").arg(nir->name()).arg(vis->name());
+        QString executeString = QString("ndvi_out=ndvi(%1,%2)").arg(nir->name()).arg(vis->name());
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
             QFAIL("workflow execution failed.");
