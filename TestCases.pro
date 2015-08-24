@@ -4,7 +4,7 @@ SUBDIRS += \
    TestSuite \
    TestRunner \
    #sandbox \
-   CoreTest \
+   #CoreTest \
    #postgrestest \
    #rasteroperationsTest \
    #ilwis3connectortest \

@@ -62,17 +62,16 @@ void WorkflowTest::executeStringOperationsWorkflow()
 
         NodeProperties operation1;
         QUrl url1 = QUrl("ilwis://operations/stringfind");
-        //QUrl url1 = QUrl("ilwis://operations/mirrorrotateraster");
         operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Vertex = workflow->addOperation(operation1);
 
         NodeProperties operation2;
         QUrl url2 = QUrl("ilwis://operations/stringsub");
-        //QUrl url2 = QUrl("ilwis://operations/mirrorrotateraster");
         operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Vertex = workflow->addOperation(operation2);
 
-        SPInputDataProperties op2InputProperty = workflow->addInputDataProperties(op2Vertex, 0);
+        SPAssignedInputData sharedInputProperty = workflow->assignInputData(op2Vertex, 0);
+        workflow->assignInputData({op1Vertex, 0}, sharedInputProperty);
 
         EdgeProperties properties;
         properties.outputIndexLastOperation = 0; // result of stringfind (idx)
@@ -94,8 +93,7 @@ void WorkflowTest::executeStringOperationsWorkflow()
         SymbolTable symbolTable;
 
         QString source = "foo42bar";
-        op2InputProperty->value = source;
-        QString executeString = QString("out=wf_test(%1, 42)").arg(source);
+        QString executeString = QString("out=wf_test(%1,42)").arg(source);
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
             QFAIL("workflow execution failed.");
@@ -140,34 +138,36 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         NodeProperties calcNDVIDividentOperation;
         calcNDVIDividentOperation.id = binaryOperationId;
         OVertex ndviDividentVertex = workflow->addOperation(calcNDVIDividentOperation);
-        SPInputDataProperties difference = workflow->addInputDataProperties(ndviDividentVertex, 2);
+        SPAssignedInputData difference = workflow->assignInputData(ndviDividentVertex, 2);
         difference->value = "substract";
 
         // divisor calculation
         NodeProperties calcNDVIDivisorOperation;
         calcNDVIDivisorOperation.id = binaryOperationId;
         OVertex ndviDivisorVertex = workflow->addOperation(calcNDVIDivisorOperation);
-        SPInputDataProperties sum = workflow->addInputDataProperties(ndviDivisorVertex, 2);
+        SPAssignedInputData sum = workflow->assignInputData(ndviDivisorVertex, 2);
         sum->value = "add";
 
         // ndvi ratio
         NodeProperties calcNDVIOperation;
         calcNDVIOperation.id = binaryOperationId;
         OVertex ndviVertex = workflow->addOperation(calcNDVIOperation);
-        SPInputDataProperties ratio = workflow->addInputDataProperties(ndviVertex, 2);
+        SPAssignedInputData ratio = workflow->assignInputData(ndviVertex, 2);
         ratio->value = "divide";
 
         // ------------- declare input data before execution
 
         // input data
-        SPInputDataProperties nirInput = workflow->addInputDataProperties(ndviDividentVertex, 0);
-        //nirInput->value = nir->name();
-        SPInputDataProperties visInput = workflow->addInputDataProperties(ndviDividentVertex, 1);
-        //visInput->value = vis->name();
+        SPAssignedInputData nirInput = workflow->assignInputData(ndviDividentVertex, 0);
+        nirInput->inputName = "NIR";
+        //nirInput->value = nir->name(); // as constant
+        SPAssignedInputData visInput = workflow->assignInputData(ndviDividentVertex, 1);
+        visInput->inputName = "VIS";
+        //visInput->value = vis->name(); // as constant
 
         // using shared data input
-        workflow->assignInputData(ndviDivisorVertex, nirInput, 0);
-        workflow->assignInputData(ndviDivisorVertex, visInput, 1);
+        workflow->assignInputData({ndviDivisorVertex, 0}, nirInput);
+        workflow->assignInputData({ndviDivisorVertex, 1}, visInput);
 
         // link divident and divisor outputs to ratio operation
         EdgeProperties divisorInputProperties;
@@ -187,7 +187,8 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
 
         ExecutionContext ctx;
         SymbolTable symbolTable;
-        QString executeString = QString("out=ndvi()");
+        // QString executeString = QString("out=ndvi()"); //as constant
+        QString executeString = QString("out=ndvi(%1,%2)").arg(nir->name()).arg(vis->name());
         bool ok = commandhandler()->execute(executeString, &ctx, symbolTable);
         if ( !ok) {
             QFAIL("workflow execution failed.");
