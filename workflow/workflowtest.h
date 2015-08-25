@@ -18,8 +18,8 @@ public:
 private:
     NEW_TEST(WorkflowTest);
 
-    void executeStringOperationsWorkflow();
 private Q_SLOTS:
+    void executeStringOperationsWorkflow();
     void executeCalculateNDVIWorkflow();
 };
 
