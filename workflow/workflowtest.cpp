@@ -62,12 +62,12 @@ void WorkflowTest::executeStringOperationsWorkflow()
 
         NodeProperties operation1;
         QUrl url1 = QUrl("ilwis://operations/stringfind");
-        operation1.id = mastercatalog()->url2id(url1, itSINGLEOPERATION);
+        operation1._operationid = mastercatalog()->url2id(url1, itSINGLEOPERATION);
         OVertex op1Vertex = workflow->addOperation(operation1);
 
         NodeProperties operation2;
         QUrl url2 = QUrl("ilwis://operations/stringsub");
-        operation2.id = mastercatalog()->url2id(url2, itSINGLEOPERATION);
+        operation2._operationid = mastercatalog()->url2id(url2, itSINGLEOPERATION);
         OVertex op2Vertex = workflow->addOperation(operation2);
 
         SPAssignedInputData sharedInputProperty = workflow->assignInputData(op2Vertex, 0);
@@ -133,23 +133,23 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         QUrl url1 = QUrl("ilwis://operations/binarymathraster");
         quint64 binaryOperationId = mastercatalog()->url2id(url1, itSINGLEOPERATION);
 
-        // divident calculation
-        NodeProperties calcNDVIDividentOperation;
-        calcNDVIDividentOperation.id = binaryOperationId;
-        OVertex ndviDividentVertex = workflow->addOperation(calcNDVIDividentOperation);
-        SPAssignedInputData difference = workflow->assignInputData(ndviDividentVertex, 2);
+        // Substract calculation
+        NodeProperties calcNDVISubstractOperation;
+        calcNDVISubstractOperation._operationid = binaryOperationId;
+        OVertex ndviSubstractVertex = workflow->addOperation(calcNDVISubstractOperation);
+        SPAssignedInputData difference = workflow->assignInputData(ndviSubstractVertex, 2);
         difference->value = "substract"; // constant assignment
 
-        // divisor calculation
-        NodeProperties calcNDVIDivisorOperation;
-        calcNDVIDivisorOperation.id = binaryOperationId;
-        OVertex ndviDivisorVertex = workflow->addOperation(calcNDVIDivisorOperation);
-        SPAssignedInputData sum = workflow->assignInputData(ndviDivisorVertex, 2);
+        // Add calculation
+        NodeProperties calcNDVIAddOperation;
+        calcNDVIAddOperation._operationid = binaryOperationId;
+        OVertex ndviAddVertex = workflow->addOperation(calcNDVIAddOperation);
+        SPAssignedInputData sum = workflow->assignInputData(ndviAddVertex, 2);
         sum->value = "add"; // constant assignment
 
         // ndvi ratio
         NodeProperties calcNDVIOperation;
-        calcNDVIOperation.id = binaryOperationId;
+        calcNDVIOperation._operationid = binaryOperationId;
         OVertex ndviVertex = workflow->addOperation(calcNDVIOperation);
         SPAssignedInputData ratio = workflow->assignInputData(ndviVertex, 2);
         ratio->value = "divide"; // constant assignment
@@ -157,26 +157,27 @@ void WorkflowTest::executeCalculateNDVIWorkflow()
         // ------------- declare input data before execution
 
         // input data
-        SPAssignedInputData nirInput = workflow->assignInputData(ndviDividentVertex, 0);
+        SPAssignedInputData nirInput = workflow->assignInputData(ndviSubstractVertex, 0);
         nirInput->inputName = "NIR";
         nirInput->value = nir->name(); // constant assignment
-        SPAssignedInputData visInput = workflow->assignInputData(ndviDividentVertex, 1);
+        SPAssignedInputData visInput = workflow->assignInputData(ndviSubstractVertex, 1);
         visInput->inputName = "VIS";
 
         // using shared data input
-        workflow->assignInputData({ndviDivisorVertex, 0}, nirInput);
-        workflow->assignInputData({ndviDivisorVertex, 1}, visInput);
+        workflow->assignInputData({ndviAddVertex, 0}, nirInput);
+        workflow->assignInputData({ndviAddVertex, 1}, visInput);
 
-        // link divident and divisor outputs to ratio operation
-        EdgeProperties divisorInputProperties;
-        divisorInputProperties.outputIndexLastOperation = 0;
-        divisorInputProperties.inputIndexNextOperation = 0;
-        workflow->addOperationFlow(ndviDividentVertex, ndviVertex, divisorInputProperties);
+        // link Substract and Add outputs to ratio operation
+        EdgeProperties addInputProperties;
+        addInputProperties.outputIndexLastOperation = 0;
+        addInputProperties.inputIndexNextOperation = 0;
+        workflow->addOperationFlow(ndviAddVertex, ndviVertex, addInputProperties);
 
-        EdgeProperties dividentInputProperties;
-        dividentInputProperties.outputIndexLastOperation = 0;
-        dividentInputProperties.inputIndexNextOperation = 1;
-        workflow->addOperationFlow(ndviDivisorVertex, ndviVertex, dividentInputProperties);
+		
+        EdgeProperties substractInputProperties;
+        substractInputProperties.outputIndexLastOperation = 0;
+        substractInputProperties.inputIndexNextOperation = 1;
+        workflow->addOperationFlow(ndviSubstractVertex, ndviVertex, substractInputProperties);
 
         workflow->createMetadata();
         workflow->debugPrintGraph();
