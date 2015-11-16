@@ -19,6 +19,11 @@ public:
 private slots:
     void testMirrorRotate();
     void testResample();
+
+    void iffRasterTest();
+    void iffRasterGeorefTest();
+    void iffRasterInvalidParamsTest();
+    void iffRasterInvalidParamsTest2();
 };
 
 #endif // RASTEROPERATIONS_H
