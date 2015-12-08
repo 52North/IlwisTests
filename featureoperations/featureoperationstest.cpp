@@ -1364,7 +1364,7 @@ void FeatureOperations::SpatialRelationOverlapsPoint_False_Test()
 void FeatureOperations::Buffer_Test()
 {
     try {
-        QString expr = QString("buffer123=buffer(ne_110m_admin_0_countries.shp, %1)").arg(5);
+        QString expr = QString("buffer123=buffer(ne_110m_admin_0_countries.shp, %1, %2, %3)").arg(5).arg(8).arg("round");
 
         Ilwis::ExecutionContext ctx;
         Ilwis::SymbolTable syms;
