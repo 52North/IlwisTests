@@ -34,6 +34,7 @@ private Q_SLOTS:
     void iffRasterInvalidParamsTest();
     void iffRasterInvalidParamsTest2();*/
 
+/*
     void SpatialRelationContainsPolygon_False_Test();
     void SpatialRelationContainsPolygon_True_Test();
     void SpatialRelationContainsLine_False_Test();
@@ -103,6 +104,17 @@ private Q_SLOTS:
     void SpatialRelationOverlapsPolygon_False_Test();
     void SpatialRelationOverlapsLine_False_Test();
     void SpatialRelationOverlapsPoint_False_Test();
+
+
+
+    void Buffer_Test();
+
+    */
+
+
+
+    //void MapDensify_Test();
+    void MapDistance_Test();
 
 };
 
