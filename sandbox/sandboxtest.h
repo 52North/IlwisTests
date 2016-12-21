@@ -114,7 +114,21 @@ private Q_SLOTS:
 
 
     //void MapDensify_Test();
-    void MapDistance_Test();
+    //void MapDistance_Test();
+
+//    void SunsetTime_Test();
+
+    /*void SatelliteAzimuthOperation_Test();
+    void SatelliteZenithOperation_Test();
+    void SolarAzimuth_Test();
+    void SolarZenith_Test();
+
+    void AtmosphericCorrection_Test();
+    */
+
+    //void Resample_Test();
+
+        void SMCEStdScript_Test();
 
 };
 

@@ -26,7 +26,7 @@
 #include "symboltable.h"
 #include "ilwiscontext.h"
 #include "mastercatalog.h"
-#include "workflow.h"
+//#include "workflow.h"
 #include "ilwisoperation.h"
 #include "rasterinterpolator.h"
 #include "resampleraster.h"
@@ -41,7 +41,7 @@
 #include "intervalrange.h"
 
 
-
+#include "../util/triangulation/solartriangulation.h"
 
 
 
@@ -1499,7 +1499,7 @@ void SandBox::MapDensify_Test()
 }
 */
 
-
+/*
 void SandBox::MapDistance_Test()
 {
     try {
@@ -1524,3 +1524,400 @@ void SandBox::MapDistance_Test()
         QVERIFY(false);
     }
 }
+*/
+/*
+
+void SandBox::AtmosphericCorrection_Test()
+{
+    try {
+// expression	"script testsmac{format(stream,"rastercoverage")}=atmosphericcorrection(file:///f:/testdata/smac_willem/toa_nir_3361610_2015_078.dat,file:///f:/testdata/smac_willem/ILWIS smac_coeffiles\Coef_RAPIDEYE_NIR_1.dat,file:///f:/testdata/smac_willem/atmospherical data maps/originally downloaded/modal2_e_aer_od_2015-03-30_rgb_1440x720.float.tif,file:///f:/testdata/smac_willem/atmospherical data maps/imported in envi/tcwv_mar_aug2015.dat,file:///f:/testdata/smac_willem/atmospherical data maps/imported in envi/tco3_mar_aug2015.dat,file:///f:/testdata/smac_willem/atmospherical data maps/imported in envi/sp_mar_aug2015.dat,2015,3,30,36000)"
+        //raster, coeffile, opticalthickness, watervaporcontent, ozonecontentmap, surfacepressuremap, year, month, day, utctime
+        QString expr = QString("smac=atmosphericcorrection(file:///f:/testdata/smac_willem/toa_NIR_3361610_2015_078_clipped3.tif, %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14)")
+                .arg("file:///f:/testdata/smac_willem/ILWIS_smac_coeffiles/Coef_RAPIDEYE_NIR_1")
+                .arg("file:///f:/testdata/smac_willem/MODAL2_E_AER_OD_2015_03_30_rgb_1440x720.FLOAT.TIF")
+                //.arg("file:///f:/testdata/smac_willem/MODAL2_E_AER_OD_2015_03_30_rgb_1440x720_clipped2.mpr")
+                .arg("file:///f:/testdata/smac_willem/tcwv_mar_aug2015.dat")
+                .arg("file:///f:/testdata/smac_willem/tco3_mar_aug2015.dat")
+                .arg("file:///f:/testdata/smac_willem/sp_mar_aug2015.dat")
+                .arg("1")
+                .arg("2015")
+                .arg("6")
+                .arg("26")
+                .arg("11")
+                .arg("48.85152")
+                .arg("13.52778")
+                .arg("6.5")
+                .arg("630000.0")
+                ;
+
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("smac.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+*/
+
+
+
+/*
+void SandBox::Resample_Test()
+{
+    try {
+        //QString expr = QString("aerosolresampled=resample(file:///f:/testdata/smac_willem/MODAL2_E_AER_OD_2015_03_30_rgb_1440x720.FLOAT.TIF, file:///f:/testdata/smac_willem/toa_nir_3361610_2015_078.grf, bicubic)");
+        QString expr = QString("aerosolresampled=resample(file:///f:/testdata/smac_willem/tcwv_mar_aug2015.dat, file:///f:/testdata/smac_willem/toa_nir_3361610_2015_078.grf, bicubic)");
+                //.arg("file:///f:/testdata/smac_willem/ILWIS smac_coeffiles/Coef_RAPIDEYE_NIR_1")
+                //.arg("file:///f:/testdata/smac_willem/MODAL2_E_AER_OD_2015_03_30_rgb_1440x720.FLOAT.TIF")
+                //.arg("file:///f:/testdata/smac_willem/tcwv_mar_aug2015.dat")
+                //.arg("file:///f:/testdata/smac_willem/tco3_mar_aug2015.dat")
+                //.arg("file:///f:/testdata/smac_willem/sp_mar_aug2015.dat")
+
+
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("tcwv_mar_aug2015_resampled.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+*/
+
+/*
+
+
+void SandBox::SatelliteAzimuthOperation_Test()
+{
+    try {
+        QString expr = QString("satazimuth=satelliteazimuth(file:///f:/testdata/smac_willem/toa_NIR_3361610_2015_078_clipped3.tif, %1, %2, %3, %4)")
+                .arg("48.85152")
+                .arg("13.52778")
+                .arg("6.5")
+                .arg("630000.0")
+                ;
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("satazimuth.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+
+
+void SandBox::SatelliteZenithOperation_Test()
+{
+    try {
+        QString expr = QString("satzenith=satellitezenithangle(file:///f:/testdata/smac_willem/toa_NIR_3361610_2015_078_clipped3.tif, %1, %2, %3, %4)")
+                .arg("48.85152")
+                .arg("13.52778")
+                .arg("6.5")
+                .arg("630000.0")
+                ;
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("satzenith.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+
+
+
+void SandBox::SolarAzimuth_Test()
+{
+    try {
+        QString expr = QString("solarazimuth=solarazimuth(file:///f:/testdata/smac_willem/toa_NIR_3361610_2015_078_clipped3.tif, %1, %2, %3, %4)")
+                .arg("2015")
+                .arg("6")
+                .arg("26")
+                .arg("11")
+                ;
+
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("solarazimuth.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+
+
+void SandBox::SolarZenith_Test()
+{
+    try {
+        QString expr = QString("solarzenithangle=solarzenithangle(file:///f:/testdata/smac_willem/toa_NIR_3361610_2015_078_clipped3.tif, %1, %2, %3, %4)")
+                .arg("2015")
+                .arg("6")
+                .arg("26")
+                .arg("11")
+                ;
+
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "transform done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        QString outputFile = makeOutputPath("solarzenithangle.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+*/
+
+
+
+/*
+void SandBox::SunsetTime_Test()
+{
+    try {
+        ::Ilwis::SolarTriangulation st(2015, 6, 26, 11);
+        double sunsetUtcHours = st.getSunSetTime(48.85152, 13.52778);
+
+        DOTEST(sunsetUtcHours != rUNDEF, "sunset time calculated");
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+*/
+
+
+
+
+
+void SandBox::SMCEStdScript_Test()
+{
+
+    qDebug() << "SMCE TEST";
+    try {
+
+        //Piecewise linear 5
+        //("iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,%lg*%S+%lg))))",
+
+        //Test Map: Embanked_areas_dist
+
+        /*
+a1=0.000012637687191638382
+b1=0.15500000000000003
+a2=0.000017346274252072766
+b2=0.08327777777777784
+a3=0.000006942782182171986
+b3=0.41567460317460303
+a4=-0.0000029126206766540097
+b4=0.9612313432835822
+a5=0
+b5=0.7275
+a6=0
+b6=0.49
+a7=0
+b7=0.3275
+a8=0
+b8=0.14
+
+x0=0
+x1=15232.2175
+x2=31950.505
+x3=55356.1075
+x4=80247.78
+x5=102167.3125
+x6=118885.6
+x7=131145.6775
+x8=148607
+        */
+
+        /*"iffraster(%1<%lg,%lg*%S+%lg,"
+        "                   iffraster(%1<%lg,%lg*%S+%lg,"
+        "                                       iffraster(%1<%lg,%lg*%S+%lg,"
+        "                                                           iffraster(%1<%lg,%lg*%S+%lg,%lg*%S+%lg))))";
+            */
+
+
+        // original
+        /*"iffraster(%1<%lg,%lg*%S+%lg,"
+        "                   iffraster(%1<%lg,%lg*%S+%lg,"
+        "                                       iffraster(%1<%lg,%lg*%S+%lg,"
+        "                                                           iffraster(%1<%lg,%lg*%S+%lg,%lg*%S+%lg))))";
+        */
+
+        //"sData, m_Anchors[1].X, a1, sData, b1, sData, m_Anchors[2].X, a2, sData, b2, sData, m_Anchors[3].X, a3, sData, b3, sData, m_Anchors[4].X, a4, sData, b4, a5, sData, b5);";
+
+        //binarylogicalraster(gridcoverage1,gridcoverage2|number|boolean,logicaloperation=and|or|xor|less|lesseq|neq|eq|greater|greatereq
+        // rcReproj = Engine.do("resample", rc.name(), targetGeoRef.name(), "bilinear")
+
+        //QString initline = "from ilwisobjects import *\nEngine.setWorkingCatalog('file:///F:/testdata2/BFD/Final_Data/SMCE_Greenbelt_submission_2711/')";
+
+        /*
+        QString line =
+         QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 15232.2175, less), binarymathraster(binarymathraster(0.000012637687191638382,Embanked_areas_dist.mpr, times), 0.15500000000000003, add)),") +
+             QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 31950.505, less), binarymathraster(binarymathraster(0.000017346274252072766,Embanked_areas_dist.mpr, times), 0.08327777777777784, add)),") +
+                QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 55356.1075, less), binarymathraster(binarymathraster(0.000006942782182171986,Embanked_areas_dist.mpr, times), 0.41567460317460303, add)),") +
+                    QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 80247.78, less), binarymathraster(binarymathraster(-0.0000029126206766540097,Embanked_areas_dist.mpr, times), 0.9612313432835822, add)),") +
+                        QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 102167.3125, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.7275, add)),") +
+                            QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 118885.6, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.49, add)),") +
+                                QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 131145.6775, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.3275, add)),") +
+                                    QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 148607, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.14, add))))))))))");
+        */
+
+/*
+        QString line =
+         QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 15232.2175, less), binarymathraster(binarymathraster(0.000012637687191638382,Embanked_areas_dist.mpr, times), 0.15500000000000003, add)),") +
+             QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 31950.505, less), binarymathraster(binarymathraster(0.000017346274252072766,Embanked_areas_dist.mpr, times), 0.08327777777777784, add)),") +
+                QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 55356.1075, less), binarymathraster(binarymathraster(0.000006942782182171986,Embanked_areas_dist.mpr, times), 0.41567460317460303, add)),") +
+                    QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 80247.78, less), binarymathraster(binarymathraster(-0.0000029126206766540097,Embanked_areas_dist.mpr, times), 0.9612313432835822, add)),") +
+                        QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 102167.3125, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.7275, add)),") +
+                            QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 118885.6, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.49, add)),") +
+                                QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 131145.6775, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.3275, add)),") +
+                                    QStringLiteral("iffraster(binarylogicalraster((Embanked_areas_dist.mpr, 148607, less), binarymathraster(binarymathraster(0,Embanked_areas_dist.mpr, times), 0.14, add))))))))))");
+
+
+
+*/
+
+
+        /*QString line = QStringLiteral("import ilwis\nilwis.Engine.setWorkingCatalog('file:///F:/testdata2/BFD/Final_Data/SMCE_Greenbelt_submission_2711/')\n") +
+                QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 15232.2175, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000012637687191638382, 'Embanked_areas_dist.mpr', 'times'), 0.15500000000000003, 'add'),") +
+                    QStringLiteral("ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster',0,'Embanked_areas_dist.mpr', 'times'), 0.14, 'add'))");
+*/
+
+                /*QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 15232.2175, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000012637687191638382, 'Embanked_areas_dist.mpr', 'times'), 0.15500000000000003, 'add'),") +
+                    QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 31950.505, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000017346274252072766, 'Embanked_areas_dist.mpr', 'times'), 0.08327777777777784, 'add'),") +
+                        QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 55356.1075, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000006942782182171986, 'Embanked_areas_dist.mpr', 'times'), 0.41567460317460303, 'add'),") +
+                            QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 80247.78, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', -0.0000029126206766540097, 'Embanked_areas_dist.mpr', 'times'), 0.9612313432835822, 'add'),") +
+                                QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 102167.3125, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, 'Embanked_areas_dist.mpr', 'times'), 0.7275, 'add'),") +
+                                    QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 118885.6, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, 'Embanked_areas_dist.mpr', 'times'), 0.49, 'add'),") +
+                                        QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', 'Embanked_areas_dist.mpr', 131145.6775, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, 'Embanked_areas_dist.mpr', 'times'), 0.3275, 'add'),") +
+                                            QStringLiteral("ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster',0,'Embanked_areas_dist.mpr', 'times'), 0.14, 'add'))))))))");*/
+
+
+        //QString line = ""; // double quotes messes things up in expression parsing so we replace them by single quotes
+        //line.replace("\"", "'");
+
+
+/*
+        QString line = QStringLiteral("import ilwis\nilwis.Engine.setWorkingCatalog('file:///F:/testdata2/BFD/Final_Data/SMCE_Greenbelt_submission_2711/sub')\n") +
+                QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 15232.2175, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000012637687191638382, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.15500000000000003, 'add'),") +
+                    QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 31950.505, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000017346274252072766, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.08327777777777784, 'add'),") +
+                        QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 55356.1075, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0.000006942782182171986, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.41567460317460303, 'add'),") +
+                            QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 80247.78, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', -0.0000029126206766540097, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.9612313432835822, 'add'),") +
+                                QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 102167.3125, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.7275, 'add'),") +
+                                    QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 118885.6, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.49, 'add'),") +
+                                        QStringLiteral("ilwis.Engine.do('iffraster', ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 131145.6775, 'less'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 0, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.3275, 'add'),") +
+                                            QStringLiteral("ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster',0,ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times'), 0.14, 'add'))))))))");
+
+        */
+
+        QString line = QStringLiteral("import ilwis\nilwis.Engine.setWorkingCatalog('file:///F:/testdata2/BFD/Final_Data/SMCE_Greenbelt_submission_2711/sub')\n") +
+                        QStringLiteral("rc1 = ilwis.Engine.do('binarylogicalraster', ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 15232.2175, 'less')\n") +
+                               QStringLiteral("rc4 = ilwis.Engine.do('binarymathraster', 0.000012637687191638382, ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times')\n") +
+                               QStringLiteral("rc2 = ilwis.Engine.do('binarymathraster', rc4, 0.15500000000000003, 'add')\n") +
+                               QStringLiteral("rc5 = ilwis.Engine.do('binarymathraster',0,ilwis.RasterCoverage('Embanked_areas_dist_sub.mpr'), 'times')\n") +
+                               QStringLiteral("rc3 = ilwis.Engine.do('binarymathraster', rc5, 0.14, 'add')\n") +
+                                QStringLiteral("pythonresult = ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', rc1 , rc2, 'times'), ilwis.Engine.do('binarymathraster', ilwis.Engine.do('binarymathraster', 1, rc1, 'subtract'), rc3, 'times'), 'add')\n") +
+                                //QStringLiteral("pythonresult.store('pythonresult.mpr', 'map', 'ilwis3')\n");
+                                QStringLiteral("pythonresult.store('pythonresult.shp', 'ESRI Shapefile', 'gdal')\n");
+                               //QStringLiteral("ilwis.Engine.do('iffraster', rc1, rc2,rc3)\n");
+
+
+        QString expr = QString("pythonresult=runpython(\"%1\")").arg(line);
+
+        Ilwis::ExecutionContext ctx;
+        Ilwis::SymbolTable syms;
+        DOTEST(Ilwis::commandhandler()->execute(expr,&ctx,syms), "execution done");
+
+        IRasterCoverage raster = syms.getValue<IRasterCoverage>(ctx._results[0]);
+        /*QString outputFile = makeOutputPath("pythonresult.mpr");
+        qDebug() << "write to: " << outputFile;
+
+        raster->connectTo(outputFile, "map","ilwis3",Ilwis::IlwisObject::cmOUTPUT);
+        raster->createTime(Ilwis::Time::now());
+        raster->store();
+
+        DOTEST(raster->size().linearSize() != 0,"Raster was created");
+        */
+        // todo: convert pythonresult.mpr to .shp format
+
+
+
+    }
+    catch(Ilwis::ErrorObject& err) {
+        qDebug() << err.message();
+        QVERIFY(false);
+    }
+}
+
